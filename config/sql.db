@@ -1,0 +1,98 @@
+-- Lost & Found database schema
+
+-- Create database (you can change the name if needed)
+CREATE DATABASE IF NOT EXISTS lost_and_found
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE lost_and_found;
+
+-- Users of the system (people who post lost/found reports and comments)
+CREATE TABLE users (
+  user_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  full_name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  password_hash VARCHAR(255) NOT NULL,
+  address VARCHAR(255),
+  profile_image VARCHAR(255),
+  trust_level TINYINT UNSIGNED DEFAULT 0,
+  badge_status ENUM('none', 'bronze', 'silver', 'gold') DEFAULT 'none',
+  language VARCHAR(10) DEFAULT 'en',
+  date_joined DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Categories for classifying reports (e.g. Electronics, Documents, Pets, etc.)
+CREATE TABLE categories (
+  category_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Lost/Found reports
+CREATE TABLE reports (
+  report_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  category_id INT UNSIGNED,
+  type ENUM('lost', 'found') NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  description TEXT NOT NULL,
+  location VARCHAR(255),
+  contact_info VARCHAR(255),
+  reward_amount DECIMAL(10,2) DEFAULT 0.00,
+  status ENUM('open', 'resolved', 'cancelled') DEFAULT 'open',
+  image_path VARCHAR(255),
+  date_posted DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_reports_user
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_reports_category
+    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+    ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Comments on reports
+CREATE TABLE comments (
+  comment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  report_id INT UNSIGNED NOT NULL,
+  user_id INT UNSIGNED NOT NULL,
+  comment_text TEXT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_comments_report
+    FOREIGN KEY (report_id) REFERENCES reports(report_id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_comments_user
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Admin users (manage announcements, moderate content, etc.)
+CREATE TABLE admins (
+  admin_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(100)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Announcements created by admins
+CREATE TABLE announcements (
+  announcement_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  admin_id INT UNSIGNED NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  content TEXT NOT NULL,
+  image_path VARCHAR(255),
+  date_posted DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expiry_date DATETIME,
+  CONSTRAINT fk_announcements_admin
+    FOREIGN KEY (admin_id) REFERENCES admins(admin_id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Optional: some basic indexes to speed up common lookups
+CREATE INDEX idx_reports_user_id ON reports(user_id);
+CREATE INDEX idx_reports_category_id ON reports(category_id);
+CREATE INDEX idx_reports_type_status ON reports(type, status);
+CREATE INDEX idx_comments_report_id ON comments(report_id);
+
