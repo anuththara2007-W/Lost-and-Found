@@ -46,27 +46,23 @@ public/assets/js/auth.js
 
 📂 Controllers
 
-app/Controllers/ItemController.php
+app/Controllers/ItemController.php // Item backend
 
 📂 Models
 
-app/Models/Item.php
+app/Models/Item.php //
 
 📂 Views – Items
 
-resources/views/items/create.php
+resources/views/items/create.php //create add item ui
 
-resources/views/items/show.php
+resources/views/items/show.php //daraz show ui
 
 📂 Views – Search & Map
 
 resources/views/search.php
 
 resources/views/map.php
-
-📂 Views – Main
-
-resources/views/home.php
 
 📂 CSS
 
@@ -93,6 +89,10 @@ app/Controllers/MessageController.php
 📂 Models
 
 app/Models/Message.php
+
+📂 Views – Main
+
+resources/views/home.php
 
 📂 Views – Messages
 
@@ -176,7 +176,7 @@ app/Core/Database.php
 
 📂 Config
 
-config/config.php
+config/config.php //anuththara
 
 includes/helpers.php
 

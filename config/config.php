@@ -66,7 +66,7 @@ spl_autoload_register(function (string $class): void {
 });
 
 // ── Bootstrap helpers ────────────────────────────────────────
-require_once ROOT . '/includes/helpers.php';
+//require_once ROOT . '/includes/helpers.php';
 
 // ── Start session ────────────────────────────────────────────
 session_name(SESSION_NAME);
