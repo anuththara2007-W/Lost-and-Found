@@ -2,17 +2,17 @@
 
 📂 Controllers
 
-app/Controllers/AuthController.php
+app/Controllers/AuthController.php - ✅
 
-app/Controllers/UserController.php
+app/Controllers/UserController.php - ✅
 
 📂 Models
 
-app/Models/User.php
+app/Models/User.php - ✅
 
 📂 Views – Auth
 
-resources/views/auth/login.php
+resources/views/auth/login.php - ✅
 
 resources/views/auth/register.php
 
@@ -32,7 +32,7 @@ legal/terms.php
 
 📂 CSS
 
-public/assets/css/login.css
+public/assets/css/login.css - ✅
 
 public/assets/css/register.css
 
