@@ -21,6 +21,15 @@ class User
         $stmt->execute(['email' => $email]);
         return $stmt->fetch();
     }
+        //feat: add method to retrieve user by username
+        
+    public function findByUsername($username)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE username = :username");
+        $stmt->execute(['username' => $username]);
+        return $stmt->fetch();
+    }
 
     
+
 }
