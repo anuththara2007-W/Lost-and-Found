@@ -38,4 +38,20 @@ class User
         return $stmt->fetch();
     }
 
+    //feat: implement user registration with hashed password storage
+
+ public function register($data)
+    {
+        $stmt = $this->db->prepare("INSERT INTO users (username, full_name, email, phone, password_hash) VALUES (:username, :full_name, :email, :phone, :password_hash)");
+        
+        return $stmt->execute([
+            'username' => $data['username'],
+            'full_name' => $data['full_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'] ?? null,
+            'password_hash' => $data['password_hash']
+        ]);
+    }
+
+    
 }
