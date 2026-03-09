@@ -25,7 +25,7 @@ class AuthController extends Controller
             $_SESSION['old'] = $_POST;
 
             if (empty($email) || empty($password)) {
-                $_SESSION['flash_error'] = 'Please fill in all fields';
+                $_SESSION['flash_error'] = 'Please fill in all the fields';
                 redirect('/auth/login');
             }
 
