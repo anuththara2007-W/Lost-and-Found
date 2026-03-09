@@ -100,5 +100,20 @@ class User
         return $stmt->fetchAll();
     }
 
+    //feat: implement badge status update for users
+ public function updateBadge($userId, $badge)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE users SET badge_status = :badge WHERE user_id = :id");
+            return $stmt->execute([
+                'badge' => $badge,
+                'id' => $userId
+            ]);
+        } catch (\PDOException $e) {
+            error_log("Failed to update badge. Missing column? " . $e->getMessage());
+            return false;
+        }
+    }
+
 
 }
