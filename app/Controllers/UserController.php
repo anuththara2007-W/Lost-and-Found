@@ -39,4 +39,20 @@ public function dashboard()
 
         $this->view('dashboard', $data);
     }
+   //feat: implement profile view for logged-in users
+    public function profile()
+    {
+        if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
+            redirect('/admin/dashboard');
+        }
+
+        $userId = $_SESSION['user_id'];
+        $user = $this->userModel->findById($userId);
+        $data = [
+            'title' => 'My Profile - Lost and Found',
+            'user' => $user
+        ];
+        $this->view('user/profile', $data);
+    }
+
 }
