@@ -30,6 +30,12 @@ class User
         return $stmt->fetch();
     }
 
-    
+    ///feat: add method to retrieve user by ID
+    public function findById($id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE user_id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch();
+    }
 
 }
