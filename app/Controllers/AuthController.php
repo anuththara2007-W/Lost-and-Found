@@ -160,7 +160,7 @@ class AuthController extends Controller
             $this->view('auth/forgot', $data);
         }
     }
-//reset password functionality, 
+//reset password functionality
  public function reset()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
