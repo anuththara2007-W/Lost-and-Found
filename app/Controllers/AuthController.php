@@ -70,4 +70,80 @@ class AuthController extends Controller
             $this->view('auth/login', $data);
         }
     }
+
+    // -----------Registration functionality for user only, admin is hardcoded in login function----------------
+     public function register()
+    {
+        // Check for POST
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Process form
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $_SESSION['old'] = $_POST;
+
+            $data = [
+                'username' => trim($_POST['username']),
+                'full_name' => trim($_POST['full_name']),
+                'email' => trim($_POST['email']),
+                'phone' => trim($_POST['phone']),
+                'password' => trim($_POST['password']),
+                'confirm_password' => trim($_POST['confirm_password']),
+            ];
+
+            // Validate Email
+            if (empty($data['email'])) {
+                $_SESSION['flash_error'] = 'Please enter email';
+                redirect('/auth/register');
+            } else {
+                if ($this->userModel->findByEmail($data['email'])) {
+                    $_SESSION['flash_error'] = 'Email is already taken';
+                    redirect('/auth/register');
+                }
+            }
+
+            // Validate Username
+            if (empty($data['username'])) {
+                $_SESSION['flash_error'] = 'Please enter username';
+                redirect('/auth/register');
+            } else {
+                if ($this->userModel->findByUsername($data['username'])) {
+                    $_SESSION['flash_error'] = 'Username is already taken';
+                    redirect('/auth/register');
+                }
+            }
+
+            // Validate Password
+            if (empty($data['password'])) {
+                $_SESSION['flash_error'] = 'Please enter password';
+                redirect('/auth/register');
+            } elseif (strlen($data['password']) < 6) {
+                $_SESSION['flash_error'] = 'Password must be at least 6 characters';
+                redirect('/auth/register');
+            } elseif ($data['password'] != $data['confirm_password']) {
+                $_SESSION['flash_error'] = 'Passwords do not match';
+                redirect('/auth/register');
+            }
+
+            // Hash Password
+            $data['password_hash'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+            // Register User
+            if ($this->userModel->register($data)) {
+                clearOld();
+                $_SESSION['flash_success'] = 'You are registered and can log in';
+                redirect('/auth/login');
+            } else {
+                die('Something went wrong');
+            }
+        } else {
+            // Init data
+            $data = [
+                'title' => 'Register - Lost and Found'
+            ];
+
+            // Load view
+            $this->view('auth/register', $data);
+        }
+    }
+
 }
