@@ -53,5 +53,18 @@ class User
         ]);
     }
 
-    
+    //feat: implement user authentication using password verification
+
+    public function login($email, $password)
+    {
+        $user = $this->findByEmail($email);
+        
+        if ($user) {
+            if (password_verify($password, $user['password_hash'])) {
+                return $user;
+            }
+        }
+        return false;
+    }
+
 }
