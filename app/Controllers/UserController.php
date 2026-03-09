@@ -54,5 +54,50 @@ public function dashboard()
         ];
         $this->view('user/profile', $data);
     }
+public function updateProfile()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $userId = $_SESSION['user_id'];
+            $user = $this->userModel->findById($userId);
+            
+            $data = [
+                'full_name' => trim($_POST['full_name']),
+                'phone' => trim($_POST['phone']) // Used for WhatsApp injection
+            ];
 
+            // Handle Profile Image Upload
+            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $fileName = $_FILES['profile_image']['name'];
+                $fileTmp = $_FILES['profile_image']['tmp_name'];
+                $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if (in_array($fileExt, $allowed)) {
+                    $newFileName = uniqid('avatar_') . '.' . $fileExt;
+                    $uploadDir = ROOT . '/public/uploads/avatars/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                        $data['profile_image'] = $newFileName;
+                        
+                        // Delete old avatar if present
+                        if (!empty($user['profile_image']) && file_exists($uploadDir . $user['profile_image'])) {
+                            unlink($uploadDir . $user['profile_image']);
+                        }
+                    }
+                } else {
+                    $_SESSION['flash_error'] = 'Invalid image format.';
+                    redirect('/user/profile');
+                }
+            }
+
+            if ($this->userModel->updateProfile($userId, $data)) {
+                $_SESSION['flash_success'] = 'Profile updated successfully.';
+            } else {
+                $_SESSION['flash_error'] = 'Failed to update profile.';
+            }
+            redirect('/user/profile');
+        }
+    }
 }
