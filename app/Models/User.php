@@ -13,6 +13,9 @@ class User
         $this->db = Database::getInstance()->getConnection();
     }
 
+    //-----------------------USER Features ----------------------
+
+    
     //feat: add method to retrieve user by email
     
     public function findByEmail($email)
