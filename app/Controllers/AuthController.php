@@ -173,6 +173,14 @@ class AuthController extends Controller
         }
     }
 
-    
+    // Logout functionality
+    public function logout()
+    {
+        unset($_SESSION['user_id']);
+        unset($_SESSION['username']);
+        unset($_SESSION['user_email']);
+        session_destroy();
+        redirect('/auth/login');
+    }
 
 }
