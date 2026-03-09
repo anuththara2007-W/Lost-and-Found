@@ -114,6 +114,11 @@ class User
             return false;
         }
     }
+//feat: add admin functionality to ban or unban users
 
-
+ public function toggleBan($userId, $isBanned)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET is_banned = :ban WHERE user_id = :id");
+        return $stmt->execute(['ban' => $isBanned, 'id' => $userId]);
+    }
 }
