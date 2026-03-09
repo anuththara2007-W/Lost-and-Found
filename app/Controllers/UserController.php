@@ -8,7 +8,7 @@ class UserController extends Controller
      private $userModel;
     private $itemModel;
 
- //initialize UserController with User and Item models and enforce login
+ //feat: initialize UserController with User and Item models and enforce login
     public function __construct()
     {
         requireLogin();
@@ -32,7 +32,7 @@ public function dashboard()
         $myReports = $this->itemModel->getReportsByUser($userId);
 
         $data = [
-            'title' => 'My Dashboard - Lost and Found',
+            'title' => 'My Dashboard - Lost & Found',
             'user' => $user,
             'reports' => $myReports
         ];
@@ -49,7 +49,7 @@ public function dashboard()
         $userId = $_SESSION['user_id'];
         $user = $this->userModel->findById($userId);
         $data = [
-            'title' => 'My Profile - Lost and Found',
+            'title' => 'My Profile - Lost & Found',
             'user' => $user
         ];
         $this->view('user/profile', $data);
@@ -62,7 +62,7 @@ public function updateProfile()
             
             $data = [
                 'full_name' => trim($_POST['full_name']),
-                'phone' => trim($_POST['phone']) // Used for WhatsApp injection
+                'phone' => trim($_POST['phone']) // Used trim for WhatsApp injection
             ];
 
             // Handle Profile Image Upload
