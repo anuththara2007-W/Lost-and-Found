@@ -19,4 +19,16 @@ class MessageController extends Controller
         $this->messageModel = $this->model('Message');
         $this->itemModel = $this->model('Item');
     }
+
+    public function index()// Displays the main message inbox page.
+    {
+        requireLogin();
+        $conversations = $this->messageModel->getConversationsForUser($_SESSION['user_id']);
+
+        $data = [
+            'title' => 'My Messages - Lost and Found',
+            'conversations' => $conversations
+        ];
+        $this->view('messages/index', $data);
+    }
 }
