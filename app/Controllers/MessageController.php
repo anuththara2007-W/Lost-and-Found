@@ -31,4 +31,30 @@ class MessageController extends Controller
         ];
         $this->view('messages/index', $data);
     }
+
+      public function chat($report_id = null)// Displays the chat page for a specific report, showing the conversation and comments.
+    {
+        requireLogin();
+        if (!$report_id) {
+            redirect('/message/index');
+        }
+
+        $item = $this->itemModel->getReportById($report_id);
+        if (!$item) {
+            $_SESSION['flash_error'] = 'Chat not found.';
+            redirect('/message/index');
+        }
+
+        $comments = $this->messageModel->getCommentsByReport($report_id);
+        $conversations = $this->messageModel->getConversationsForUser($_SESSION['user_id']);
+
+        $data = [
+            'title' => 'Direct Chat',
+            'item' => $item,
+            'comments' => $comments,
+            'conversations' => $conversations
+        ];
+        $this->view('messages/chat', $data);
+    }
+
 }
