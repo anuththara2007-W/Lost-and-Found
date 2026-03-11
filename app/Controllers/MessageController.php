@@ -182,4 +182,54 @@ class MessageController extends Controller
         echo json_encode(['success' => true]);
         exit;
     }
+    public function apiSendMessage()//AJAX API endpoint used to send messages without reloading the page.
+    {
+        header('Content-Type: application/json');
+
+        if (!isset($_SESSION['user_id'])) {
+            http_response_code(403);
+            echo json_encode(['error' => 'Not logged in']);
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $report_id = filter_input(INPUT_POST, 'report_id', FILTER_SANITIZE_NUMBER_INT);
+            $parent_id = isset($_POST['parent_id']) ? (int)$_POST['parent_id'] : 0;
+            $comment_text = trim($_POST['comment_text'] ?? '');
+            $user_id = $_SESSION['user_id'];
+            $attachmentPath = null;
+
+            if (empty($comment_text) && empty($_FILES['attachment']['name'])) {
+                echo json_encode(['error' => 'Empty message']);
+                exit;
+            }
+
+            // Handle optional attachment
+            if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] == 0) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $fileName = $_FILES['attachment']['name'];
+                $fileTmp = $_FILES['attachment']['tmp_name'];
+                $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                if (in_array($fileExt, $allowed)) {
+                    $newFileName = uniqid('chat_') . '.' . $fileExt;
+                    $uploadDir = ROOT . '/public/uploads/chat/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                        $attachmentPath = $newFileName;
+                    }
+                }
+            }
+
+            if ($this->messageModel->addCommentWithAttachment($report_id, $user_id, $comment_text, $attachmentPath, $parent_id)) {
+                echo json_encode(['success' => true]);
+                exit;
+            } else {
+                echo json_encode(['error' => 'Database error']);
+                exit;
+            }
+        }
+    }
 }
