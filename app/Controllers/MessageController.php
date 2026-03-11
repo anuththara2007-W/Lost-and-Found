@@ -167,5 +167,19 @@ class MessageController extends Controller
         }
     }
 
+    public function apiSetTyping()//API endpoint that records when a user is typing.
+    {
+        header('Content-Type: application/json');
 
+        if (!isset($_SESSION['user_id'])) {
+            echo json_encode(['error' => 'Not logged in']);
+            exit;
+        }
+
+        $report_id = filter_input(INPUT_POST, 'report_id', FILTER_SANITIZE_NUMBER_INT);
+        $is_typing = isset($_POST['is_typing']) ? (int)$_POST['is_typing'] : 0;
+        $this->messageModel->setTyping($report_id, $_SESSION['user_id'], $is_typing);
+        echo json_encode(['success' => true]);
+        exit;
+    }
 }
