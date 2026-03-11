@@ -113,5 +113,59 @@ class MessageController extends Controller
             }
         }
     }
+      // --- API Endpoints for Real-time Chat ---
+    public function apiGetMessages($report_id = null)
+    {
+        // Ensure JSON header is always set FIRST
+        header('Content-Type: application/json');
+
+        // Check if user is logged in
+        if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'Please log in to view messages']);
+            exit;
+        }
+
+        try {
+            $my_id = $_SESSION['user_id'];
+            $this->messageModel->updateUserActivity($my_id);
+
+            if (!$report_id) {
+                echo json_encode(['error' => 'Missing report ID']);
+                exit;
+            }
+
+            // Verify the report exists
+            $item = $this->itemModel->getReportById($report_id);
+            if (!$item) {
+                echo json_encode(['error' => 'Report not found']);
+                exit;
+            }
+
+            $comments = $this->messageModel->getCommentsByReport($report_id);
+
+            // Format dates before sending JSON
+            foreach ($comments as &$c) {
+                $c['formatted_date'] = date('M j, Y, g:i a', strtotime($c['created_at']));
+            }
+
+            $typingStatus = $this->messageModel->getTypingStatus($report_id, $my_id);
+
+            $otherUserId = ($item['user_id'] == $my_id) ? null : $item['user_id'];
+
+            $isOnline = false;
+            if ($otherUserId) {
+                $isOnline = $this->messageModel->isUserOnline($otherUserId);
+            }
+
+            echo json_encode(['messages' => $comments, 'typing' => $typingStatus, 'partner_online' => $isOnline]);
+            exit;
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Server error: ' . $e->getMessage()]);
+            exit;
+        }
+    }
+
 
 }
