@@ -33,4 +33,21 @@ class Message
         $stmt->execute(['report_id' => $report_id]);
         return $stmt->fetchAll();
     }
+
+    public function getConversationsForUser($user_id)//Get all conversations related to a specific user
+    {
+        $stmt = $this->db->prepare("
+            SELECT DISTINCT r.*, c.name as category_name
+            FROM reports r
+            LEFT JOIN categories c ON r.category_id = c.category_id
+            LEFT JOIN comments msg ON msg.report_id = r.report_id
+            WHERE r.user_id = :user_id1 OR msg.user_id = :user_id2
+            ORDER BY r.date_posted DESC
+        ");
+        $stmt->execute([
+            'user_id1' => $user_id,
+            'user_id2' => $user_id
+        ]);
+        return $stmt->fetchAll();
+    }
 }
