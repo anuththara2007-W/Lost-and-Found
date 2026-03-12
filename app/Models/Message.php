@@ -12,3 +12,7 @@ use PDO;
  * It includes retrieving conversations, adding comments, 
  * managing typing indicators, and checking user activity status.
  */
+class Message
+{
+    
+}
