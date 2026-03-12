@@ -64,4 +64,54 @@ class Message
             'parent_id' => $parent_id
         ]);
     }
+
+    //* Add a comment with file attachment This function inserts a comment along with an attachment
+     public function addCommentWithAttachment($report_id, $user_id, $comment_text, $attachment_path, $parent_id = 0)
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO comments (report_id, user_id, comment_text, attachment_path, parent_id)
+            VALUES (:report_id, :user_id, :comment_text, :attachment_path, :parent_id)
+        ");
+        return $stmt->execute([
+            'report_id' => $report_id,
+            'user_id' => $user_id,
+            'comment_text' => $comment_text,
+            'attachment_path' => $attachment_path,
+            'parent_id' => $parent_id
+        ]);
+    }
+
+     public function updateUserActivity($user_id)//Update user's last activity time
+    {
+        $stmt = $this->db->prepare("UPDATE users SET last_activity = NOW() WHERE user_id = :uid");
+        return $stmt->execute(['uid' => $user_id]);
+    }
+
+     public function setTyping($report_id, $user_id, $is_typing)//Set typing status for chat This function records whether a user is currently typing
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO chat_status (report_id, user_id, is_typing, last_typed)
+            VALUES (:rid, :uid, :typing, NOW())
+            ON DUPLICATE KEY UPDATE is_typing = :typing, last_typed = NOW()
+        ");
+        return $stmt->execute(['rid' => $report_id, 'uid' => $user_id, 'typing' => $is_typing]);
+    }
+
+     public function getTypingStatus($report_id, $exclude_user_id)//Get typing users in a conversation
+    {
+        $stmt = $this->db->prepare("
+            SELECT u.username 
+            FROM chat_status cs
+            JOIN users u ON cs.user_id = u.user_id
+            WHERE cs.report_id = :rid 
+              AND cs.user_id != :uid 
+              AND cs.is_typing = 1 
+              AND cs.last_typed > DATE_SUB(NOW(), INTERVAL 5 SECOND)
+        ");
+        $stmt->execute(['rid' => $report_id, 'uid' => $exclude_user_id]);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
+
+
 }
