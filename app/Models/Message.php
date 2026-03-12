@@ -50,4 +50,18 @@ class Message
         ]);
         return $stmt->fetchAll();
     }
+
+     public function addComment($report_id, $user_id, $comment_text, $parent_id = 0)//Add a new comment to a report
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO comments (report_id, user_id, comment_text, parent_id)
+            VALUES (:report_id, :user_id, :comment_text, :parent_id)
+        ");
+        return $stmt->execute([
+            'report_id' => $report_id,
+            'user_id' => $user_id,
+            'comment_text' => $comment_text,
+            'parent_id' => $parent_id
+        ]);
+    }
 }
