@@ -111,7 +111,16 @@ class Message
         $stmt->execute(['rid' => $report_id, 'uid' => $exclude_user_id]);
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
-    
+
+      public function isUserOnline($user_id)//Check if a user is currently online
+    {
+        $stmt = $this->db->prepare("
+            SELECT 1 FROM users 
+            WHERE user_id = :uid AND last_activity > DATE_SUB(NOW(), INTERVAL 15 SECOND)
+        ");
+        $stmt->execute(['uid' => $user_id]);
+        return $stmt->fetchColumn() ? true : false;
+    }
 
 
 }
