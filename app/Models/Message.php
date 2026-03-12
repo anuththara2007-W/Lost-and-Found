@@ -20,4 +20,17 @@ class Message
     {
         $this->db = Database::getInstance()->getConnection();
     }
+
+     public function getCommentsByReport($report_id)// This function retrieves all comments posted for a particular lost or found report along with the user information.
+    {
+        $stmt = $this->db->prepare("
+            SELECT c.*, u.username, u.profile_image 
+            FROM comments c
+            JOIN users u ON c.user_id = u.user_id
+            WHERE c.report_id = :report_id
+            ORDER BY c.created_at ASC
+        ");
+        $stmt->execute(['report_id' => $report_id]);
+        return $stmt->fetchAll();
+    }
 }
