@@ -14,5 +14,10 @@ use PDO;
  */
 class Message
 {
-    
+     private $db;
+
+    public function __construct()//Initializes the database connection using the Database singleton.
+    {
+        $this->db = Database::getInstance()->getConnection();
+    }
 }
