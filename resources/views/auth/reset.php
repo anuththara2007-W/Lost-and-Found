@@ -1,7 +1,5 @@
 <?php
-/**
- * C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\auth\reset.php
- */
+
 require_once __DIR__ . '/../../../config/config.php';
 
 $token   = $_GET['token'] ?? '';
@@ -39,10 +37,10 @@ if (empty($token)) { header('Location: ' . BASE_URL . '/forgot-password'); exit;
       </h1>
       <p class="auth-panel-body">Choose a password that's difficult to guess and unique to this account.</p>
       <ul class="auth-benefits" style="margin-top:28px;">
-        <li class="benefit-row"><span class="benefit-icon">🔠</span><span class="benefit-text">Mix uppercase and lowercase letters</span></li>
-        <li class="benefit-row"><span class="benefit-icon">🔢</span><span class="benefit-text">Include at least one number</span></li>
-        <li class="benefit-row"><span class="benefit-icon">✨</span><span class="benefit-text">Add a special character (! @ # $ %)</span></li>
-        <li class="benefit-row"><span class="benefit-icon">📏</span><span class="benefit-text">Minimum 8 characters</span></li>
+        <li class="benefit-row"><span class="benefit-icon"></span><span class="benefit-text">Mix uppercase and lowercase letters</span></li>
+        <li class="benefit-row"><span class="benefit-icon"></span><span class="benefit-text">Include at least one number</span></li>
+        <li class="benefit-row"><span class="benefit-icon"></span><span class="benefit-text">Add a special character (! @ # $ %)</span></li>
+        <li class="benefit-row"><span class="benefit-icon"></span><span class="benefit-text">Minimum 8 characters</span></li>
       </ul>
     </div>
   </aside>
