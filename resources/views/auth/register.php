@@ -1,6 +1,6 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 
-<div class="form-container" style="margin-top: 40px; margin-bottom: 40px; max-width: 550px;">
+<div class="form-container" style="margin-top: 5px; margin-bottom: 40px; max-width: 550px;border:1px solid grey ;">
     <div class="form-header">
         <h2>Create an Account</h2>
         <p>Join our community to safely report or match found items.</p>
