@@ -51,7 +51,7 @@ include ROOT . '/resources/views/layouts/header.php';
           </div>
           <div class="contact-info-text">
             <span class="contact-info-label">Email</span>
-            <span class="contact-info-value">hello@lostandfound.sg</span>
+            <span class="contact-info-value">lost&found@gmail.com</span>
           </div>
         </div>
         <div class="contact-info-item">
@@ -69,7 +69,7 @@ include ROOT . '/resources/views/layouts/header.php';
           </div>
           <div class="contact-info-text">
             <span class="contact-info-label">Based in</span>
-            <span class="contact-info-value">Singapore</span>
+            <span class="contact-info-value">Sri Lanka</span>
           </div>
         </div>
       </div>
