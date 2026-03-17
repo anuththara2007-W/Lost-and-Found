@@ -202,5 +202,101 @@ ${escapeHtml(msg.comment_text)}
 
     }
 
+    
+    function handleChatSubmit(e) {//function to handle message submission
+
+        if (e) e.preventDefault();
+
+        const textInput = document.getElementById('comment_text');
+        const fileInput = document.getElementById('chat_attachment');
+        const submitBtn = chatForm.querySelector('button[type="submit"]');
+
+        if (textInput.value.trim() === '' && fileInput.files.length === 0) {
+            alert('Please type a message or attach image');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Sending...';
+
+        const formData = new FormData(chatForm);
+
+        fetch(`${baseUrl}/message/apiSendMessage`, {
+
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'
+
+            })
+
+            .then(async res => {
+
+                const text = await res.text();
+
+                if (!res.ok) {
+                    throw new Error(text);
+                }
+
+                return JSON.parse(text);
+
+            })
+
+            .then(data => {
+
+                if (data.success) {
+
+                    textInput.value = '';
+                    fileInput.value = '';
+                    document.getElementById('file_alert').style.display = 'none';
+
+                    fetchMessages();
+
+                } else {
+
+                    alert(data.error || 'Send failed');
+
+                }
+
+            })
+
+            .catch(err => {
+
+                console.error(err);
+                alert('Message send failed');
+
+            })
+
+            .finally(() => {
+
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Send';
+
+            });
+
+    }
+
+
+    chatForm.addEventListener('submit', handleChatSubmit);
+
+
+    document.getElementById('comment_text').addEventListener('keydown', function(e) {
+
+        if (e.key === 'Enter') {
+
+            e.preventDefault();
+            handleChatSubmit(e);
+
+        }
+
+    });
+
+
+    fetchMessages();
+    setInterval(fetchMessages, 3000);
+</script>
+
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
+
 
 
