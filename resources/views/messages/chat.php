@@ -56,3 +56,8 @@ div class="wa-chat-container">
             </a>
 
         </div>
+
+         <!-- MESSAGES -->
+        <div class="wa-messages-area" id="chatMessagesArea">
+            <div class="wa-messages-empty">Loading messages...</div>
+        </div>
