@@ -168,6 +168,38 @@ ${escapeHtml(msg.comment_text)}
             lastMessageCount = messages.length;
         }
 
+
+    }
+    function fetchMessages() {//function to fetch messages from the server
+
+        fetch(`${baseUrl}/message/apiGetMessages/${reportId}`, {
+                credentials: 'same-origin'
+            })
+
+            .then(res => res.json())
+
+            .then(data => {
+
+                if (data.messages) {
+                    renderMessages(data.messages);
+                }
+
+                let status = document.getElementById('chatStatusIndicator');
+
+                if (data.typing?.length) {
+                    status.textContent = 'typing...';
+                } else if (data.partner_online) {
+                    status.textContent = 'online';
+                } else {
+                    status.textContent = '';
+                }
+
+            })
+
+            .catch(err => {
+                console.error("Fetch error", err);
+            });
+
     }
 
 
