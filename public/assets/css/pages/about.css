@@ -1,0 +1,481 @@
+/* ============================================================
+   Lost & Found — About Page Styles
+   Companion to: about.html
+   ============================================================ */
+
+/* ── Design Tokens ── */
+:root {
+  --white:          #FAFAF8;
+  --off-white:      #F2F0EB;
+  --parchment:      #E8E3D8;
+  --warm-mid:       #C9C0AE;
+  --clay:           #9C8C78;
+  --terracotta:     #C96442;
+  --terracotta-lt:  #EDD5C8;
+  --sage:           #5C7A65;
+  --sage-lt:        #D1DFCF;
+  --midnight:       #1E2027;
+  --ink:            #3A3830;
+  --amber:          #D4940A;
+  --amber-lt:       #F5E9C8;
+
+  --shadow-card:  0 2px 14px rgba(30,32,39,0.07), 0 0 0 1px var(--parchment);
+  --shadow-hover: 0 8px 32px rgba(30,32,39,0.12), 0 0 0 1px var(--warm-mid);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Base ── */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Root Wrapper ── */
+.about-root {
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  background: var(--midnight);
+  padding: 72px 48px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,100,66,0.12) 0%, transparent 70%);
+}
+
+.hero-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4rem;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--terracotta);
+}
+
+.hero-sub {
+  color: var(--warm-mid);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.hero-deco {
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ============================================================
+   CONTENT WRAPPER
+   ============================================================ */
+.content-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 64px 48px 0;
+}
+
+/* ============================================================
+   SHARED TYPOGRAPHY
+   ============================================================ */
+.section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--clay);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.section-eyebrow-light {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--midnight);
+  margin-bottom: 28px;
+}
+
+/* ============================================================
+   MISSION BLOCK
+   ============================================================ */
+.mission-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 24px rgba(30,32,39,0.08);
+  margin-bottom: 48px;
+}
+
+.mission-text {
+  background: var(--off-white);
+  padding: 40px 36px;
+}
+
+.mission-visual {
+  background: var(--terracotta);
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mission-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--midnight);
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+.mission-body {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.mission-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 24px;
+}
+
+.mission-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.mission-stat {
+  color: rgba(255,255,255,0.75);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.mission-stat strong {
+  display: block;
+  font-size: 2.4rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+.how-section {
+  margin-bottom: 48px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.step-card {
+  background: var(--off-white);
+  border-radius: 14px;
+  padding: 28px 24px;
+  border: 1px solid var(--parchment);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.step-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(30,32,39,0.09);
+}
+
+.step-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--terracotta);
+  line-height: 1;
+  margin-bottom: 14px;
+  opacity: 0.7;
+}
+
+.step-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--midnight);
+  margin-bottom: 8px;
+}
+
+.step-body {
+  font-size: 13px;
+  color: var(--clay);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+.divider {
+  height: 1px;
+  background: var(--parchment);
+  margin: 48px 0;
+}
+
+/* ============================================================
+   VALUES
+   ============================================================ */
+.values-section {
+  margin-bottom: 48px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.value-pill {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--off-white);
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid var(--parchment);
+}
+
+.value-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.value-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-terra { background: var(--terracotta-lt); color: var(--terracotta); }
+.icon-sage  { background: var(--sage-lt);       color: var(--sage); }
+.icon-amber { background: var(--amber-lt);      color: var(--amber); }
+.icon-mid   { background: var(--parchment);     color: var(--clay); }
+
+.value-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--midnight);
+  margin-bottom: 4px;
+}
+
+.value-body {
+  font-size: 12px;
+  color: var(--clay);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   CTA BLOCK
+   ============================================================ */
+.cta-block {
+  background: var(--midnight);
+  border-radius: 18px;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.cta-text h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.cta-text h2 em {
+  font-style: italic;
+  color: var(--terracotta);
+}
+
+.cta-text p {
+  color: var(--warm-mid);
+  font-size: 13px;
+  max-width: 340px;
+  line-height: 1.7;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 9px;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+  transition: all 0.18s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--terracotta);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #b5572f;
+  box-shadow: 0 4px 16px rgba(201,100,66,0.4);
+  transform: translateY(-1px);
+}
+
+.btn-found {
+  background: var(--sage);
+  color: #fff;
+}
+
+.btn-found:hover {
+  background: #4a6752;
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.08);
+  color: var(--warm-mid);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.14);
+  color: var(--white);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .hero {
+    padding: 48px 24px 40px;
+  }
+
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .hero-deco {
+    display: none;
+  }
+
+  .content-wrap {
+    padding: 40px 24px 0;
+  }
+
+  .mission-row {
+    grid-template-columns: 1fr;
+  }
+
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-block {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .mission-quote {
+    font-size: 1.5rem;
+  }
+}
