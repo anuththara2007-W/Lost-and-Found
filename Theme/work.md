@@ -14,19 +14,19 @@ app/Models/User.php - ✅
 
 resources/views/auth/login.php - ✅
 
-resources/views/auth/register.php
+resources/views/auth/register.php - ✅
 
-resources/views/auth/forgot.php
+resources/views/auth/forgot.php - ✅
 
-resources/views/auth/reset.php
+resources/views/auth/reset.php - ✅
 
 📂 Views – Pages
 
-resources/views/pages/contact.php
+resources/views/pages/contact.php - ✅
 
 📂 Legal
 
-legal/privacy.php
+legal/privacy.php - ✅
 
 legal/terms.php
 
@@ -34,7 +34,7 @@ legal/terms.php
 
 public/assets/css/login.css - ✅
 
-public/assets/css/register.css
+public/assets/css/register.css - ✅
 
 public/assets/css/auth/
 
