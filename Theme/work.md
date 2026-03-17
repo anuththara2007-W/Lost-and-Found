@@ -298,29 +298,36 @@ View → User
 
 📂 Controllers
 
-app/Controllers/MessageController.php
+app/Controllers/MessageController.php✅
+
 
 📂 Models
 
-app/Models/Message.php
+app/Models/Message.php✅
+
 
 📂 Views – Messages
 
-resources/views/messages/index.php
+resources/views/messages/index.php✅
 
-resources/views/messages/chat.php
+
+resources/views/messages/chat.php✅
+
 
 📂 Views – Pages
 
-resources/views/pages/about.php
+resources/views/pages/about.php✅
 
-resources/views/pages/faq.php
+
+resources/views/pages/faq.php✅
+
 
 📂 CSS
 
-public/assets/css/chat.css
+public/assets/css/chat.css✅
 
-public/assets/css/messages/
+
+public/assets/css/messages/✅
 
                                     👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
