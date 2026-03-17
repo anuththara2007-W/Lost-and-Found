@@ -1,0 +1,88 @@
+/* public/assets/css/messages/index-inbox.css - Inbox UI styling */
+
+.inbox-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: var(--off-white);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+}
+
+.inbox-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: var(--midnight);
+}
+
+.inbox-content {
+    text-align: left;
+    padding: 20px;
+}
+
+.inbox-subtitle {
+    color: var(--clay);
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.inbox-empty {
+    text-align: center;
+    padding: 40px;
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--parchment);
+}
+
+.inbox-empty p {
+    color: var(--clay);
+}
+
+.inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.inbox-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--parchment);
+    padding: 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s;
+}
+
+.inbox-item-card:hover {
+    border-color: var(--clay);
+}
+
+.inbox-item-title-row {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--midnight);
+    margin-bottom: 5px;
+}
+
+.inbox-item-status {
+    font-size: 0.8rem;
+    font-weight: normal;
+    margin-left: 10px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background: var(--off-white);
+}
+
+.inbox-item-date {
+    font-size: 0.9rem;
+    color: var(--clay);
+}
+
+.inbox-item-arrow {
+    color: var(--warm-mid);
+    font-size: 1.5rem;
+}
