@@ -61,3 +61,47 @@ div class="wa-chat-container">
         <div class="wa-messages-area" id="chatMessagesArea">
             <div class="wa-messages-empty">Loading messages...</div>
         </div>
+        
+         <!-- INPUT -->
+        <div class="wa-input-area">
+
+            <form id="chatForm" class="wa-form" enctype="multipart/form-data">
+
+                <input type="hidden" name="report_id" id="report_id" value="<?= $data['item']['report_id'] ?>">
+
+                <label for="chat_attachment" class="wa-attachment-btn">
+                    📎
+                </label>
+
+                <input type="file"
+                    name="attachment"
+                    id="chat_attachment"
+                    accept="image/*"
+                    class="wa-file-input"
+                    onchange="document.getElementById('file_alert').style.display='block';">
+
+                <div class="wa-input-wrapper">
+
+                    <input type="text"
+                        name="comment_text"
+                        id="comment_text"
+                        class="wa-text-input"
+                        placeholder="Type a message"
+                        autocomplete="off">
+
+                    <div id="file_alert" class="wa-file-alert" style="display:none">
+                        Image ready
+                    </div>
+
+                </div>
+
+                <button type="submit" class="wa-send-btn">
+                    Send
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
