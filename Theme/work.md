@@ -40,7 +40,7 @@ public/assets/css/auth/ - ✅
 
 📂 JS
 
-public/assets/js/auth.js
+public/assets/js/auth.js - ✅
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
