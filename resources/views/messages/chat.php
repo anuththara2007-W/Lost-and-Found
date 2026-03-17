@@ -122,4 +122,53 @@ div class="wa-chat-container">
             .replace(/>/g, "&gt;");
     }
 
+       function renderMessages(messages) {//function to render messages in the chat area
+
+        if (messages.length === 0) {
+            chatMessagesArea.innerHTML = '<div class="wa-messages-empty">No messages yet.</div>';
+            return;
+        }
+
+        let html = '';
+
+        messages.forEach(msg => {
+
+            const mine = msg.user_id == currentUserId;
+
+            let attach = '';
+
+            if (msg.attachment_path) {
+                attach = `
+<a href="${baseUrl}/uploads/chat/${msg.attachment_path}" target="_blank">
+<img src="${baseUrl}/uploads/chat/${msg.attachment_path}" class="wa-attachment-img">
+</a>`;
+            }
+
+            html += `
+<div class="wa-msg-row ${mine?'wa-msg-row-mine':'wa-msg-row-theirs'}">
+
+<div class="wa-msg-bubble ${mine?'wa-bubble-mine':'wa-bubble-theirs'}">
+
+${attach}
+
+${escapeHtml(msg.comment_text)}
+
+<span class="wa-msg-time">${msg.formatted_date.split(',')[1]}</span>
+
+</div>
+
+</div>`;
+
+        });
+
+        chatMessagesArea.innerHTML = html;
+
+        if (messages.length > lastMessageCount) {
+            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
+            lastMessageCount = messages.length;
+        }
+
+    }
+
+
 
