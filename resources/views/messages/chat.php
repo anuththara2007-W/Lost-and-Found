@@ -61,7 +61,7 @@ div class="wa-chat-container">
         <div class="wa-messages-area" id="chatMessagesArea">
             <div class="wa-messages-empty">Loading messages...</div>
         </div>
-        
+
          <!-- INPUT -->
         <div class="wa-input-area">
 
@@ -105,3 +105,21 @@ div class="wa-chat-container">
 
     </div>
 </div>
+
+<script>//script to get values
+    const reportId = document.getElementById('report_id').value;
+    const currentUserId = <?= json_encode($_SESSION['user_id']) ?>;
+    const chatMessagesArea = document.getElementById('chatMessagesArea');
+    const chatForm = document.getElementById('chatForm');
+    const baseUrl = '<?= BASE_URL ?>';
+    let lastMessageCount = 0;
+
+
+    function escapeHtml(text) {
+        return (text || '')
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+    }
+
+
