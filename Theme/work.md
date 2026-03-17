@@ -28,7 +28,7 @@ resources/views/pages/contact.php - ✅
 
 legal/privacy.php - ✅
 
-legal/terms.php
+legal/terms.php - ✅
 
 📂 CSS
 
@@ -36,7 +36,7 @@ public/assets/css/login.css - ✅
 
 public/assets/css/register.css - ✅
 
-public/assets/css/auth/
+public/assets/css/auth/ - ✅
 
 📂 JS
 
