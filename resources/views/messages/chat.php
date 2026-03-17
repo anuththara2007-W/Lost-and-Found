@@ -30,3 +30,29 @@ div class="wa-chat-container">
             <?php endif; ?>
         </div>
     </div>
+
+     <!-- MAIN CHAT -->
+    <div class="wa-main">
+
+        <div class="wa-main-header">
+
+            <div class="wa-main-header-user">
+
+                <div class="wa-main-header-avatar">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2z" />
+                    </svg>
+                </div>
+
+                <div class="wa-main-header-info">
+                    <h3 class="wa-main-title"><?= escape($data['item']['title']) ?></h3>
+                    <div id="chatStatusIndicator" class="wa-main-status"></div>
+                </div>
+
+            </div>
+
+            <a href="<?= BASE_URL ?>/item/show/<?= $data['item']['report_id'] ?>" class="btn btn-secondary" style="font-size:13px;padding:6px 12px;border-radius:20px;">
+                View Item
+            </a>
+
+        </div>
