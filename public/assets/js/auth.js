@@ -1,7 +1,4 @@
-/**
- * Lost & Found — Auth JS
- * public/assets/js/auth.js
- *
+/*
  * Handles: password toggle, password strength meter,
  * client-side validation, remember-me, avatar preview,
  * and form submit UX.
@@ -9,9 +6,8 @@
 
 "use strict";
 
-/* ═══════════════════════════════════════════════
-   Password Visibility Toggle
-   ═══════════════════════════════════════════════ */
+  // Password Visibility Toggle
+
 
 document.querySelectorAll(".toggle-password").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -31,9 +27,9 @@ document.querySelectorAll(".toggle-password").forEach((btn) => {
   });
 });
 
-/* ═══════════════════════════════════════════════
-   Password Strength Meter
-   ═══════════════════════════════════════════════ */
+
+  // Password Strength Meter
+
 
 const strengthInput = document.getElementById("password");
 const strengthFill = document.querySelector(".strength-fill");
@@ -60,9 +56,9 @@ if (strengthInput && strengthFill && strengthLabel) {
   });
 }
 
-/**
- * Returns 0-4 strength score.
- */
+
+//Returns 0-4 strength score.
+
 function calcStrength(pw) {
   if (!pw) return 0;
   let score = 0;
@@ -74,9 +70,8 @@ function calcStrength(pw) {
   return Math.min(4, score);
 }
 
-/* ═══════════════════════════════════════════════
-   Confirm Password Match
-   ═══════════════════════════════════════════════ */
+
+// Confirm Password Match
 
 const confirmInput = document.getElementById("confirm_password");
 
@@ -109,9 +104,8 @@ if (confirmInput && strengthInput) {
   });
 }
 
-/* ═══════════════════════════════════════════════
-   Email Real-Time Validation
-   ═══════════════════════════════════════════════ */
+
+  // Email Real-Time Validation
 
 const emailInput = document.getElementById("email");
 
@@ -144,9 +138,8 @@ if (emailInput) {
   }
 }
 
-/* ═══════════════════════════════════════════════
-   Username Availability (debounced fetch)
-   ═══════════════════════════════════════════════ */
+
+  // Username Availability (debounced fetch)
 
 const usernameInput = document.getElementById("username");
 
@@ -206,9 +199,8 @@ if (usernameInput) {
   }
 }
 
-/* ═══════════════════════════════════════════════
-   Profile Image Preview
-   ═══════════════════════════════════════════════ */
+
+  //Profile Image Preview
 
 const avatarInput = document.getElementById("profile_image");
 const avatarPreview = document.getElementById("avatar-preview-img");
@@ -242,9 +234,8 @@ if (avatarInput && avatarPreview) {
   });
 }
 
-/* ═══════════════════════════════════════════════
-   Form Submit — Loading State
-   ═══════════════════════════════════════════════ */
+// Form Submit — Loading State
+
 
 document.querySelectorAll("form.auth-form").forEach((form) => {
   form.addEventListener("submit", function (e) {
@@ -273,9 +264,8 @@ document.querySelectorAll("form.auth-form").forEach((form) => {
   });
 });
 
-/* ═══════════════════════════════════════════════
-   Shake form on page load if errors present
-   ═══════════════════════════════════════════════ */
+
+  // Shake form on page load if errors present
 
 const alertError = document.querySelector(".alert-error");
 if (alertError) {
@@ -290,9 +280,8 @@ if (alertError) {
   }
 }
 
-/* ═══════════════════════════════════════════════
-   Toast notification
-   ═══════════════════════════════════════════════ */
+
+// Toast notification
 
 /**
  * @param {string} message

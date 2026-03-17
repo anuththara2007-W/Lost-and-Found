@@ -1,7 +1,5 @@
 <?php
-/**
- * C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\auth\forgot.php
- */
+
 require_once __DIR__ . '/../../../config/config.php';
 
 if (!empty($_SESSION['user'])) { header('Location: ' . BASE_URL . '/'); exit; }
