@@ -16,7 +16,6 @@ class MapController extends Controller
     public function index()
     {
         $db = \App\Core\Database::getInstance()->getConnection();
-        // Get ALL open items - those without coordinates will get generated coordinates in the map JS
         $stmt = $db->query("SELECT r.report_id, r.title, r.type, r.latitude, r.longitude, r.image_path, r.date_posted, r.location, c.name as category_name FROM reports r LEFT JOIN categories c ON r.category_id = c.category_id WHERE r.status = 'open' ORDER BY r.date_posted DESC");
         $items = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
