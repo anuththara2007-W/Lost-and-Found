@@ -42,6 +42,10 @@ public/assets/css/auth/ - ✅
 
 public/assets/js/auth.js - ✅
 
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Services\NotificationService.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\Profile.css
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\success.css
+
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
 main view home - index.php
@@ -300,36 +304,36 @@ View → User
 
 app/Controllers/MessageController.php✅
 
-
 📂 Models
 
 app/Models/Message.php✅
-
 
 📂 Views – Messages
 
 resources/views/messages/index.php✅
 
-
 resources/views/messages/chat.php✅
-
 
 📂 Views – Pages
 
 resources/views/pages/about.php✅
 
-
 resources/views/pages/faq.php✅
-
 
 📂 CSS
 
 public/assets/css/chat.css✅
 
-
 public/assets/css/messages/✅
 
-                                    👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
+📂 Controllers
+
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\success_stories.php
+
+👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
 (Owner of architecture. No one edits core without approval.)
 
@@ -342,6 +346,7 @@ app/Controllers/HomeController.php
 📂 Models
 
 app/Models/Admin.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Models\Announcement.php
 
 📂 Admin Views
 
@@ -374,8 +379,6 @@ public/assets/css/admin/
 public/assets/css/dashboard.css
 
 public/assets/css/style.css
-
-public/assets/css/pages/
 
 📂 JS
 
