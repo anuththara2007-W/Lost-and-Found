@@ -42,14 +42,14 @@ public/assets/css/auth/ - ✅
 
 public/assets/js/auth.js - ✅
 
-C:\xampp\ht docs\Lost & Found\Lost-and-Found\app\Services\NotificationService.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\Profile.css
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\success.css
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\items\index.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess
+C:\xampp\ht docs\Lost & Found\Lost-and-Found\app\Services\NotificationService.php - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\Profile.css - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\success.css - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\items\index.php - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php - ✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
