@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 class NotificationService
+// handles the sms and email notifications for the lost and found system
 {
  public static function sendEmail($to, $subject, $body)
     {
