@@ -1,0 +1,113 @@
+.success-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  min-height: 60vh;
+}
+
+.success-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.success-header h1 {
+  font-family: "Cormorant Garamond", serif;
+  color: var(--midnight);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.success-header p {
+  color: var(--clay);
+  font-size: 1.1rem;
+}
+
+.success-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.success-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.success-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.success-image {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  background: var(--sand);
+}
+
+.success-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.success-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  color: var(--clay);
+}
+
+.success-badge-wrapper {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.success-badge {
+  background: var(--success, #34c759);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.success-content {
+  padding: 20px;
+}
+
+.success-content h3 {
+  margin: 0 0 10px 0;
+  color: var(--midnight);
+  font-size: 1.2rem;
+}
+
+.success-meta {
+  font-size: 0.85rem;
+  color: var(--clay);
+  margin-bottom: 15px;
+}
+
+.success-reward {
+  color: var(--warm-mid);
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.success-desc {
+  color: var(--secondary-text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
