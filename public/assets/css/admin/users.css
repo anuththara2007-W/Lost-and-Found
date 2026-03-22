@@ -1,0 +1,14 @@
+/* Scoped styles for the users table */
+.badge-select {
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.btn-save {
+  padding: 4px 8px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
