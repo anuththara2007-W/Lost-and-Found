@@ -45,6 +45,9 @@ public/assets/js/auth.js - ✅
 C:\xampp\ht docs\Lost & Found\Lost-and-Found\app\Services\NotificationService.php
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\Profile.css
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\success.css
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\items\index.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
@@ -332,6 +335,8 @@ C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\success_stories.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\announcements.css
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\reports.css
 
 👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
@@ -377,7 +382,7 @@ public/assets/css/admin-users.css
 public/assets/css/admin/
 
 public/assets/css/dashboard.css
-
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\admin_dashboard.css
 public/assets/css/style.css
 
 📂 JS
