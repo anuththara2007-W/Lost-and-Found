@@ -21,4 +21,4 @@
     </form>
 </div>
 
-<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
+<?php require_once ROOT . '/resources/views/layouts/footer.php';  ?>
