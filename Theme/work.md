@@ -1,3 +1,4 @@
+                    Updated Work.md
                                     👤 1️⃣ ANUTHTHARA – Authentication & Users + Legal
 
 📂 Controllers
@@ -337,9 +338,6 @@ C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\success_stories.php
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\announcements.css
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\reports.css
-app/Core/App.php
-includes/helpers.php
-app/Core/Controller.php
 
 👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
