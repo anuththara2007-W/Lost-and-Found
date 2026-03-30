@@ -96,3 +96,7 @@ CREATE INDEX idx_reports_category_id ON reports(category_id);
 CREATE INDEX idx_reports_type_status ON reports(type, status);
 CREATE INDEX idx_comments_report_id ON comments(report_id);
 
+ALTER TABLE reports
+ADD custom_category VARCHAR(255) NULL,
+ADD whatsapp_contact VARCHAR(20) NULL,
+ADD allow_platform_message TINYINT(1) DEFAULT 1;

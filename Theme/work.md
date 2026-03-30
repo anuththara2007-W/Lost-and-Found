@@ -53,8 +53,6 @@ C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php - 
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
 
 
-new -- resources/views/layouts/header.php
-
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
@@ -357,6 +355,8 @@ includes/helpers.php-pabasara
 public/index.php - pabasara
 
 new--resources/views/layouts/footer.php
+new -- resources/views/layouts/header.php
+
 
 👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
