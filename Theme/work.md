@@ -52,6 +52,10 @@ C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css - 
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
 
+
+new -- resources/views/layouts/header.php
+
+
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
 main view home - index.php
@@ -302,7 +306,7 @@ User → Controller → Model → Database
 ↓
 View → User
 
----
+
 
                                             👤 3️⃣ PABASARA – Messaging + Informational Pages
 
@@ -334,10 +338,25 @@ public/assets/css/messages/✅
 
 📂 Controllers
 
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\success_stories.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\announcements.css
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\reports.css
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\success_stories.php✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\announcements.css✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\reports.css✅
+
+app/Core/App.php-pabasara
+
+app/Core/Controller.php-pabasara
+
+app/Core/Database.php -pabasara
+app/Core/session.php -pabasara
+
+📂 Config
+
+includes/helpers.php-pabasara
+
+public/index.php - pabasara
+
+new--resources/views/layouts/footer.php
 
 👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
@@ -364,12 +383,6 @@ resources/views/admin/reports.php
 
 resources/views/admin/users.php
 
-📂 Layouts (Shared Templates)
-
-resources/views/layouts/header.php
-
-resources/views/layouts/footer.php
-
 📂 Dashboard
 
 resources/views/dashboard.php
@@ -392,22 +405,6 @@ public/assets/js/main.js
 
                                                  ⚙️ CORE SYSTEM (SHARED INFRASTRUCTURE)
 
-📂 Core
-
-app/Core/App.php-pabasara
-
-app/Core/Controller.php-pabasara
-
-app/Core/Database.php -pabasara
-app/Core/session.php -pabasara
-
-📂 Config
-
-config/config.php - Anuththara
-
-includes/helpers.php-pabasara
-
-public/index.php - pabasara
 
 📂 DOCUMENTATION & OTHER FILES
 
