@@ -1,8 +1,17 @@
 <?php
 if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
+    require_once dirname(__DIR__, 3) . '/config/config.php';
 }
 require_once ROOT . '/resources/views/layouts/header.php';
+
+if (empty($data)) {
+    $data = [
+        'announcements' => [
+            ['announcement_id' => 1, 'title' => 'Scheduled Maintenance on Apr 5', 'content' => 'The system will go offline for 2 hours.', 'type' => 'warning', 'date_posted' => '2026-04-01', 'is_active' => 1],
+            ['announcement_id' => 2, 'title' => 'Welcome to the New Admin Panel', 'content' => 'We have rolled out the new Lost & Found interface natively!', 'type' => 'success', 'date_posted' => '2026-03-25', 'is_active' => 0]
+        ]
+    ];
+}
 ?>
 
 <style>

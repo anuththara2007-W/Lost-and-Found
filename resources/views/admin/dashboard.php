@@ -1,10 +1,21 @@
 <?php
 if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
+    require_once dirname(__DIR__, 3) . '/config/config.php';
 }
+$pageCss = ['admin/admin_dashboard.css'];
 require_once ROOT . '/resources/views/layouts/header.php';
+if (empty($data)) {
+    $data = [
+        'users' => [1, 2],
+        'activeCount' => 12,
+        'resolvedCount' => 150,
+        'reports' => [
+            ['report_id' => '101', 'title' => 'Lost Wallet', 'type' => 'lost', 'username' => 'johndoe', 'date_posted' => '2026-03-20', 'status' => 'active'],
+            ['report_id' => '102', 'title' => 'Found Keys', 'type' => 'found', 'username' => 'janedoe', 'date_posted' => '2026-03-22', 'status' => 'resolved']
+        ]
+    ];
+}
 ?>
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
 
 <div class="admin-wrapper">
     <!-- Admin Sidebar -->

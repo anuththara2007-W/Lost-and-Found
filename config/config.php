@@ -5,8 +5,8 @@
  */
 
 // ── Base Paths ──────────────────────────────────────────────
-define('ROOT',     'C:/xampp/htdocs/Lost & Found/Lost-and-Found');
-define('BASE_URL', 'http://localhost/Lost%20&%20Found/Lost-and-Found');
+define('ROOT',     dirname(__DIR__));
+define('BASE_URL', 'http://localhost/Lost-and-Found/public');
 
 // ── Database ─────────────────────────────────────────────────
 define('DB_HOST',    'localhost');
@@ -66,7 +66,7 @@ spl_autoload_register(function (string $class): void {
 });
 
 // ── Bootstrap helpers ────────────────────────────────────────
-//require_once ROOT . '/includes/helpers.php';
+require_once ROOT . '/includes/helpers.php';
 
 // ── Start session ────────────────────────────────────────────
 session_name(SESSION_NAME);

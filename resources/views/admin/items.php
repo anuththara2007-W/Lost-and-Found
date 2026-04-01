@@ -1,8 +1,17 @@
 <?php
 if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
+    require_once dirname(__DIR__, 3) . '/config/config.php';
 }
+$pageCss = ['admin/admin-items.css'];
 require_once ROOT . '/resources/views/layouts/header.php';
+if (empty($data)) {
+    $data = [
+        'reports' => [
+            ['report_id' => '101', 'title' => 'Lost Wallet', 'status' => 'active'],
+            ['report_id' => '102', 'title' => 'Found Keys', 'status' => 'resolved']
+        ]
+    ];
+}
 ?>
 <div style="max-width: 1000px; margin: 40px auto; min-height: 50vh;">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--midnight); padding-bottom: 15px; margin-bottom: 30px;">
