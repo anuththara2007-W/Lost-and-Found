@@ -1,7 +1,10 @@
-<?php 
-require_once __DIR__ . '/../../includes/header.php'; 
+<?php
+if (!defined('ROOT')) {
+    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
+}
+require_once ROOT . '/resources/views/layouts/header.php';
 ?>
-<link rel="stylesheet" href="/public/assets/css/admin/admin-dashboard.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
 
 <div class="admin-wrapper">
     <!-- Admin Sidebar -->
@@ -10,11 +13,12 @@ require_once __DIR__ . '/../../includes/header.php';
             <h2>Admin Panel</h2>
         </div>
         <ul class="sidebar-menu">
-            <li class="active"><a href="/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
-            <li><a href="/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
-            <li><a href="/admin/items"><i class="fas fa-box"></i> Manage Items</a></li>
-            <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li class="active"><a href="<?= BASE_URL ?>/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/items"><i class="fas fa-box"></i> Manage Items</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+            <li><a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </aside>
 
@@ -23,7 +27,7 @@ require_once __DIR__ . '/../../includes/header.php';
         <header class="admin-topbar">
             <h1>Dashboard Overview</h1>
             <div class="admin-profile" style="display: flex; gap: 15px; align-items: center;">
-                <a href="/admin/export_data" class="btn btn-secondary" style="font-size: 13px;"><i class="fas fa-download"></i> Export CSV</a>
+                <a href="<?= BASE_URL ?>/admin/export_data" class="btn btn-secondary" style="font-size: 13px;"><i class="fas fa-download"></i> Export CSV</a>
                 <span>Welcome, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?></span>
             </div>
         </header>
@@ -76,7 +80,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                     <td><?php echo htmlspecialchars($report['username'] ?? 'Unknown'); ?></td>
                                     <td><?php echo date('M d, Y', strtotime($report['date_posted'])); ?></td>
                                     <td>
-                                        <a href="/items/show/<?php echo $report['report_id']; ?>" class="btn-action view" target="_blank">View</a>
+                                        <a href="<?= BASE_URL ?>/item/show/<?php echo $report['report_id']; ?>" class="btn-action view" target="_blank">View</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -90,4 +94,4 @@ require_once __DIR__ . '/../../includes/header.php';
     </main>
 </div>
 
-<?php require_once __DIR__ . '/../../includes/footer.php'; ?>
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>

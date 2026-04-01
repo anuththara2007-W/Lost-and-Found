@@ -1,4 +1,9 @@
-<?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
+<?php
+if (!defined('ROOT')) {
+    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
+}
+require_once ROOT . '/resources/views/layouts/header.php';
+?>
 <div style="max-width: 1000px; margin: 40px auto; min-height: 50vh;">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--midnight); padding-bottom: 15px; margin-bottom: 30px;">
         <h1 style="font-size: 2.2rem; color: var(--midnight);">Admin: Manage Items</h1>
@@ -15,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($data['reports'] as $report): ?>
+                <?php foreach (($data['reports'] ?? []) as $report): ?>
                 <tr style="border-bottom: 1px solid var(--parchment);">
                     <td style="padding: 12px 15px; color: var(--midnight); font-weight: 500;"><?= $report['report_id'] ?></td>
                     <td style="padding: 12px 15px; color: var(--midnight);"><a href="<?= BASE_URL ?>/item/show/<?= $report['report_id'] ?>" style="color:var(--midnight);"><?= escape($report['title']) ?></a></td>
@@ -34,4 +39,5 @@
         <?php endif; ?>
     </div>
 </div>
+
 <?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
