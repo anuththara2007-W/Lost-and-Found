@@ -52,8 +52,6 @@ C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css - 
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
 
-
-
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
 main view home - index.php
@@ -304,8 +302,6 @@ User → Controller → Model → Database
 ↓
 View → User
 
-
-
                                             👤 3️⃣ PABASARA – Messaging + Informational Pages
 
 📂 Controllers
@@ -357,54 +353,52 @@ public/index.php - pabasara
 new--resources/views/layouts/footer.php
 new -- resources/views/layouts/header.php
 
-
 👤 4️⃣ THEJANU – Admin + System Core + Shared Infrastructure
 
 (Owner of architecture. No one edits core without approval.)
 
 📂 Controllers
 
-app/Controllers/AdminController.php
+app/Controllers/AdminController.php✅
 
-app/Controllers/HomeController.php
+app/Controllers/HomeController.php✅
 
 📂 Models
 
 app/Models/Admin.php
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Models\Announcement.php
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Models\Announcement.php✅
 
 📂 Admin Views
 
-resources/views/admin/dashboard.php
+resources/views/admin/dashboard.php✅
 
-resources/views/admin/items.php
+resources/views/admin/items.php✅
 
-resources/views/admin/reports.php
+resources/views/admin/reports.php✅
 
-resources/views/admin/users.php
+resources/views/admin/users.php✅
 
 📂 Dashboard
 
-resources/views/dashboard.php
+resources/views/dashboard.php✅
 
 📂 CSS
 
-public/assets/css/admin-main.css
+public/assets/css/admin-main.css✅
 
-public/assets/css/admin-users.css
+public/assets/css/admin-users.css✅
 
-public/assets/css/admin/
+public/assets/css/admin/✅
 
-public/assets/css/dashboard.css
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\admin_dashboard.css
-public/assets/css/style.css
+public/assets/css/dashboard.css✅
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\admin_dashboard.css✅
+public/assets/css/style.css✅
 
 📂 JS
 
 public/assets/js/main.js
 
                                                  ⚙️ CORE SYSTEM (SHARED INFRASTRUCTURE)
-
 
 📂 DOCUMENTATION & OTHER FILES
 

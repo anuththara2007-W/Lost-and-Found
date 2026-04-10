@@ -1,7 +1,24 @@
-<?php 
-require_once __DIR__ . '/../../includes/header.php'; 
+<?php
+if (!defined('ROOT')) {
+    require_once dirname(__DIR__, 3) . '/config/config.php';
+}
+$pageCss = ['admin/admin_dashboard.css'];
+require_once ROOT . '/resources/views/layouts/header.php';
+
+if (empty($data)) {
+    $data = [
+        'categories' => [
+            ['category_id' => 1, 'name' => 'Electronics'],
+            ['category_id' => 2, 'name' => 'Personal Items']
+        ],
+        'config' => [
+            'site_name' => 'Lost & Found',
+            'admin_email' => 'admin@gmail.com',
+            'maintenance_mode' => '0'
+        ]
+    ];
+}
 ?>
-<link rel="stylesheet" href="/public/assets/css/admin/admin-dashboard.css">
 <style>
 .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
 .settings-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
@@ -20,11 +37,12 @@ require_once __DIR__ . '/../../includes/header.php';
     <aside class="admin-sidebar">
         <div class="sidebar-header"><h2>Admin Panel</h2></div>
         <ul class="sidebar-menu">
-            <li><a href="/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
-            <li><a href="/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
-            <li class="active"><a href="/admin/settings"><i class="fas fa-cog"></i> System Settings</a></li>
-            <li><a href="/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+            <li class="active"><a href="<?= BASE_URL ?>/admin/settings"><i class="fas fa-cog"></i> System Settings</a></li>
+            <li><a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </aside>
 
@@ -34,10 +52,9 @@ require_once __DIR__ . '/../../includes/header.php';
         </header>
 
         <section class="admin-content settings-grid">
-            <!-- Categories Management -->
             <div class="settings-card">
                 <h2>Manage Categories</h2>
-                <form action="/admin/add_category" method="POST" style="display:flex; gap: 10px; margin-bottom: 1.5rem;">
+                <form action="<?= BASE_URL ?>/admin/add_category" method="POST" style="display:flex; gap: 10px; margin-bottom: 1.5rem;">
                     <input type="text" name="category_name" placeholder="New Category Name" required style="flex:1; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px;">
                     <button type="submit" class="btn-primary" style="padding: 0.5rem 1rem;">Add</button>
                 </form>
@@ -46,7 +63,7 @@ require_once __DIR__ . '/../../includes/header.php';
                         <?php foreach($data['categories'] as $cat): ?>
                             <li>
                                 <span><?php echo htmlspecialchars($cat['name']); ?></span>
-                                <form action="/admin/delete_category/<?php echo $cat['category_id']; ?>" method="POST" onsubmit="return confirm('Delete this category?');">
+                                <form action="<?= BASE_URL ?>/admin/delete_category/<?php echo $cat['category_id']; ?>" method="POST" onsubmit="return confirm('Delete this category?');">
                                     <button type="submit" class="btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
                             </li>
@@ -57,10 +74,9 @@ require_once __DIR__ . '/../../includes/header.php';
                 </ul>
             </div>
 
-            <!-- Global Site Configurations -->
             <div class="settings-card">
                 <h2>Global Configuration</h2>
-                <form action="/admin/update_config" method="POST">
+                <form action="<?= BASE_URL ?>/admin/update_config" method="POST">
                     <div class="form-group">
                         <label>Site Name</label>
                         <input type="text" name="site_name" value="<?php echo htmlspecialchars($data['config']['site_name'] ?? 'Lost & Found Express'); ?>">
@@ -83,4 +99,4 @@ require_once __DIR__ . '/../../includes/header.php';
     </main>
 </div>
 
-<?php require_once __DIR__ . '/../../includes/footer.php'; ?>
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>

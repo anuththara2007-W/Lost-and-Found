@@ -1,4 +1,9 @@
-<?php require_once ROOT . '/resources/views/layouts/header.php'; ?>//admin login
+<?php
+if (!defined('ROOT')) {
+    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
+}
+require_once ROOT . '/resources/views/layouts/header.php';
+?>
 
 <div class="form-container" style="margin-top: 60px; margin-bottom: 60px;">
     <div class="form-header">
@@ -21,4 +26,4 @@
     </form>
 </div>
 
-<?php require_once ROOT . '/resources/views/layouts/footer.php';  ?>
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
