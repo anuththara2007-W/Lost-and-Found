@@ -109,3 +109,64 @@
       </div>
     </div>
   </section>
+
+   <!-- CATEGORIES-->
+  <section class="categories-section bg-light">
+    <h2 class="section-header">Asset Classification Taxonomy</h2>
+    <p class="section-description">
+      To ensure optimal searchability and rapid database querying, items are organized into strict
+      taxonomic categories. Accurate categorization is the highest predictor of a successful reunion.
+    </p>
+
+    <div class="categories-grid">
+      <div class="category-card">
+        <h4>Biometric &amp; Identifications</h4>
+        <p>Passports, national ID cards, driver's licenses, and employee access badges. These items require expedited handling due to identity theft vectors.</p>
+      </div>
+      <div class="category-card">
+        <h4>Consumer Electronics</h4>
+        <p>Laptops, smartphones, smartwatches, and headphones. High financial value items that often contain sensitive, unencrypted personal data.</p>
+      </div>
+      <div class="category-card">
+        <h4>Financial Instruments</h4>
+        <p>Physical wallets, credit cards, checkbooks, and significant sums of cash. Requires immediate reporting to preempt fraudulent transactions.</p>
+      </div>
+      <div class="category-card">
+        <h4>Keys &amp; Access Tokens</h4>
+        <p>Vehicle fobs, residential keys, and physical security tokens. High inconvenience factor items that disrupt daily logistical operations.</p>
+      </div>
+      <div class="category-card">
+        <h4>Sentimental &amp; Biological</h4>
+        <p>Heirlooms, specialized medical equipment, prescription eyewear, and companion animals. Items possessing immense subjective value to the original owner.</p>
+      </div>
+      <div class="category-card">
+        <h4>Transit &amp; Luggage</h4>
+        <p>Backpacks, checked baggage, briefcases, and gym bags. Often displaced during high-friction transitional states like commuting or traveling.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section class="analytics-section">
+    <h2 class="section-header">Geospatial Intelligence &amp; Predictive Analytics</h2>
+    <p class="section-description">
+      We are moving beyond a simple reactive bulletin board to become an infrastructural diagnostic
+      tool. By aggregating thousands of data points, we can map the topography of human error.
+    </p>
+
+    <div class="analytics-content">
+      <p class="pillar-text">
+        As our dataset grows, the predictive capabilities of the platform expand exponentially.
+        Currently, we operate on a reactive model—a user loses an item, a user posts an item.
+        However, aggressively clustering geographic data over long timelines allows us to identify
+        and map 'loss hotspots.'
+      </p>
+      <p class="pillar-text">
+        Imagine an administrative dashboard that clearly visualizes that 40% of all lost biometric
+        identification cards within a specific university campus occur within a precise 50-meter
+        radius of a specific dining hall turnstile. Facility managers can use this anonymized,
+        aggregated geospatial data to alter physical traffic flows, add targeted warning signage,
+        or reposition physical security desks.
+      </p>
+    </div>
+  </section>
