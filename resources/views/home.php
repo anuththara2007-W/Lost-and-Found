@@ -220,3 +220,93 @@
 
     </div>
   </section>
+
+  <!-- FRAMEWORK -->
+  <section class="framework-section">
+    <div class="framework-container">
+      <h2 class="framework-header">Community Trust Frameworks &amp; Gamification Protocols</h2>
+
+      <div class="framework-card">
+        <h4 class="framework-card-title">Reputational Dynamics</h4>
+        <p class="framework-card-text">
+          A decentralized recovery network is entirely dependent on the integrity of its nodes—the
+          users. To foster an environment of high trust, we have implemented a structured
+          reputational dynamic centered around authenticated 'Finder Badges.'
+        </p>
+        <p class="framework-card-text">
+          When a user consistently demonstrates altruistic behavior by reporting found high-value
+          items and successfully walking through the return protocol, their profile metrics reflect
+          this reliability. System administrators manually verify these return chains and issue
+          Bronze, Silver, or Gold tier badges.
+        </p>
+        <p class="framework-card-text">
+          If you are arranging to meet someone to recover a $2,000 piece of equipment, seeing a
+          Gold Finder Badge next to their username significantly reduces anxiety. This creates a
+          positive feedback loop where good behavior is structurally incentivized.
+        </p>
+      </div>
+
+      <div class="framework-card">
+        <h4 class="framework-card-title">Data Privacy &amp; Information Masking</h4>
+        <p class="framework-card-text">
+          Navigating the intersection of open-source community help and stringent personal data
+          privacy requires a delicate architectural balance. We require users to provide enough
+          detail to make a recovery possible, but we purposefully obfuscate sensitive vectors until
+          a mutual connection is established.
+        </p>
+        <p class="framework-card-text">
+          Our internal messaging system acts as a secure airlock. Users can exchange photographs,
+          discuss specific identifying serial numbers, and negotiate meeting places without ever
+          exposing their personal email addresses or phone numbers to the public ledger.
+        </p>
+        <p class="framework-card-text">
+          Optional external integrations utilize intent-based routing. A user must deliberately
+          consent to expose alternative contact methods. This opt-in methodology ensures that
+          power-users can achieve frictionless communication while casual users are never pressured
+          to leave the secure sandbox.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAFETY -->
+  <section class="safety-section">
+    <h2 class="section-header">Physical Hand-off Operational Guidelines</h2>
+    <p class="section-description">
+      While digital coordination occurs within a secure environment, the final step of the recovery
+      lifecycle occurs in the physical world. We mandate adherence to the following operational
+      guidelines to ensure the absolute safety of all parties.
+    </p>
+    <div class="safety-grid">
+      <ul class="safety-list">
+        <li>
+          <strong>Public Intersections:</strong>
+          All physical exchanges must occur in highly trafficked, well-lit public spaces. Coffee
+          shops, library atriums, or designated municipal safe exchange zones (such as police
+          station lobbies) are heavily recommended.
+        </li>
+        <li>
+          <strong>Verification Before Meeting:</strong>
+          The "Finder" should withhold one distinct, identifying feature of the item from their
+          public listing. The "Loser" must accurately describe this withheld feature via secure
+          message prior to finalizing a meeting location.
+        </li>
+        <li>
+          <strong>Daylight Operations:</strong>
+          Whenever possible, schedule the asset recovery exchange during daylight hours. If an
+          evening exchange is unavoidable, restrict locations to indoor commercial establishments
+          with active security personnel.
+        </li>
+        <li>
+          <strong>Third-Party Presence:</strong>
+          Users are encouraged to bring a companion to the exchange. If attending alone, inform a
+          trusted external contact of the meeting location, time, and the username of the
+          individual you are meeting.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
