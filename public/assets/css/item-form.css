@@ -1,0 +1,47 @@
+/* item-form.css - Styling for the item creation/reporting form */
+
+.item-form-wrapper {
+    max-width: 600px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.item-form-title-lost {
+    color: var(--terracotta);
+}
+
+.item-form-title-found {
+    color: var(--sage);
+}
+
+.item-form-map-hint {
+    font-size: 13px;
+    color: var(--clay);
+    margin-bottom: 10px;
+}
+
+.item-form-map-container {
+    height: 300px;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--parchment);
+    background: #eee;
+    margin-bottom: 10px;
+    z-index: 1;
+}
+
+.item-form-coords-display {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--clay);
+}
+
+.item-form-file-input {
+    padding: 9px 12px;
+}
+
+.item-form-submit-btn {
+    padding: 12px;
+    font-size: 15px;
+}
