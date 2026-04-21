@@ -25,3 +25,52 @@
         <button type="submit" class="btn btn-primary search-btn">Search</button>
     </form>
 </div>
+
+<!-- Browse Results -->
+<?php if (empty($data['items']) && !isset($data['items'])): ?>
+    <div class="search-empty-state">
+        <p class="search-empty-text">Search results will populate here.</p>
+    </div>
+<?php elseif(empty($data['items'])): ?>
+    <div class="search-no-results">
+        <p class="search-empty-text">No items match your criteria.</p>
+    </div>
+<?php else: ?>
+    <div class="search-results-grid">
+        <?php foreach ($data['items'] as $item): ?>
+            <div class="preview-card preview-card-styled" onclick="window.location.href='<?= BASE_URL ?>/item/show/<?= $item['report_id'] ?>'">
+                
+                <?php if ($item['type'] === 'lost'): ?>
+                    <span class="card-badge badge-lost badge-inline badge-inline-lost"><span class="badge-dot"></span> Lost</span>
+                <?php else: ?>
+                    <span class="card-badge badge-found badge-inline badge-inline-found"><span class="badge-dot"></span> Found</span>
+                <?php endif; ?>
+                
+                <?php if(empty($item['image_path'])): ?>
+                    <div class="card-image-container card-image-no-photo">
+                         [ NO PHOTO ]
+                    </div>
+                <?php else: ?>
+                    <div class="card-image-container" style="background: url('<?= BASE_URL ?>/public/uploads/<?= $item['image_path'] ?>') center/cover;">
+                    </div>
+                <?php endif; ?>
+                
+                <div class="card-info-title">
+                    <?= escape($item['title']) ?>
+                </div>
+                
+                <div class="card-info-date">
+                    <?= formatDate($item['date_posted']) ?>
+                </div>
+                
+                <div class="card-info-location">
+                    📍 <?= escape($item['location']) ?>
+                </div>
+
+                <a href="<?= BASE_URL ?>/item/show/<?= $item['report_id'] ?>" class="btn btn-secondary w-full">View Details</a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
