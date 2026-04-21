@@ -1,0 +1,171 @@
+/* search.css - Styling for the search page */
+
+.search-header-container {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.search-title {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+}
+
+.search-subtitle {
+    color: var(--clay);
+    font-size: 14px;
+}
+
+.search-form-container {
+    background: var(--off-white);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 40px;
+}
+
+.search-form {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.search-input-group-large {
+    flex: 2;
+    min-width: 200px;
+    margin-bottom: 0;
+}
+
+.search-input-group-small {
+    flex: 1;
+    min-width: 150px;
+    margin-bottom: 0;
+}
+
+.search-select {
+    height: 48px;
+}
+
+.search-btn {
+    padding: 12px 24px;
+    height: 48px;
+}
+
+.search-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.search-no-results {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--off-white);
+    border-radius: 16px;
+}
+
+.search-empty-text {
+    color: var(--clay);
+    font-size: 15px;
+}
+
+.search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+/* Card Styles (Reused from home.css to ensure encapsulation as requested) */
+.preview-card-styled {
+    background: var(--off-white);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.preview-card-styled:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.badge-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+
+.badge-inline-lost {
+    background: var(--terracotta-lt);
+    color: var(--terracotta);
+}
+
+.badge-inline-found {
+    background: var(--sage-lt);
+    color: var(--sage);
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.card-image-container {
+    width: 100%;
+    height: 160px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--warm-mid);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.card-image-no-photo {
+    background: var(--parchment);
+}
+
+.card-info-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--midnight);
+    margin-bottom: 6px;
+}
+
+.card-info-date {
+    color: var(--clay);
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.card-info-location {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--clay);
+    margin-bottom: 16px;
+}
+
+/* Actions for index.php reused layout */
+.index-actions-container {
+    display: flex;
+    gap: 10px;
+}
+
+.index-action-btn {
+    font-size: 12px;
+    padding: 8px 16px;
+}
