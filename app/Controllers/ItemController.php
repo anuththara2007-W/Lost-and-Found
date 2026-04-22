@@ -42,7 +42,7 @@ class ItemController extends Controller
         
         $this->view('items/index', $data);
     }
-    
+
     // Show details for a single item
     public function show($id)
     {
@@ -85,5 +85,90 @@ class ItemController extends Controller
 
         $this->view('items/show', $data);
     }
+
+    public function create()
+    {
+        requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+            $_SESSION['old'] = $_POST;
+
+            // Handle multiple file uploads
+            $imagePath = null;
+            $uploadedImages = [];
+            if (isset($_FILES['images']) && is_array($_FILES['images']['name']) && count($_FILES['images']['name']) > 0) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+                $uploadDir = ROOT . '/public/uploads/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+
+                foreach ($_FILES['images']['name'] as $key => $fileName) {
+                    if ($_FILES['images']['error'][$key] == 0) {
+                        $fileTmp = $_FILES['images']['tmp_name'][$key];
+                        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+                        if (in_array($fileExt, $allowed)) {
+                            $newFileName = uniqid() . '_' . $key . '.' . $fileExt;
+                            if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                                $uploadedImages[] = $newFileName;
+                                // Primary image is just the first uploaded one
+                                if ($imagePath === null) {
+                                    $imagePath = $newFileName;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $data = [
+                'user_id' => $_SESSION['user_id'],
+                'category_id' => !empty($_POST['category_id']) ? $_POST['category_id'] : null,
+                'type' => $_POST['type'] ?? 'lost',
+                'title' => trim($_POST['title']),
+                'description' => trim($_POST['description']),
+                'location' => trim($_POST['location']),
+                'reward_amount' => !empty($_POST['reward_amount']) ? trim($_POST['reward_amount']) : null,
+                'contact_info' => trim($_POST['contact_info'] ?? ''),
+                'latitude' => !empty($_POST['latitude']) ? trim($_POST['latitude']) : null,
+                'longitude' => !empty($_POST['longitude']) ? trim($_POST['longitude']) : null,
+                'image_path' => $imagePath,
+                'images' => $uploadedImages,
+                'custom_category' => $_POST['custom_category'] ?? null,
+                'whatsapp_contact' => $_POST['whatsapp_contact'] ?? null,
+                'allow_platform_message' => isset($_POST['allow_platform_message']) ? 1 : 0
+            ];
+
+            if (empty($data['title']) || empty($data['description']) || empty($data['location'])) {
+                $_SESSION['flash_error'] = 'Please fill out all required fields.';
+                redirect('/item/create?type=' . $data['type']);
+            }
+
+            if ($this->itemModel->addReport($data)) {
+                clearOld();
+                $_SESSION['flash_success'] = 'Report successfully submitted.';
+                redirect('/home/index');
+            } else {
+                $_SESSION['flash_error'] = 'Something went wrong. Please try again.';
+                redirect('/item/create?type=' . $data['type']);
+            }
+
+        } else {
+            $categories = $this->itemModel->getCategories();
+            $type = isset($_GET['type']) && in_array($_GET['type'], ['lost', 'found']) ? $_GET['type'] : 'lost';
+
+            $data = [
+                'title' => 'Report an Item - Lost and Found',
+                'categories' => $categories,
+                'type' => $type
+            ];
+
+            $this->view('items/create', $data);
+        }
+    }
+}
+
 
 
