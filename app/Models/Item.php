@@ -140,3 +140,16 @@ class Item
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    public function getReportsByUser($user_id)
+    {
+        $stmt = $this->db->prepare("
+            SELECT r.*, c.name as category_name
+            FROM reports r
+            LEFT JOIN categories c ON r.category_id = c.category_id
+            WHERE r.user_id = :user_id
+            ORDER BY r.date_posted DESC
+        ");
+        $stmt->execute(['user_id' => $user_id]);
+        return $stmt->fetchAll();
+    }
