@@ -1,0 +1,141 @@
+/* map.css - Styles for the mapping page */
+
+.map-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.map-title {
+  font-size: 2.5rem;
+  color: var(--midnight, #1e2027);
+  margin-bottom: 5px;
+}
+
+.map-subtitle {
+  color: var(--clay, #9c8c78);
+  font-size: 14px;
+}
+
+.map-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+
+.map-badge-lost {
+  background: var(--terracotta-lt, #f6e4dc);
+  color: var(--terracotta, #c96442);
+  margin: 0 5px;
+}
+
+.map-badge-found {
+  background: var(--sage-lt, #e3ebe6);
+  color: var(--sage, #5c7a65);
+}
+
+.map-wrapper {
+  background: var(--off-white, #faf8f5);
+  padding: 10px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card, 0 8px 24px rgba(0, 0, 0, 0.08));
+}
+
+#laf-map,
+.laf-map-element {
+  display: block;
+  width: 100%;
+  height: 600px;
+  min-height: 420px;
+  border-radius: 12px;
+  z-index: 1;
+  background: #e9eef3;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  font-family: "DM Sans", sans-serif;
+}
+
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-marker-lost {
+  background-color: #c96442;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.custom-marker-found {
+  background-color: #5c7a65;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.popup-container {
+  font-family: "DM Sans", sans-serif;
+  min-width: 180px;
+}
+
+.popup-badge-wrapper {
+  margin-bottom: 5px;
+}
+
+.popup-badge-lost {
+  color: #c96442;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.popup-badge-found {
+  color: #5c7a65;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.popup-title {
+  font-size: 14px;
+  color: #1e2027;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.popup-location {
+  font-size: 11px;
+  color: #9c8c78;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+.popup-link {
+  color: #c96442;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.map-empty-note {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff5f5;
+  color: #b42318;
+  font-size: 14px;
+}
