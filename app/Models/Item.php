@@ -184,3 +184,24 @@ class Item
             'user_id' => $user_id
         ]);
     }
+
+    // --- Admin Methods ---
+    public function getAllReports()
+    {
+        $stmt = $this->db->prepare("
+            SELECT r.*, u.username, u.email, c.name as category_name
+            FROM reports r
+            LEFT JOIN users u ON r.user_id = u.user_id
+            LEFT JOIN categories c ON r.category_id = c.category_id
+            ORDER BY r.date_posted DESC
+        ");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function deleteReport($id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id");
+        return $stmt->execute(['id' => $id]);
+    }
+}
