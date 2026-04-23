@@ -32,3 +32,13 @@
                 <option value="other" <?= old('category_id') == 'other' ? 'selected' : '' ?>>Other (Specify Custom Category)</option>
             </select>
         </div>
+
+        <div class="input-group" id="custom_category_group" style="display: <?= old('category_id') == 'other' ? 'block' : 'none' ?>;">
+            <label class="input-label" for="custom_category">Custom Category Name</label>
+            <input type="text" id="custom_category" name="custom_category" class="input-field" placeholder="e.g. Drones" value="<?= old('custom_category') ?>">
+        </div>
+
+        <div class="input-group">
+            <label class="input-label" for="location">General Location Area *</label>
+            <input type="text" id="location" name="location" class="input-field" placeholder="e.g. Central Library, Level 2" required value="<?= old('location') ?>">
+        </div>
