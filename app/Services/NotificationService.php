@@ -1,16 +1,32 @@
 <?php
 namespace App\Services;
+
+/**
+ * NotificationService
+ * 
+ * Handles all outward bound communication (Email, SMS) scaffolds.
+ * In a production environment, this would integrate with Twilio/SendGrid.
+ */
 class NotificationService
-// handles the sms and email notifications for the lost and found system
 {
- public static function sendEmail($to, $subject, $body)
+    /**
+     * Send an email notification
+     */
+    public static function sendEmail($to, $subject, $body)
     {
-       
+        // Scaffold implementation
+        // e.g. mail($to, $subject, $body, $headers);
         error_log("NotificationService: Sending EMAIL to $to | Subject: $subject");
         return true;
     }
-public static function sendSMS($phoneNumber, $message)
+
+    /**
+     * Send an SMS notification
+     */
+    public static function sendSMS($phoneNumber, $message)
     {
+        // Scaffold implementation
+        // e.g. Twilio API call here
         error_log("NotificationService: Sending SMS to $phoneNumber | Message: $message");
         return true;
     }
