@@ -134,5 +134,47 @@ if (confirmPasswordInput !== null && passwordInput !== null) {
   passwordInput.addEventListener("input", checkPasswordMatch);
 }
 
+const emailInput = document.getElementById("email");
 
+if (emailInput !== null) {
+  function validateEmailField() {
+    let emailValue = emailInput.value.trim();
+    let messageBox = document.getElementById("email-msg");
 
+    if (!messageBox) {
+      return;
+    }
+
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let isValid = pattern.test(emailValue);
+
+    if (emailValue.length === 0) {
+      return;
+    }
+
+    if (isValid === true) {
+      emailInput.classList.add("is-valid");
+      emailInput.classList.remove("is-invalid");
+
+      messageBox.className = "field-msg";
+    } else {
+      emailInput.classList.add("is-invalid");
+      emailInput.classList.remove("is-valid");
+
+      messageBox.textContent = "Invalid email format";
+      messageBox.className = "field-msg visible error";
+    }
+  }
+
+  let emailTimeout;
+
+  emailInput.addEventListener("input", function () {
+    clearTimeout(emailTimeout);
+
+    emailTimeout = setTimeout(function () {
+      validateEmailField();
+    }, 500);
+  });
+
+  emailInput.addEventListener("blur", validateEmailField);
+}
