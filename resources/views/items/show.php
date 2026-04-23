@@ -79,3 +79,31 @@
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+
+            <!-- Premium Image Gallery Lightbox -->
+            <?php if (!empty($images)): ?>
+                <div id="image-lightbox"
+                    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; justify-content:center; align-items:center; flex-direction:column;">
+                    <button onclick="closeLightbox(event)"
+                        style="position:absolute; top:20px; right:30px; background:none; border:none; color:white; font-size:2rem; cursor:pointer; z-index: 10000;">&times;</button>
+
+                    <?php if (count($images) > 1): ?>
+                        <button onclick="prevLightboxImage(event)"
+                            style="position:absolute; left:20px; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.1); border:none; color:white; font-size:2rem; cursor:pointer; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                            &larr;
+                        </button>
+
+                        <button onclick="nextLightboxImage(event)"
+                            style="position:absolute; right:20px; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.1); border:none; color:white; font-size:2rem; cursor:pointer; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                            &rarr;
+                        </button>
+                    <?php endif; ?>
+
+                    <img id="lightbox-main-img" src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($images[0]) ?>"
+                        style="max-width:90%; max-height:85vh; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5); transition: opacity 0.2s;">
+
+                    <?php if (count($images) > 1): ?>
+                        <div style="color: white; margin-top: 15px; font-weight: bold; letter-spacing: 1px;"><span
+                                id="lightbox-counter">1</span> / <?= count($images) ?></div>
+                    <?php endif; ?>
+                </div>
