@@ -34,6 +34,8 @@ passwordButtons.forEach(function (button) {
   });
 });
 
+//   Password Strength Checker
+
 const passwordInput = document.getElementById("password");
 const strengthBar = document.querySelector(".strength-fill");
 const strengthText = document.querySelector(".strength-label");
@@ -61,4 +63,35 @@ if (passwordInput !== null && strengthBar !== null && strengthText !== null) {
     strengthText.textContent = value.length > 0 ? result.label : "";
     strengthText.style.color = result.color;
   });
+}
+/* Password score function */
+
+function getPasswordScore(password) {
+  if (!password) {
+    return 0;
+  }
+
+  let score = 0;
+
+  if (password.length >= 8) {
+    score = score + 1;
+  }
+
+  if (password.length >= 12) {
+    score = score + 1;
+  }
+
+  if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+    score = score + 1;
+  }
+
+  if (password.match(/[0-9]/)) {
+    score = score + 1;
+  }
+
+  if (password.match(/[^a-zA-Z0-9]/)) {
+    score = score + 1;
+  }
+
+  return score;
 }
