@@ -193,3 +193,56 @@ function generateDescription() {
         btn.innerHTML = originalHtml;
     }, 800);
 }
+/ AI Auto-Tagging via JS Heuristics
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const categorySelect = document.getElementById('category_id');
+
+    const keywords = {
+        'electronics': ['phone', 'iphone', 'samsung', 'laptop', 'macbook', 'ipad', 'tablet', 'charger', 'headphones', 'airpods', 'earbuds', 'camera', 'watch', 'apple watch'],
+        'keys': ['key', 'keys', 'car key', 'house keys', 'fob'],
+        'wallet': ['wallet', 'purse', 'cardholder', 'cash', 'money', 'credit card'],
+        'documents': ['id', 'passport', 'license', 'certificate', 'document', 'folder', 'binder'],
+        'clothing': ['jacket', 'coat', 'sweater', 'hoodie', 'hat', 'cap', 'scarf', 'gloves', 'shoes', 'sneakers'],
+        'jewelry': ['ring', 'necklace', 'bracelet', 'earring', 'jewelry', 'gold', 'silver', 'diamond'],
+        'bag': ['bag', 'backpack', 'tote', 'luggage', 'suitcase', 'briefcase']
+    };
+
+    function autoTag() {
+        // Only auto tag if user hasn't manually selected something yet
+        if (categorySelect.value !== '') return;
+        
+        let text = (titleInput.value + ' ' + descInput.value).toLowerCase();
+        
+        let foundCategory = null;
+        for (let cat in keywords) {
+            if (keywords[cat].some(kw => text.includes(kw))) {
+                foundCategory = cat;
+                break;
+            }
+        }
+
+        if (foundCategory) {
+            // Find option matching this category text partially
+            let options = categorySelect.options;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].text.toLowerCase().includes(foundCategory)) {
+                    categorySelect.selectedIndex = i;
+                    toggleCustomCategory(); // Trigger the related UI updates if any
+                    
+                    // Show a tiny feedback
+                    let lbl = document.querySelector('label[for="category_id"]');
+                    let originalHTML = lbl.innerHTML;
+                    lbl.innerHTML = 'Category <span style="color:#34c759; font-size:11px; margin-left:5px;"><i class="fas fa-magic"></i> Auto-tagged!</span>';
+                    setTimeout(() => lbl.innerHTML = originalHTML, 3000);
+                    break;
+                }
+            }
+        }
+    }
+
+    titleInput.addEventListener('blur', autoTag);
+    descInput.addEventListener('blur', autoTag);
+});
+</script>
