@@ -133,3 +133,9 @@
                         document.getElementById('image-lightbox').style.display = 'flex';
                         document.body.style.overflow = 'hidden';
                     }
+                      function prevLightboxImage(e) {
+                        if (e) e.stopPropagation();
+                        if (galleryImages.length <= 1) return;
+                        currentGalleryIndex = (currentGalleryIndex === 0) ? galleryImages.length - 1 : currentGalleryIndex - 1;
+                        updateLightboxDisplay();
+                    }
