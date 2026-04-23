@@ -179,8 +179,6 @@ if (emailInput !== null) {
   emailInput.addEventListener("blur", validateEmailField);
 }
 
-
-
 const usernameInput = document.getElementById("username");
 
 if (usernameInput !== null) {
@@ -229,4 +227,43 @@ if (usernameInput !== null) {
       // ignore error
     }
   }
+}
+
+//   Profile Image Preview
+
+
+const imageInput = document.getElementById("profile_image");
+const imagePreview = document.getElementById("avatar-preview-img");
+
+if (imageInput !== null && imagePreview !== null) {
+  imageInput.addEventListener("change", function () {
+    let file = imageInput.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    let allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
+    if (allowedTypes.indexOf(file.type) === -1) {
+      showToast("Invalid image type", "error");
+      imageInput.value = "";
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      showToast("Image too large (max 2MB)", "error");
+      imageInput.value = "";
+      return;
+    }
+
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+      imagePreview.src = e.target.result;
+      imagePreview.style.display = "block";
+    };
+
+    reader.readAsDataURL(file);
+  });
 }
