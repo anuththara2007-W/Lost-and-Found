@@ -13,6 +13,7 @@ app/Models/User.php - ✅
 
 📂 Views – Auth
 
+
 resources/views/auth/login.php - ✅
 
 resources/views/auth/register.php - ✅
