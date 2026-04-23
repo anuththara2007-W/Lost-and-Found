@@ -70,3 +70,9 @@
                 </div>
             <?php endif; ?>
 
+            <div class="browse-more">
+                <a href="<?= BASE_URL ?>/item/index" class="btn btn-ghost"><?= escape(t('home_browse_all')) ?></a>
+            </div>
+        </div>
+    </section>
+
