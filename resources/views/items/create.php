@@ -74,3 +74,19 @@
             <label class="input-label" for="whatsapp_contact">WhatsApp Number (Optional)</label>
             <input type="text" id="whatsapp_contact" name="whatsapp_contact" class="input-field" placeholder="Number to be contacted via WhatsApp..." value="<?= old('whatsapp_contact') ?>">
         </div>
+
+         <div class="input-group" style="display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 20px;">
+            <input type="checkbox" id="allow_platform_message" name="allow_platform_message" value="1" <?= (empty($_SESSION['old']) || old('allow_platform_message')) ? 'checked' : '' ?> style="width: 16px; height: 16px;">
+            <label class="input-label" for="allow_platform_message" style="margin-bottom: 0;">Allow user to message me through platform</label>
+        </div>
+
+        <?php if($type === 'lost'): ?>
+        <div class="input-group">
+            <label class="input-label" for="reward_amount">Reward Amount (Optional)</label>
+            <div style="display:flex; align-items:center;">
+                <span style="padding: 12px 16px; background: var(--warm-mid); color: white; border-radius: 8px 0 0 8px; font-weight: bold;">$</span>
+                <input type="number" step="0.01" min="0" id="reward_amount" name="reward_amount" class="input-field" placeholder="0.00" value="<?= old('reward_amount') ?>" style="border-radius: 0 8px 8px 0;">
+            </div>
+            <p class="item-form-map-hint" style="margin-top: 5px;">Offering a reward increases the chances of your item being returned.</p>
+        </div>
+        <?php endif; ?>
