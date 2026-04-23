@@ -99,4 +99,10 @@ public function updateBadge($userId, $badge)
         }
     }
 
+
+     public function toggleBan($userId, $isBanned)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET is_banned = :ban WHERE user_id = :id");
+        return $stmt->execute(['ban' => $isBanned, 'id' => $userId]);
+    }
 }
