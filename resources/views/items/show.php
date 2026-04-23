@@ -124,3 +124,12 @@
                             thumb.style.borderColor = (parseInt(thumb.getAttribute('data-index')) === index) ? 'var(--surface-text)' : 'transparent';
                         });
                     }
+  function openLightbox(index = currentGalleryIndex) {
+                        currentGalleryIndex = index;
+                        document.getElementById('lightbox-main-img').src = galleryImages[currentGalleryIndex];
+                        if (document.getElementById('lightbox-counter')) {
+                            document.getElementById('lightbox-counter').textContent = currentGalleryIndex + 1;
+                        }
+                        document.getElementById('image-lightbox').style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                    }
