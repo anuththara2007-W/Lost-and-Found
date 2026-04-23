@@ -47,3 +47,35 @@
                         Resolved</div>
                 </div>
             </div>
+
+            <div class="item-gallery-container"
+                style="position: relative; border-radius: 12px; overflow: hidden; background: var(--parchment); aspect-ratio: 4/3; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: zoom-in;"
+                onclick="openLightbox(0)">
+                <?php if (empty($images)): ?>
+                    <div
+                        style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--clay); font-weight: bold; background: #e2e8f0;">
+                        [ NO PHOTO UPLOADED ]</div>
+                <?php else: ?>
+                    <img id="main-gallery-image" src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($images[0]) ?>"
+                        style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s;"
+                        alt="Main Item Image">
+                    <?php if (count($images) > 1): ?>
+                        <div
+                            style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">
+                            <i class="fas fa-images"></i> +<?= count($images) - 1 ?>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+
+            <?php if (!empty($images) && count($images) > 1): ?>
+                <div class="gallery-thumbnails"
+                    style="display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px;">
+                    <?php foreach ($images as $index => $img): ?>
+                        <img src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($img) ?>"
+                            onclick="changeMainImage(<?= $index ?>)"
+                            style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid <?= $index == 0 ? 'var(--surface-text)' : 'transparent' ?>; transition: border-color 0.2s;"
+                            class="gallery-thumb" data-index="<?= $index ?>">
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
