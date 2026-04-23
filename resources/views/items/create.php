@@ -54,3 +54,13 @@
                 <div>Lng: <span id="lngDisplay">--</span></div>
             </div>
         </div>
+
+         <div class="input-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="input-label" for="description" style="margin-bottom: 0;">Detailed Description</label>
+                <button type="button" onclick="generateDescription()" class="btn-secondary" style="padding: 2px 8px; font-size: 11px; border-radius: 4px; color: #d97706; border-color: #fcd34d; background: #fef3c7;">
+                    <i class="fas fa-magic"></i> AI Generate
+                </button>
+            </div>
+            <textarea id="description" name="description" class="input-field" rows="4" placeholder="Distinctive features, contents, brand, colors..." required><?= old('description') ?></textarea>
+        </div>
