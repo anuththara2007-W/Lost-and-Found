@@ -54,3 +54,50 @@ require_once __DIR__ . '/../layouts/header.php';
                     <button type="submit" class="btn-primary" style="width:100%;">Create Announcement</button>
                 </form>
             </div>
+
+             <!-- Existing Announcements Table -->
+            <div class="card" style="padding:0; overflow:hidden;">
+                <h2 style="padding: 1.5rem 1.5rem 0 1.5rem;">Recent Announcements</h2>
+                <table class="admin-table" style="margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($data['announcements'])): ?>
+                            <?php foreach ($data['announcements'] as $ann): ?>
+                                <tr>
+                                    <td><strong><?php echo htmlspecialchars($ann['title']); ?></strong></td>
+                                    <td><span class="badge badge-<?php echo $ann['type']; ?>"><?php echo ucfirst($ann['type']); ?></span></td>
+                                    <td>
+                                        <form action="<?= BASE_URL ?>/admin/toggle_announcement/<?php echo $ann['announcement_id']; ?>" method="POST">
+                                            <input type="hidden" name="is_active" value="<?php echo $ann['is_active'] ? '0' : '1'; ?>">
+                                            <button type="submit" class="toggle-btn <?php echo $ann['is_active'] ? 'toggle-on' : 'toggle-off'; ?>">
+                                                <?php echo $ann['is_active'] ? 'Active' : 'Hidden'; ?>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td><?php echo date('M d', strtotime($ann['created_at'])); ?></td>
+                                    <td>
+                                        <form action="<?= BASE_URL ?>/admin/delete_announcement/<?php echo $ann['announcement_id']; ?>" method="POST" onsubmit="return confirm('Delete this announcement?');" style="display:inline;">
+                                            <button type="submit" class="btn-danger"><i class="fas fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="5" class="text-center">No announcements created yet.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>
