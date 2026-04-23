@@ -90,3 +90,14 @@
             <p class="item-form-map-hint" style="margin-top: 5px;">Offering a reward increases the chances of your item being returned.</p>
         </div>
         <?php endif; ?>
+
+        <div class="input-group mb-20">
+            <label class="input-label" for="image">Upload Images (Optional, multiple allowed)</label>
+            <input type="file" id="image" name="images[]" multiple class="input-field item-form-file-input" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn <?= $type === 'lost' ? 'btn-primary' : 'btn-found' ?> w-full item-form-submit-btn">
+            Submit Report
+        </button>
+    </form>
+</div>
