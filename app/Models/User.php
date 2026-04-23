@@ -46,5 +46,16 @@ class User
             'phone' => $data['phone'] ?? null,
             'password_hash' => $data['password_hash']
         ]);
+    }  
+     public function login($email, $password)
+    {
+        $user = $this->findByEmail($email);
+        
+        if ($user) {
+            if (password_verify($password, $user['password_hash'])) {
+                return $user;
+            }
+        }
+        return false;
     }
 }
