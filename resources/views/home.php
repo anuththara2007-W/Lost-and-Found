@@ -134,3 +134,24 @@
         </div>
     </section>
 
+    <div class="trust-bar">
+        <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-lock"></i></div><div class="trust-val"><?= escape(t('home_trust_secure')) ?></div><div class="trust-lbl"><?= escape(t('home_trust_secure_sub')) ?></div></div>
+        <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-award"></i></div><div class="trust-val"><?= escape(t('home_trust_verified')) ?></div><div class="trust-lbl"><?= escape(t('home_trust_verified_sub')) ?></div></div>
+        <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-map-location-dot"></i></div><div class="trust-val"><?= escape(t('home_trust_geo')) ?></div><div class="trust-lbl"><?= escape(t('home_trust_geo_sub')) ?></div></div>
+        <div class="trust-item"><div class="trust-icon"><i class="fa-solid fa-bolt"></i></div><div class="trust-val"><?= escape(t('home_trust_alerts')) ?></div><div class="trust-lbl"><?= escape(t('home_trust_alerts_sub')) ?></div></div>
+    </div>
+
+    <section id="safety" class="section bg-white">
+        <div class="section-inner">
+            <div class="eyebrow"><?= escape(t('home_stay_safe')) ?></div>
+            <h2 class="sec-title"><?= t('home_safe_handoff_html') ?></h2>
+            <p class="sec-sub"><?= escape(t('home_safe_sub')) ?></p>
+            <div class="safety-grid">
+                <div class="safety-card"><h4><i class="fa-solid fa-city"></i> <?= escape(t('home_safe_public')) ?></h4><p><?= escape(t('home_safe_public_sub')) ?></p></div>
+                <div class="safety-card"><h4><i class="fa-solid fa-circle-check"></i> <?= escape(t('home_safe_verify')) ?></h4><p><?= escape(t('home_safe_verify_sub')) ?></p></div>
+                <div class="safety-card"><h4><i class="fa-solid fa-sun"></i> <?= escape(t('home_safe_daytime')) ?></h4><p><?= escape(t('home_safe_daytime_sub')) ?></p></div>
+                <div class="safety-card"><h4><i class="fa-solid fa-user-group"></i> <?= escape(t('home_safe_support')) ?></h4><p><?= escape(t('home_safe_support_sub')) ?></p></div>
+            </div>
+        </div>
+    </section>
+
