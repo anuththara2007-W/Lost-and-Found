@@ -254,3 +254,57 @@
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>
+   <!-- Social Share -->
+                <div class="social-share"
+                    style="margin-bottom: 30px; border-top: 1px solid var(--parchment); padding-top: 15px;">
+                    <span style="font-size: 13px; color: var(--clay); margin-right: 10px;">Share to Social Media:</span>
+                    <?php $shareUrl = urlencode(BASE_URL . '/items/show/' . $item['report_id']); ?>
+                    <?php $shareTitle = urlencode("Check out this " . $item['type'] . " item on Lost & Found: " . $item['title']); ?>
+
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?= $shareUrl ?>" target="_blank"
+                        style="color: #1877F2; margin-right: 15px; font-size: 1.5rem; transition: transform 0.2s;"><i
+                            class="fab fa-facebook"></i></a>
+                    <a href="https://twitter.com/intent/tweet?url=<?= $shareUrl ?>&text=<?= $shareTitle ?>"
+                        target="_blank"
+                        style="color: #1DA1F2; margin-right: 15px; font-size: 1.5rem; transition: transform 0.2s;"><i
+                            class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/?text=<?= $shareTitle . ' ' . $shareUrl ?>" target="_blank"
+                        style="color: #25D366; font-size: 1.5rem; transition: transform 0.2s;"><i
+                            class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- Potential Matches -->
+            <?php if (!empty($potentialMatches)): ?>
+                <div class="potential-matches"
+                    style="margin-top: 10px; margin-bottom: 30px; padding: 15px; background: var(--parchment); border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <h4 style="margin-top: 0; color: var(--midnight); font-size: 15px; margin-bottom: 12px;">
+                        <i class="fas fa-magic" style="color: var(--warm-strong);"></i> Potential Matches
+                    </h4>
+                    <p style="font-size: 12px; color: var(--clay); margin-top: -8px; margin-bottom: 10px;">These items in
+                        the same category might be related.</p>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <?php foreach ($potentialMatches as $match): ?>
+                            <li
+                                style="margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <?php if (!empty($match['image_path'])): ?>
+                                    <img src="<?= BASE_URL ?>/uploads/<?= escape($match['image_path']) ?>"
+                                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">
+                                <?php else: ?>
+                                    <div
+                                        style="width: 40px; height: 40px; background: #e2e8f0; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #a0aec0;">
+                                        <i class="fas fa-box"></i></div>
+                                <?php endif; ?>
+                                <div>
+                                    <a href="<?= BASE_URL ?>/item/show/<?= $match['report_id'] ?>"
+                                        style="text-decoration: none; color: var(--surface-text); font-weight: 600; font-size: 14px; display: block;">
+                                        <?= escape($match['title']) ?>
+                                    </a>
+                                    <div style="font-size: 11px; color: var(--clay);">📍
+                                        <?= escape(substr($match['location'], 0, 25)) ?>...</div>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
