@@ -107,3 +107,20 @@
                                 id="lightbox-counter">1</span> / <?= count($images) ?></div>
                     <?php endif; ?>
                 </div>
+
+                <script>
+                    // Store images array in JS for gallery manipulation
+                    const galleryImages = <?= json_encode(array_map(function ($img) {
+                        return BASE_URL . '/uploads/' . $img;
+                    }, $images)) ?>;
+                    let currentGalleryIndex = 0;
+
+                    function changeMainImage(index) {
+                        currentGalleryIndex = index;
+                        document.getElementById('main-gallery-image').src = galleryImages[index];
+
+                        // Update active thumbnail styling
+                        document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+                            thumb.style.borderColor = (parseInt(thumb.getAttribute('data-index')) === index) ? 'var(--surface-text)' : 'transparent';
+                        });
+                    }
