@@ -193,7 +193,7 @@ function generateDescription() {
         btn.innerHTML = originalHtml;
     }, 800);
 }
-/ AI Auto-Tagging via JS Heuristics
+// AI Auto-Tagging via JS Heuristics
 document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('title');
     const descInput = document.getElementById('description');

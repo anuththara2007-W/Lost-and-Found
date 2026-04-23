@@ -66,7 +66,7 @@ app/Models/Item.php     ✅
 
 📂 Views – Items
 
-resources/views/items/create.php    
+resources/views/items/create.php    ✅
 
 resources/views/items/show.php
 
