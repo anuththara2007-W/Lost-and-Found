@@ -5,6 +5,10 @@ class HomeController
 {
     public function index()
     {
-        echo "Home Page Loaded Successfully ✅";
+        // Example data (important because your view expects it)
+        $recentItems = [];
+
+        // Load the view
+        require_once ROOT . '/resources/views/home.php';
     }
 }
