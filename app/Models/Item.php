@@ -169,4 +169,13 @@ class Item
         return $stmt->fetch();
     }
 
+     public function markResolved($id, $user_id)
+    {
+        $stmt = $this->db->prepare("UPDATE reports SET status = 'resolved' WHERE report_id = :id AND user_id = :user_id");
+        return $stmt->execute([
+            'id' => $id,
+            'user_id' => $user_id
+        ]);
+    }
+
 
