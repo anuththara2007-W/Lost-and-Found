@@ -139,3 +139,9 @@
                         currentGalleryIndex = (currentGalleryIndex === 0) ? galleryImages.length - 1 : currentGalleryIndex - 1;
                         updateLightboxDisplay();
                     }
+  function nextLightboxImage(e) {
+                        if (e) e.stopPropagation();
+                        if (galleryImages.length <= 1) return;
+                        currentGalleryIndex = (currentGalleryIndex === galleryImages.length - 1) ? 0 : currentGalleryIndex + 1;
+                        updateLightboxDisplay();
+                    }
