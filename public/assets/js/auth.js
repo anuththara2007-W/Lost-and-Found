@@ -178,3 +178,55 @@ if (emailInput !== null) {
 
   emailInput.addEventListener("blur", validateEmailField);
 }
+
+
+
+const usernameInput = document.getElementById("username");
+
+if (usernameInput !== null) {
+  let usernameTimer;
+
+  usernameInput.addEventListener("input", function () {
+    clearTimeout(usernameTimer);
+
+    let value = usernameInput.value.trim();
+    let messageBox = document.getElementById("username-msg");
+
+    if (value.length < 3) {
+      return;
+    }
+
+    usernameTimer = setTimeout(function () {
+      checkUsername(value);
+    }, 500);
+  });
+
+  async function checkUsername(username) {
+    try {
+      const response = await fetch("/api/check-username?username=" + username);
+      const data = await response.json();
+
+      const messageBox = document.getElementById("username-msg");
+
+      if (data.available === true) {
+        usernameInput.classList.add("is-valid");
+        usernameInput.classList.remove("is-invalid");
+
+        if (messageBox) {
+          messageBox.textContent = "Username available";
+          messageBox.className = "field-msg visible ok";
+        }
+      } else {
+        usernameInput.classList.add("is-invalid");
+        usernameInput.classList.remove("is-valid");
+
+        if (messageBox) {
+          messageBox.textContent = "Username already taken";
+          messageBox.className = "field-msg visible error";
+        }
+      }
+    } catch (error) {
+      // ignore error
+    }
+  }
+}
