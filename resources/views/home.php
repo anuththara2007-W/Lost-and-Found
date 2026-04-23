@@ -117,3 +117,20 @@
         </div>
     </section>
 
+    <section class="section">
+        <div class="section-inner">
+            <div class="split">
+                <div>
+                    <div class="split-title red"><?= escape(t('home_psychology_title')) ?></div>
+                    <p class="split-text"><?= escape(t('home_psychology_text1')) ?></p>
+                    <p class="split-text"><?= escape(t('home_psychology_text2')) ?></p>
+                </div>
+                <div>
+                    <div class="split-title green"><?= escape(t('home_anatomy_title')) ?></div>
+                    <p class="split-text"><?= escape(t('home_anatomy_text1')) ?></p>
+                    <p class="split-text"><?= escape(t('home_anatomy_text2')) ?></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
