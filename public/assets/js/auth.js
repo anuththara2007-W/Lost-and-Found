@@ -95,3 +95,44 @@ function getPasswordScore(password) {
 
   return score;
 }
+//   Confirm Password Match
+
+const confirmPasswordInput = document.getElementById("confirm_password");
+
+if (confirmPasswordInput !== null && passwordInput !== null) {
+  function checkPasswordMatch() {
+    const messageBox = document.getElementById("confirm-msg");
+
+    if (!messageBox) {
+      return;
+    }
+
+    let passwordValue = passwordInput.value;
+    let confirmValue = confirmPasswordInput.value;
+
+    if (confirmValue.length === 0) {
+      messageBox.className = "field-msg";
+      return;
+    }
+
+    if (passwordValue === confirmValue) {
+      messageBox.textContent = "Passwords match";
+      messageBox.className = "field-msg visible ok";
+
+      confirmPasswordInput.classList.remove("is-invalid");
+      confirmPasswordInput.classList.add("is-valid");
+    } else {
+      messageBox.textContent = "Passwords do not match";
+      messageBox.className = "field-msg visible error";
+
+      confirmPasswordInput.classList.remove("is-valid");
+      confirmPasswordInput.classList.add("is-invalid");
+    }
+  }
+
+  confirmPasswordInput.addEventListener("input", checkPasswordMatch);
+  passwordInput.addEventListener("input", checkPasswordMatch);
+}
+
+
+
