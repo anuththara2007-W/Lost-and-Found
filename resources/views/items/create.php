@@ -69,3 +69,8 @@
             <label class="input-label" for="contact_info">Contact Info (Optional)</label>
             <input type="text" id="contact_info" name="contact_info" class="input-field" placeholder="Phone number or specific instructions" value="<?= old('contact_info') ?>">
         </div>
+
+        <div class="input-group">
+            <label class="input-label" for="whatsapp_contact">WhatsApp Number (Optional)</label>
+            <input type="text" id="whatsapp_contact" name="whatsapp_contact" class="input-field" placeholder="Number to be contacted via WhatsApp..." value="<?= old('whatsapp_contact') ?>">
+        </div>
