@@ -95,3 +95,44 @@ class Item
         return $stmt->fetchAll();
     }
 
+    public function addReport($data)
+    {
+        $stmt = $this->db->prepare("
+            INSERT INTO reports 
+            (user_id, category_id, type, title, description, location, reward_amount, contact_info, image_path, latitude, longitude, custom_category, whatsapp_contact, allow_platform_message)
+            VALUES 
+            (:user_id, :category_id, :type, :title, :description, :location, :reward_amount, :contact_info, :image_path, :latitude, :longitude, :custom_category, :whatsapp_contact, :allow_platform_message)
+        ");
+
+        $success = $stmt->execute([
+            'user_id' => $data['user_id'],
+            'category_id' => $data['category_id'] ?: null,
+            'type' => $data['type'],
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'location' => $data['location'],
+            'reward_amount' => !empty($data['reward_amount']) ? (float)$data['reward_amount'] : 0.00,
+            'contact_info' => $data['contact_info'],
+            'image_path' => $data['image_path'] ?? null,
+            'latitude' => !empty($data['latitude']) ? (is_array($data['latitude']) ? reset($data['latitude']) : $data['latitude']) : null,
+            'longitude' => !empty($data['longitude']) ? (is_array($data['longitude']) ? reset($data['longitude']) : $data['longitude']) : null,
+            'custom_category' => $data['custom_category'] ?? null,
+            'whatsapp_contact' => $data['whatsapp_contact'] ?? null,
+            'allow_platform_message' => isset($data['allow_platform_message']) ? (int)$data['allow_platform_message'] : 1
+        ]);
+
+        if ($success) {
+            $report_id = $this->db->lastInsertId();
+            
+            // Insert multiple images if provided
+            if (!empty($data['images']) && is_array($data['images'])) {
+                $imgStmt = $this->db->prepare("INSERT INTO report_images (report_id, image_path) VALUES (?, ?)");
+                foreach ($data['images'] as $img) {
+                    $imgStmt->execute([$report_id, $img]);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
