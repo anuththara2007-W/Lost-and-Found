@@ -2,17 +2,17 @@
 
 /* Fallbacks if :root vars aren't loaded for some reason */
 :root {
-  --white: #fafaf8;
-  --off-white: #f2f0eb;
-  --parchment: #e8e3d8;
-  --warm-mid: #c9c0ae;
-  --clay: #9c8c78;
-  --ink: #3a3830;
-  --midnight: #1e2027;
-  --terracotta: #c96442;
-  --terracotta-lt: #edd5c8;
-  --sage: #5c7a65;
-  --sage-lt: #d1dfcf;
+  --white: #f8f7f4;
+  --off-white: #ffffff;
+  --parchment: #e8e5df;
+  --warm-mid: #c8c4bb;
+  --clay: #6b6a67;
+  --ink: #111110;
+  --midnight: #111110;
+  --terracotta: #e0402a;
+  --terracotta-lt: #fff0ed;
+  --sage: #2d7a4f;
+  --sage-lt: #edf6f1;
   --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
   --shadow-2: 0 0 0 1px rgba(232, 227, 216, 0.92);
   --shadow-3: 0 18px 55px rgba(30, 32, 39, 0.1);
@@ -20,8 +20,12 @@
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --fast: 160ms;
   --med: 240ms;
-  --font-display: "Cormorant Garamond", serif;
-  --font-body: "DM Sans", sans-serif;
+  --font-display:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
+  --font-body:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
 }
 
 /* Page shell */
@@ -617,7 +621,7 @@
   }
 }
 
-/* Reduced motions */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
