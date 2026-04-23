@@ -1,27 +1,21 @@
 <?php
-
 namespace App\Models;
+
 use App\Core\Database;
 use PDO;
 
-/**
- * Message Model
- * 
- * This model handles all database operations related to the 
- * messaging and commenting system of the Lost and Found system.
- * It includes retrieving conversations, adding comments, 
- * managing typing indicators, and checking user activity status.
- */
 class Message
 {
-     private $db;
+    private $db;
+    private $columnCache = [];
+    private $tableCache = [];
 
-    public function __construct()//Initializes the database connection using the Database singleton.
+    public function __construct()
     {
         $this->db = Database::getInstance()->getConnection();
     }
 
-     public function getCommentsByReport($report_id)// This function retrieves all comments posted for a particular lost or found report along with the user information.
+    public function getCommentsByReport($report_id)
     {
         $stmt = $this->db->prepare("
             SELECT c.*, u.username, u.profile_image 
@@ -34,7 +28,7 @@ class Message
         return $stmt->fetchAll();
     }
 
-    public function getConversationsForUser($user_id)//Get all conversations related to a specific user
+    public function getConversationsForUser($user_id)
     {
         $stmt = $this->db->prepare("
             SELECT DISTINCT r.*, c.name as category_name
@@ -51,7 +45,7 @@ class Message
         return $stmt->fetchAll();
     }
 
-     public function addComment($report_id, $user_id, $comment_text, $parent_id = 0)//Add a new comment to a report
+    public function addComment($report_id, $user_id, $comment_text, $parent_id = 0)
     {
         $stmt = $this->db->prepare("
             INSERT INTO comments (report_id, user_id, comment_text, parent_id)
@@ -65,30 +59,49 @@ class Message
         ]);
     }
 
-    //* Add a comment with file attachment This function inserts a comment along with an attachment
-     public function addCommentWithAttachment($report_id, $user_id, $comment_text, $attachment_path, $parent_id = 0)
+    public function addCommentWithAttachment($report_id, $user_id, $comment_text, $attachment_path, $parent_id = 0)
     {
-        $stmt = $this->db->prepare("
-            INSERT INTO comments (report_id, user_id, comment_text, attachment_path, parent_id)
-            VALUES (:report_id, :user_id, :comment_text, :attachment_path, :parent_id)
-        ");
-        return $stmt->execute([
+        // Keep compatibility with older schemas that may not have attachment_path/parent_id.
+        $hasAttachment = $this->hasColumn('comments', 'attachment_path');
+        $hasParent = $this->hasColumn('comments', 'parent_id');
+
+        $columns = ['report_id', 'user_id', 'comment_text'];
+        $placeholders = [':report_id', ':user_id', ':comment_text'];
+        $params = [
             'report_id' => $report_id,
             'user_id' => $user_id,
-            'comment_text' => $comment_text,
-            'attachment_path' => $attachment_path,
-            'parent_id' => $parent_id
-        ]);
+            'comment_text' => $comment_text
+        ];
+
+        if ($hasAttachment) {
+            $columns[] = 'attachment_path';
+            $placeholders[] = ':attachment_path';
+            $params['attachment_path'] = $attachment_path;
+        }
+        if ($hasParent) {
+            $columns[] = 'parent_id';
+            $placeholders[] = ':parent_id';
+            $params['parent_id'] = $parent_id;
+        }
+
+        $sql = "INSERT INTO comments (" . implode(', ', $columns) . ")
+                VALUES (" . implode(', ', $placeholders) . ")";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($params);
     }
 
-     public function updateUserActivity($user_id)//Update user's last activity time
-    {
+    public function updateUserActivity($user_id) {
+        if (!$this->hasColumn('users', 'last_activity')) {
+            return true;
+        }
         $stmt = $this->db->prepare("UPDATE users SET last_activity = NOW() WHERE user_id = :uid");
         return $stmt->execute(['uid' => $user_id]);
     }
 
-     public function setTyping($report_id, $user_id, $is_typing)//Set typing status for chat This function records whether a user is currently typing
-    {
+    public function setTyping($report_id, $user_id, $is_typing) {
+        if (!$this->hasTable('chat_status')) {
+            return false;
+        }
         $stmt = $this->db->prepare("
             INSERT INTO chat_status (report_id, user_id, is_typing, last_typed)
             VALUES (:rid, :uid, :typing, NOW())
@@ -97,8 +110,10 @@ class Message
         return $stmt->execute(['rid' => $report_id, 'uid' => $user_id, 'typing' => $is_typing]);
     }
 
-     public function getTypingStatus($report_id, $exclude_user_id)//Get typing users in a conversation
-    {
+    public function getTypingStatus($report_id, $exclude_user_id) {
+        if (!$this->hasTable('chat_status')) {
+            return [];
+        }
         $stmt = $this->db->prepare("
             SELECT u.username 
             FROM chat_status cs
@@ -112,8 +127,10 @@ class Message
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
-      public function isUserOnline($user_id)//Check if a user is currently online
-    {
+    public function isUserOnline($user_id) {
+        if (!$this->hasColumn('users', 'last_activity')) {
+            return false;
+        }
         $stmt = $this->db->prepare("
             SELECT 1 FROM users 
             WHERE user_id = :uid AND last_activity > DATE_SUB(NOW(), INTERVAL 15 SECOND)
@@ -122,5 +139,37 @@ class Message
         return $stmt->fetchColumn() ? true : false;
     }
 
+    private function hasTable($table)
+    {
+        if (array_key_exists($table, $this->tableCache)) {
+            return $this->tableCache[$table];
+        }
 
+        // MariaDB can reject placeholders in SHOW ... LIKE on some setups.
+        $safeTable = $this->db->quote($table);
+        $stmt = $this->db->query("SHOW TABLES LIKE {$safeTable}");
+        $this->tableCache[$table] = $stmt ? (bool)$stmt->fetchColumn() : false;
+        return $this->tableCache[$table];
+    }
+
+    private function hasColumn($table, $column)
+    {
+        $key = $table . '.' . $column;
+        if (array_key_exists($key, $this->columnCache)) {
+            return $this->columnCache[$key];
+        }
+
+        // Allow only known table names that this model checks.
+        $allowedTables = ['comments', 'users', 'chat_status'];
+        if (!in_array($table, $allowedTables, true)) {
+            $this->columnCache[$key] = false;
+            return false;
+        }
+
+        // MariaDB compatibility: avoid placeholders with SHOW ... LIKE.
+        $safeColumn = $this->db->quote($column);
+        $stmt = $this->db->query("SHOW COLUMNS FROM `{$table}` LIKE {$safeColumn}");
+        $this->columnCache[$key] = $stmt ? (bool)$stmt->fetchColumn() : false;
+        return $this->columnCache[$key];
+    }
 }

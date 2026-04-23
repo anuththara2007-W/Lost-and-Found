@@ -1,5 +1,3 @@
-// This is the inbox view where users can see all their active conversations related to reports they own or have commented on.
-// It lists the conversations with links to the chat pages for each report.
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/messages/index-inbox.css">
 
