@@ -153,3 +153,104 @@
                     }
                 </script>
             <?php endif; ?>
+            <!-- Detail Map -->
+            <?php if (!empty($item['latitude']) && !empty($item['longitude'])): ?>
+                <div class="item-detail-map-container">
+                    <h3 class="item-detail-desc-title">Map Location</h3>
+                    <div id="detailMap" class="item-detail-map-element" data-lat="<?= escape($item['latitude']) ?>"
+                        data-lng="<?= escape($item['longitude']) ?>" data-type="<?= escape($item['type']) ?>"></div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- Right Side: Details -->
+        <div class="item-detail-right">
+
+            <div class="item-detail-badges">
+                <?php if ($item['type'] === 'lost'): ?>
+                    <span class="card-badge badge-lost badge-inline badge-inline-lost"><span class="badge-dot"></span>
+                        Lost</span>
+                <?php else: ?>
+                    <span class="card-badge badge-found badge-inline badge-inline-found"><span class="badge-dot"></span>
+                        Found</span>
+                <?php endif; ?>
+
+                <?php if ($item['status'] === 'resolved'): ?>
+                    <span class="badge-resolved">Resolved</span>
+                <?php endif; ?>
+
+                <?php if (!empty($item['reward_amount']) && $item['reward_amount'] > 0): ?>
+                    <span class="card-badge badge-inline" style="background: #fbbf24; color: #78350f; font-weight: bold;">
+                        <span class="badge-dot" style="background: #78350f;"></span> Reward:
+                        $<?= number_format($item['reward_amount'], 2) ?>
+                    </span>
+                <?php endif; ?>
+            </div>
+
+            <h1 class="item-detail-title"><?= escape($item['title']) ?></h1>
+
+            <div class="item-detail-meta">
+                Reported by <strong><?= escape($item['username']) ?></strong> &middot;
+                <?= formatDate($item['date_posted']) ?>
+                <br>
+                📍 <?= escape($item['location']) ?> &middot; Category:
+                <?= escape(!empty($item['custom_category']) ? $item['custom_category'] : ($item['category_name'] ?? 'Uncategorized')) ?>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h3 class="item-detail-desc-title">Description</h3>
+                <p class="item-detail-desc-text"><?= escape($item['description']) ?></p>
+                <div style="margin-top: 15px;">
+                    <button onclick="printFlyer()" class="btn btn-secondary"
+                        style="font-size: 12px; border-radius: 4px; padding: 6px 12px; border-color: var(--warm-mid);">
+                        <i class="fas fa-print"></i> Generate QR Flyer
+                    </button>
+                </div>
+            </div>
+
+            <?php if (!empty($item['contact_info'])): ?>
+                <div class="item-detail-contact-box">
+                    <strong class="item-detail-contact-title">Provided Contact Info</strong>
+                    <?= escape($item['contact_info']) ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="item-detail-actions-stack">
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <?php
+                    // Check if user has phone number for WhatsApp
+                    $db = \App\Core\Database::getInstance()->getConnection();
+                    $stmt = $db->prepare("SELECT phone FROM users WHERE user_id = :uid");
+                    $stmt->execute(['uid' => $item['user_id']]);
+                    $posterPhone = $stmt->fetchColumn();
+                    ?>
+
+                    <!-- WhatsApp Contact -->
+                    <?php
+                    $wpNumber = !empty($item['whatsapp_contact']) ? $item['whatsapp_contact'] : $posterPhone;
+                    if (!empty($wpNumber)): ?>
+                        <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $wpNumber) ?>?text=<?= urlencode('Hello, I am inquiring about your ' . $item['type'] . ' item: ' . $item['title']) ?>"
+                            target="_blank" class="btn flex-grow text-center"
+                            style="background:#25D366; color:white; border-radius: 8px;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                    <?php endif; ?>
+
+                    <!-- Direct Chat -->
+                    <?php if (isset($item['allow_platform_message']) && $item['allow_platform_message'] != 0): ?>
+                        <?php if (isLoggedIn() && $_SESSION['user_id'] != $item['user_id']): ?>
+                            <a href="<?= BASE_URL ?>/message/chat/<?= $item['report_id'] ?>"
+                                class="btn btn-primary flex-grow text-center" style="border-radius: 8px;">
+                                <i class="fas fa-comment-dots"></i> Direct Chat
+                            </a>
+                        <?php elseif (isLoggedIn() && $_SESSION['user_id'] == $item['user_id']): ?>
+                            <div class="item-detail-own-report flex-grow text-center"
+                                style="padding: 10px; background: var(--parchment); border-radius: 8px;">
+                                <p class="item-detail-own-report-text" style="margin:0;">This is your own report.</p>
+                            </div>
+                        <?php else: ?>
+                            <a href="<?= BASE_URL ?>/auth/login" class="btn btn-secondary flex-grow text-center">Log in to
+                                chat</a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
