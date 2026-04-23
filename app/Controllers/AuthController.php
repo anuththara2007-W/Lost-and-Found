@@ -159,4 +159,19 @@ class AuthController extends Controller
         }
     }
 
+
+    
+    public function reset()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $password = trim($_POST['password']);
+            $_SESSION['flash_success'] = 'Password successfully reset. Please login with your new password.';
+            redirect('/auth/login');
+        } else {
+            $data = ['title' => 'Reset Password'];
+            $this->view('auth/reset', $data);
+        }
+    }
+
+
 }
