@@ -101,3 +101,19 @@
         </div>
     </section>
 
+      <section id="categories" class="section bg-white">
+        <div class="section-inner">
+            <div class="eyebrow"><?= escape(t('home_item_types')) ?></div>
+            <h2 class="sec-title"><?= t('home_browse_category_html') ?></h2>
+            <p class="sec-sub"><?= escape(t('home_category_sub')) ?></p>
+            <div class="cats-grid">
+                <a href="<?= BASE_URL ?>/item/search?category_id=1" class="cat-card"><div class="cat-icon"><i class="fa-regular fa-id-card"></i></div><div class="cat-name"><?= escape(t('home_cat_identification')) ?></div><div class="cat-count"><?= escape(t('home_cat_identification_sub')) ?></div></a>
+                <a href="<?= BASE_URL ?>/item/search?category_id=2" class="cat-card"><div class="cat-icon"><i class="fa-solid fa-mobile-screen-button"></i></div><div class="cat-name"><?= escape(t('home_cat_electronics')) ?></div><div class="cat-count"><?= escape(t('home_cat_electronics_sub')) ?></div></a>
+                <a href="<?= BASE_URL ?>/item/search?category_id=3" class="cat-card"><div class="cat-icon"><i class="fa-regular fa-credit-card"></i></div><div class="cat-name"><?= escape(t('home_cat_wallets')) ?></div><div class="cat-count"><?= escape(t('home_cat_wallets_sub')) ?></div></a>
+                <a href="<?= BASE_URL ?>/item/search?category_id=4" class="cat-card"><div class="cat-icon"><i class="fa-solid fa-key"></i></div><div class="cat-name"><?= escape(t('home_cat_keys')) ?></div><div class="cat-count"><?= escape(t('home_cat_keys_sub')) ?></div></a>
+                <a href="<?= BASE_URL ?>/item/search?category_id=5" class="cat-card"><div class="cat-icon"><i class="fa-solid fa-paw"></i></div><div class="cat-name"><?= escape(t('home_cat_pets')) ?></div><div class="cat-count"><?= escape(t('home_cat_pets_sub')) ?></div></a>
+                <a href="<?= BASE_URL ?>/item/search?category_id=6" class="cat-card"><div class="cat-icon"><i class="fa-solid fa-suitcase"></i></div><div class="cat-name"><?= escape(t('home_cat_bags')) ?></div><div class="cat-count"><?= escape(t('home_cat_bags_sub')) ?></div></a>
+            </div>
+        </div>
+    </section>
+
