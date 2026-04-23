@@ -145,4 +145,18 @@ class AuthController extends Controller
             $this->view('auth/register', $data);
         }
     }
+    
+    public function forgot()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            // Simulate sending reset link
+            $_SESSION['flash_success'] = 'If an account exists for ' . escape($email) . ', a reset link was sent.';
+            redirect('/auth/login');
+        } else {
+            $data = ['title' => 'Forgot Password'];
+            $this->view('auth/forgot', $data);
+        }
+    }
+
 }
