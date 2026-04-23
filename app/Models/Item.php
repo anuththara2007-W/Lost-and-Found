@@ -94,6 +94,7 @@ class Item
         $stmt->execute($params);
         return $stmt->fetchAll();
     }
+
     public function addReport($data)
     {
         $stmt = $this->db->prepare("
@@ -134,7 +135,8 @@ class Item
         }
         return false;
     }
-     public function getCategories()
+
+    public function getCategories()
     {
         $stmt = $this->db->prepare("SELECT * FROM categories ORDER BY name ASC");
         $stmt->execute();
@@ -167,7 +169,7 @@ class Item
         return $stmt->fetch();
     }
 
-    public function markResolved($id, $user_id)
+     public function markResolved($id, $user_id)
     {
         $stmt = $this->db->prepare("UPDATE reports SET status = 'resolved' WHERE report_id = :id AND user_id = :user_id");
         return $stmt->execute([
@@ -185,7 +187,7 @@ class Item
         ]);
     }
 
-    // --- Admin Methods ---
+     // --- Admin Methods ---
     public function getAllReports()
     {
         $stmt = $this->db->prepare("
@@ -199,9 +201,69 @@ class Item
         return $stmt->fetchAll();
     }
 
+    public function getAdminReports(array $filters = [])
+    {
+        $query = "
+            SELECT r.*, u.username, u.email, c.name as category_name
+            FROM reports r
+            LEFT JOIN users u ON r.user_id = u.user_id
+            LEFT JOIN categories c ON r.category_id = c.category_id
+            WHERE 1=1
+        ";
+        $params = [];
+
+        if (!empty($filters['q'])) {
+            $query .= " AND (r.title LIKE :q OR r.description LIKE :q OR r.location LIKE :q OR u.username LIKE :q)";
+            $params['q'] = '%' . $filters['q'] . '%';
+        }
+        if (!empty($filters['type']) && in_array($filters['type'], ['lost', 'found'], true)) {
+            $query .= " AND r.type = :type";
+            $params['type'] = $filters['type'];
+        }
+        if (!empty($filters['status'])) {
+            $query .= " AND r.status = :status";
+            $params['status'] = $filters['status'];
+        }
+        if (!empty($filters['user_id'])) {
+            $query .= " AND r.user_id = :user_id";
+            $params['user_id'] = (int)$filters['user_id'];
+        }
+
+        $query .= " ORDER BY r.date_posted DESC";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+    }
+
+    public function updateReportAdmin($reportId, array $data)
+    {
+        $stmt = $this->db->prepare("
+            UPDATE reports
+            SET title = :title,
+                description = :description,
+                location = :location,
+                status = :status,
+                type = :type,
+                category_id = :category_id
+            WHERE report_id = :id
+        ");
+
+        return $stmt->execute([
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'location' => $data['location'],
+            'status' => $data['status'],
+            'type' => $data['type'],
+            'category_id' => $data['category_id'] ?: null,
+            'id' => (int)$reportId
+        ]);
+    }
+
     public function deleteReport($id)
     {
         $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id");
         return $stmt->execute(['id' => $id]);
     }
 }
+
+
