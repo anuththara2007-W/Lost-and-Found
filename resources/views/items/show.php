@@ -144,4 +144,12 @@
                         if (galleryImages.length <= 1) return;
                         currentGalleryIndex = (currentGalleryIndex === galleryImages.length - 1) ? 0 : currentGalleryIndex + 1;
                         updateLightboxDisplay();
+                    }       function updateLightboxDisplay() {
+                        document.getElementById('lightbox-main-img').src = galleryImages[currentGalleryIndex];
+                        if (document.getElementById('lightbox-counter')) {
+                            document.getElementById('lightbox-counter').textContent = currentGalleryIndex + 1;
+                        }
+                        changeMainImage(currentGalleryIndex); // Keep background sync'd
                     }
+                </script>
+            <?php endif; ?>
