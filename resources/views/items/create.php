@@ -42,3 +42,15 @@
             <label class="input-label" for="location">General Location Area *</label>
             <input type="text" id="location" name="location" class="input-field" placeholder="e.g. Central Library, Level 2" required value="<?= old('location') ?>">
         </div>
+
+         <div class="input-group">
+            <label class="input-label">Pinpoint Exact Location (Optional but recommended)</label>
+            <p class="item-form-map-hint">Click on the map to set a precise pin for this item.</p>
+            <div id="pickerMap" class="item-form-map-container"></div>
+            <input type="hidden" id="latitude" name="latitude" value="<?= old('latitude') ?>">
+            <input type="hidden" id="longitude" name="longitude" value="<?= old('longitude') ?>">
+            <div class="item-form-coords-display">
+                <div>Lat: <span id="latDisplay">--</span></div>
+                <div>Lng: <span id="lngDisplay">--</span></div>
+            </div>
+        </div>
