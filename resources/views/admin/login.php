@@ -1,9 +1,4 @@
-<?php
-if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/includes/bootstrap.php';
-}
-require_once ROOT . '/resources/views/layouts/header.php';
-?>
+<?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 
 <div class="form-container" style="margin-top: 60px; margin-bottom: 60px;">
     <div class="form-header">

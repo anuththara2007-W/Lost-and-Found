@@ -1,350 +1,303 @@
-/*
- * Handles: password toggle, password strength meter,
- * client-side validation, remember-me, avatar preview,
- * and form submit UX.
- */
+//   Password Visibility Toggle
 
-"use strict";
+const passwordButtons = document.querySelectorAll(".toggle-password");
 
-  // Password Visibility Toggle
+passwordButtons.forEach(function (button) {
+  button.addEventListener("click", function () {
+    const targetId = button.dataset.target;
+    const inputField = document.getElementById(targetId);
 
+    if (!inputField) {
+      return;
+    }
 
-document.querySelectorAll(".toggle-password").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const targetId = btn.dataset.target;
-    const input = document.getElementById(targetId);
-    if (!input) return;
+    let currentType = inputField.type;
 
-    const isText = input.type === "text";
-    input.type = isText ? "password" : "text";
+    if (currentType === "password") {
+      inputField.type = "text";
+    } else {
+      inputField.type = "password";
+    }
 
-    const iconHide = btn.querySelector(".icon-hide");
-    const iconShow = btn.querySelector(".icon-show");
-    if (iconHide) iconHide.style.display = isText ? "block" : "none";
-    if (iconShow) iconShow.style.display = isText ? "none" : "block";
+    const hideIcon = button.querySelector(".icon-hide");
+    const showIcon = button.querySelector(".icon-show");
 
-    btn.setAttribute("aria-label", isText ? "Show password" : "Hide password");
+    if (currentType === "password") {
+      if (hideIcon) hideIcon.style.display = "none";
+      if (showIcon) showIcon.style.display = "block";
+      button.setAttribute("aria-label", "Hide password");
+    } else {
+      if (hideIcon) hideIcon.style.display = "block";
+      if (showIcon) showIcon.style.display = "none";
+      button.setAttribute("aria-label", "Show password");
+    }
   });
 });
 
+//   Password Strength Checker
 
-  // Password Strength Meter
+const passwordInput = document.getElementById("password");
+const strengthBar = document.querySelector(".strength-fill");
+const strengthText = document.querySelector(".strength-label");
 
+if (passwordInput !== null && strengthBar !== null && strengthText !== null) {
+  passwordInput.addEventListener("input", function () {
+    let value = passwordInput.value;
+    let score = getPasswordScore(value);
 
-const strengthInput = document.getElementById("password");
-const strengthFill = document.querySelector(".strength-fill");
-const strengthLabel = document.querySelector(".strength-label");
+    let weak = { label: "Weak", color: "#C96442", width: "25%" };
+    let fair = { label: "Fair", color: "#D4940A", width: "50%" };
+    let good = { label: "Good", color: "#5C7A65", width: "75%" };
+    let strong = { label: "Strong", color: "#3B7A5C", width: "100%" };
+    let empty = { label: "", color: "transparent", width: "0%" };
 
-if (strengthInput && strengthFill && strengthLabel) {
-  strengthInput.addEventListener("input", () => {
-    const val = strengthInput.value;
-    const score = calcStrength(val);
+    let result = empty;
 
-    const levels = [
-      { label: "", color: "transparent", width: "0%" },
-      { label: "Weak", color: "#C96442", width: "25%" },
-      { label: "Fair", color: "#D4940A", width: "55%" },
-      { label: "Good", color: "#5C7A65", width: "80%" },
-      { label: "Strong", color: "#3B7A5C", width: "100%" },
-    ];
+    if (score === 1) result = weak;
+    else if (score === 2) result = fair;
+    else if (score === 3) result = good;
+    else if (score >= 4) result = strong;
 
-    const lvl = levels[score];
-    strengthFill.style.width = lvl.width;
-    strengthFill.style.background = lvl.color;
-    strengthLabel.textContent = val.length ? lvl.label : "";
-    strengthLabel.style.color = lvl.color;
+    strengthBar.style.width = result.width;
+    strengthBar.style.backgroundColor = result.color;
+    strengthText.textContent = value.length > 0 ? result.label : "";
+    strengthText.style.color = result.color;
   });
 }
+/* Password score function */
 
+function getPasswordScore(password) {
+  if (!password) {
+    return 0;
+  }
 
-//Returns 0-4 strength score.
-
-function calcStrength(pw) {
-  if (!pw) return 0;
   let score = 0;
-  if (pw.length >= 8) score++;
-  if (pw.length >= 12) score++;
-  if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
-  if (/[0-9]/.test(pw)) score++;
-  if (/[^a-zA-Z0-9]/.test(pw)) score++;
-  return Math.min(4, score);
+
+  if (password.length >= 8) {
+    score = score + 1;
+  }
+
+  if (password.length >= 12) {
+    score = score + 1;
+  }
+
+  if (password.match(/[a-z]/) && password.match(/[A-Z]/)) {
+    score = score + 1;
+  }
+
+  if (password.match(/[0-9]/)) {
+    score = score + 1;
+  }
+
+  if (password.match(/[^a-zA-Z0-9]/)) {
+    score = score + 1;
+  }
+
+  return score;
 }
+//   Confirm Password Match
 
+const confirmPasswordInput = document.getElementById("confirm_password");
 
-// Confirm Password Match
+if (confirmPasswordInput !== null && passwordInput !== null) {
+  function checkPasswordMatch() {
+    const messageBox = document.getElementById("confirm-msg");
 
-const confirmInput = document.getElementById("confirm_password");
-
-if (confirmInput && strengthInput) {
-  const showMatch = () => {
-    const msg = document.getElementById("confirm-msg");
-    if (!msg) return;
-
-    if (!confirmInput.value) {
-      msg.classList.remove("visible", "error", "ok");
+    if (!messageBox) {
       return;
     }
 
-    if (confirmInput.value === strengthInput.value) {
-      msg.textContent = "✓ Passwords match";
-      msg.className = "field-msg visible ok";
-      confirmInput.classList.remove("is-invalid");
-      confirmInput.classList.add("is-valid");
-    } else {
-      msg.textContent = "Passwords do not match";
-      msg.className = "field-msg visible error";
-      confirmInput.classList.remove("is-valid");
-      confirmInput.classList.add("is-invalid");
+    let passwordValue = passwordInput.value;
+    let confirmValue = confirmPasswordInput.value;
+
+    if (confirmValue.length === 0) {
+      messageBox.className = "field-msg";
+      return;
     }
-  };
 
-  confirmInput.addEventListener("input", showMatch);
-  strengthInput.addEventListener("input", () => {
-    if (confirmInput.value) showMatch();
-  });
+    if (passwordValue === confirmValue) {
+      messageBox.textContent = "Passwords match";
+      messageBox.className = "field-msg visible ok";
+
+      confirmPasswordInput.classList.remove("is-invalid");
+      confirmPasswordInput.classList.add("is-valid");
+    } else {
+      messageBox.textContent = "Passwords do not match";
+      messageBox.className = "field-msg visible error";
+
+      confirmPasswordInput.classList.remove("is-valid");
+      confirmPasswordInput.classList.add("is-invalid");
+    }
+  }
+
+  confirmPasswordInput.addEventListener("input", checkPasswordMatch);
+  passwordInput.addEventListener("input", checkPasswordMatch);
 }
-
-
-  // Email Real-Time Validation
 
 const emailInput = document.getElementById("email");
 
-if (emailInput) {
-  let emailTimer = null;
+if (emailInput !== null) {
+  function validateEmailField() {
+    let emailValue = emailInput.value.trim();
+    let messageBox = document.getElementById("email-msg");
 
-  emailInput.addEventListener("input", () => {
-    clearTimeout(emailTimer);
-    emailTimer = setTimeout(() => validateEmail(), 400);
-  });
+    if (!messageBox) {
+      return;
+    }
 
-  emailInput.addEventListener("blur", validateEmail);
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let isValid = pattern.test(emailValue);
 
-  function validateEmail() {
-    const val = emailInput.value.trim();
-    const msg = document.getElementById("email-msg");
-    if (!val || !msg) return;
+    if (emailValue.length === 0) {
+      return;
+    }
 
-    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-    if (valid) {
-      emailInput.classList.remove("is-invalid");
+    if (isValid === true) {
       emailInput.classList.add("is-valid");
-      msg.className = "field-msg";
+      emailInput.classList.remove("is-invalid");
+
+      messageBox.className = "field-msg";
     } else {
-      emailInput.classList.remove("is-valid");
       emailInput.classList.add("is-invalid");
-      msg.textContent = "Please enter a valid email address.";
-      msg.className = "field-msg visible error";
+      emailInput.classList.remove("is-valid");
+
+      messageBox.textContent = "Invalid email format";
+      messageBox.className = "field-msg visible error";
     }
   }
+
+  let emailTimeout;
+
+  emailInput.addEventListener("input", function () {
+    clearTimeout(emailTimeout);
+
+    emailTimeout = setTimeout(function () {
+      validateEmailField();
+    }, 500);
+  });
+
+  emailInput.addEventListener("blur", validateEmailField);
 }
-
-
-  // Username Availability (debounced fetch)
 
 const usernameInput = document.getElementById("username");
 
-if (usernameInput) {
-  let usernameTimer = null;
+if (usernameInput !== null) {
+  let usernameTimer;
 
-  usernameInput.addEventListener("input", () => {
+  usernameInput.addEventListener("input", function () {
     clearTimeout(usernameTimer);
-    const val = usernameInput.value.trim();
-    const msg = document.getElementById("username-msg");
 
-    if (!val || val.length < 3) {
-      if (msg) msg.className = "field-msg";
-      usernameInput.classList.remove("is-valid", "is-invalid");
+    let value = usernameInput.value.trim();
+    let messageBox = document.getElementById("username-msg");
+
+    if (value.length < 3) {
       return;
     }
 
-    if (!/^[a-zA-Z0-9_]+$/.test(val)) {
-      if (msg) {
-        msg.textContent = "Only letters, numbers, and underscores allowed.";
-        msg.className = "field-msg visible error";
-      }
-      usernameInput.classList.add("is-invalid");
-      usernameInput.classList.remove("is-valid");
-      return;
-    }
-
-    usernameTimer = setTimeout(() => checkUsernameAvailability(val), 500);
+    usernameTimer = setTimeout(function () {
+      checkUsername(value);
+    }, 500);
   });
 
-  async function checkUsernameAvailability(username) {
-    const msg = document.getElementById("username-msg");
+  async function checkUsername(username) {
     try {
-      const resp = await fetch(
-        `/api/check-username?username=${encodeURIComponent(username)}`,
-      );
-      const data = await resp.json();
+      const response = await fetch("/api/check-username?username=" + username);
+      const data = await response.json();
 
-      if (data.available) {
+      const messageBox = document.getElementById("username-msg");
+
+      if (data.available === true) {
         usernameInput.classList.add("is-valid");
         usernameInput.classList.remove("is-invalid");
-        if (msg) {
-          msg.textContent = "✓ Username is available";
-          msg.className = "field-msg visible ok";
+
+        if (messageBox) {
+          messageBox.textContent = "Username available";
+          messageBox.className = "field-msg visible ok";
         }
       } else {
         usernameInput.classList.add("is-invalid");
         usernameInput.classList.remove("is-valid");
-        if (msg) {
-          msg.textContent = "That username is already taken.";
-          msg.className = "field-msg visible error";
+
+        if (messageBox) {
+          messageBox.textContent = "Username already taken";
+          messageBox.className = "field-msg visible error";
         }
       }
-    } catch (_) {
-      // Silently fail — server-side will validate
+    } catch (error) {
+      // ignore error
     }
   }
 }
 
+//   Profile Image Preview
 
-  //Profile Image Preview
+const imageInput = document.getElementById("profile_image");
+const imagePreview = document.getElementById("avatar-preview-img");
 
-const avatarInput = document.getElementById("profile_image");
-const avatarPreview = document.getElementById("avatar-preview-img");
+if (imageInput !== null && imagePreview !== null) {
+  imageInput.addEventListener("change", function () {
+    let file = imageInput.files[0];
 
-if (avatarInput && avatarPreview) {
-  avatarInput.addEventListener("change", () => {
-    const file = avatarInput.files[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-    if (!allowed.includes(file.type)) {
-      showToast("Please select a valid image (JPG, PNG, WebP).", "error");
-      avatarInput.value = "";
+    let allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+
+    if (allowedTypes.indexOf(file.type) === -1) {
+      showToast("Invalid image type", "error");
+      imageInput.value = "";
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      showToast("Image must be under 2 MB.", "error");
-      avatarInput.value = "";
+      showToast("Image too large (max 2MB)", "error");
+      imageInput.value = "";
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      avatarPreview.src = e.target.result;
-      avatarPreview.style.display = "block";
-      const placeholder = document.querySelector(".avatar-placeholder");
-      if (placeholder) placeholder.style.display = "none";
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+      imagePreview.src = e.target.result;
+      imagePreview.style.display = "block";
     };
+
     reader.readAsDataURL(file);
   });
 }
 
-// Form Submit — Loading State
+//   Toast System
 
-
-document.querySelectorAll("form.auth-form").forEach((form) => {
-  form.addEventListener("submit", function (e) {
-    const submitBtn = form.querySelector(".btn-submit");
-    if (!submitBtn) return;
-
-    // Terms checkbox guard (register only)
-    const termsCheck = form.querySelector("#terms");
-    if (termsCheck && !termsCheck.checked) {
-      e.preventDefault();
-      showToast("Please accept the terms to continue.", "error");
-      termsCheck.closest(".terms-wrap")?.classList.add("shake");
-      setTimeout(
-        () => termsCheck.closest(".terms-wrap")?.classList.remove("shake"),
-        500,
-      );
-      return;
-    }
-
-    // Activate loading state
-    submitBtn.disabled = true;
-    const spinner = submitBtn.querySelector(".btn-spinner");
-    const btnText = submitBtn.querySelector(".btn-text");
-    if (spinner) spinner.style.display = "block";
-    if (btnText) btnText.style.opacity = ".6";
-  });
-});
-
-
-  // Shake form on page load if errors present
-
-const alertError = document.querySelector(".alert-error");
-if (alertError) {
-  const wrap = document.querySelector(".auth-form-wrap");
-  if (wrap) {
-    wrap.classList.add("shake");
-    wrap.addEventListener(
-      "animationend",
-      () => wrap.classList.remove("shake"),
-      { once: true },
-    );
+function showToast(message, type) {
+  if (!type) {
+    type = "info";
   }
-}
 
-
-// Toast notification
-
-/**
- * @param {string} message
- * @param {'success'|'error'|'info'} type
- */
-function showToast(message, type = "info") {
   let container = document.getElementById("toast-container");
+
   if (!container) {
     container = document.createElement("div");
     container.id = "toast-container";
-    Object.assign(container.style, {
-      position: "fixed",
-      bottom: "24px",
-      right: "24px",
-      zIndex: "9999",
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px",
-    });
+
+    container.style.position = "fixed";
+    container.style.bottom = "20px";
+    container.style.right = "20px";
+
     document.body.appendChild(container);
   }
 
-  const colors = {
-    error: { bg: "#EDD5C8", color: "#C96442", border: "rgba(201,100,66,.25)" },
-    success: {
-      bg: "#D1DFCF",
-      color: "#5C7A65",
-      border: "rgba(92,122,101,.25)",
-    },
-    info: { bg: "#E8E3D8", color: "#3A3830", border: "rgba(58,56,48,.15)" },
-  };
-
-  const c = colors[type] || colors.info;
-  const toast = document.createElement("div");
-  Object.assign(toast.style, {
-    background: c.bg,
-    color: c.color,
-    border: `1px solid ${c.border}`,
-    borderRadius: "10px",
-    padding: "12px 18px",
-    fontSize: "13px",
-    fontFamily: "'DM Sans', sans-serif",
-    boxShadow: "0 4px 20px rgba(30,32,39,.1)",
-    opacity: "0",
-    transform: "translateY(10px)",
-    transition: "opacity .25s ease, transform .25s ease",
-    maxWidth: "320px",
-    lineHeight: "1.5",
-  });
-
+  let toast = document.createElement("div");
   toast.textContent = message;
+
+  toast.style.padding = "12px";
+  toast.style.marginTop = "10px";
+
   container.appendChild(toast);
 
-  requestAnimationFrame(() => {
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(0)";
-  });
-
-  setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(10px)";
-    setTimeout(() => toast.remove(), 300);
-  }, 3500);
+  setTimeout(function () {
+    toast.remove();
+  }, 3000);
 }
 
 window.showToast = showToast;

@@ -1,21 +1,7 @@
 <?php
-if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/config/config.php';
-}
-$pageCss = ['admin/admin_dashboard.css'];
-require_once ROOT . '/resources/views/layouts/header.php';
-if (empty($data)) {
-    $data = [
-        'users' => [1, 2],
-        'activeCount' => 12,
-        'resolvedCount' => 150,
-        'reports' => [
-            ['report_id' => '101', 'title' => 'Lost Wallet', 'type' => 'lost', 'username' => 'johndoe', 'date_posted' => '2026-03-20', 'status' => 'active'],
-            ['report_id' => '102', 'title' => 'Found Keys', 'type' => 'found', 'username' => 'janedoe', 'date_posted' => '2026-03-22', 'status' => 'resolved']
-        ]
-    ];
-}
+require_once __DIR__ . '/../layouts/header.php';
 ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
 
 <div class="admin-wrapper">
     <!-- Admin Sidebar -->
@@ -28,7 +14,9 @@ if (empty($data)) {
             <li><a href="<?= BASE_URL ?>/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
             <li><a href="<?= BASE_URL ?>/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
             <li><a href="<?= BASE_URL ?>/admin/items"><i class="fas fa-box"></i> Manage Items</a></li>
-            <li><a href="<?= BASE_URL ?>/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/contact_requests"><i class="fas fa-envelope"></i> Contact Requests</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/monitor"><i class="fas fa-chart-line"></i> Real-time Monitor</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/backup"><i class="fas fa-database"></i> Backup & Restore</a></li>
             <li><a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </aside>
@@ -105,4 +93,4 @@ if (empty($data)) {
     </main>
 </div>
 
-<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

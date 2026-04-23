@@ -9,6 +9,7 @@ class App
 
     public function __construct()
     {
+        do_action('app.before_route');
         $url = $this->parseUrl();
 
         // 1. Controller
@@ -36,7 +37,9 @@ class App
         $this->params = $url ? array_values($url) : [];
 
         // 4. Call method
+        do_action('app.before_dispatch', $this->controller, $this->method, $this->params);
         call_user_func_array([$this->controller, $this->method], $this->params);
+        do_action('app.after_dispatch', $this->controller, $this->method, $this->params);
     }
 
     public function parseUrl()

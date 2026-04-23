@@ -5,15 +5,14 @@ use App\Core\Controller;
 
 class AuthController extends Controller
 {
-    private $userModel;
+
+ private $userModel;
 
     public function __construct()
     {
         $this->userModel = $this->model('User');
     }
-
-
-    // login funtionality for both admin and user
+    
     public function login()
     {
         // Check for POST
@@ -25,7 +24,7 @@ class AuthController extends Controller
             $_SESSION['old'] = $_POST;
 
             if (empty($email) || empty($password)) {
-                $_SESSION['flash_error'] = 'Please fill in all the fields';
+                $_SESSION['flash_error'] = 'Please fill in all fields';
                 redirect('/auth/login');
             }
 
@@ -71,8 +70,9 @@ class AuthController extends Controller
         }
     }
 
-    // -----------Registration functionality for user only, admin is hardcoded in login function----------------
-     public function register()
+    
+
+    public function register()
     {
         // Check for POST
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -145,10 +145,8 @@ class AuthController extends Controller
             $this->view('auth/register', $data);
         }
     }
-
-        // Forgot password functionality
-
-      public function forgot()
+    
+    public function forgot()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -160,8 +158,10 @@ class AuthController extends Controller
             $this->view('auth/forgot', $data);
         }
     }
-//reset password functionality
- public function reset()
+
+
+    
+    public function reset()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $password = trim($_POST['password']);
@@ -173,7 +173,7 @@ class AuthController extends Controller
         }
     }
 
-    // Logout functionality
+
     public function logout()
     {
         unset($_SESSION['user_id']);
@@ -182,5 +182,5 @@ class AuthController extends Controller
         session_destroy();
         redirect('/auth/login');
     }
-
+//completed
 }

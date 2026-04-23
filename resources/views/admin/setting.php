@@ -1,24 +1,7 @@
 <?php
-if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/config/config.php';
-}
-$pageCss = ['admin/admin_dashboard.css'];
-require_once ROOT . '/resources/views/layouts/header.php';
-
-if (empty($data)) {
-    $data = [
-        'categories' => [
-            ['category_id' => 1, 'name' => 'Electronics'],
-            ['category_id' => 2, 'name' => 'Personal Items']
-        ],
-        'config' => [
-            'site_name' => 'Lost & Found',
-            'admin_email' => 'admin@gmail.com',
-            'maintenance_mode' => '0'
-        ]
-    ];
-}
+require_once __DIR__ . '/../layouts/header.php';
 ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
 <style>
 .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
 .settings-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
@@ -40,7 +23,6 @@ if (empty($data)) {
             <li><a href="<?= BASE_URL ?>/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="<?= BASE_URL ?>/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
             <li><a href="<?= BASE_URL ?>/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
-            <li><a href="<?= BASE_URL ?>/admin/announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
             <li class="active"><a href="<?= BASE_URL ?>/admin/settings"><i class="fas fa-cog"></i> System Settings</a></li>
             <li><a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
@@ -52,6 +34,7 @@ if (empty($data)) {
         </header>
 
         <section class="admin-content settings-grid">
+            <!-- Categories Management -->
             <div class="settings-card">
                 <h2>Manage Categories</h2>
                 <form action="<?= BASE_URL ?>/admin/add_category" method="POST" style="display:flex; gap: 10px; margin-bottom: 1.5rem;">
@@ -74,6 +57,7 @@ if (empty($data)) {
                 </ul>
             </div>
 
+            <!-- Global Site Configurations -->
             <div class="settings-card">
                 <h2>Global Configuration</h2>
                 <form action="<?= BASE_URL ?>/admin/update_config" method="POST">
@@ -92,6 +76,15 @@ if (empty($data)) {
                             <option value="1" <?php echo ($data['config']['maintenance_mode'] ?? '0') == '1' ? 'selected' : ''; ?>>Enabled - Under Construction</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="notify_new_report" value="1" <?php echo ($data['config']['notify_new_report'] ?? '1') === '1' ? 'checked' : ''; ?> style="width:auto; margin-right:6px;"> Notify on new reports</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="notify_new_message" value="1" <?php echo ($data['config']['notify_new_message'] ?? '1') === '1' ? 'checked' : ''; ?> style="width:auto; margin-right:6px;"> Notify on new messages</label>
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="notify_contact_request" value="1" <?php echo ($data['config']['notify_contact_request'] ?? '1') === '1' ? 'checked' : ''; ?> style="width:auto; margin-right:6px;"> Notify on contact requests</label>
+                    </div>
                     <button type="submit" class="btn-primary" style="width: 100%;">Save Configuration</button>
                 </form>
             </div>
@@ -99,4 +92,4 @@ if (empty($data)) {
     </main>
 </div>
 
-<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

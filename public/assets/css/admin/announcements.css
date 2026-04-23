@@ -1,101 +1,16 @@
-.form-group {
-    margin-bottom: 1rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #475569;
-    font-weight: 500;
-    font-size: 0.875rem;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 0.875rem;
-}
-
-.btn-primary {
-    background: #3b82f6;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-weight: 600;
-}
-
-.btn-primary:hover {
-    background: #2563eb;
-}
-
-.btn-danger {
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.layout-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.card h2 {
-    margin-top: 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-
-.badge-info {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.badge-warning {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.badge-success {
-    background: #d1fae5;
-    color: #065f46;
-}
-
-.badge-danger {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.toggle-btn {
-    padding: 4px 8px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    color: white;
-}
-
-.toggle-on {
-    background: #10b981;
-}
-
-.toggle-off {
-    background: #6b7280;
-}
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; color: #475569; font-weight: 500; font-size: 0.875rem; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.875rem; }
+.btn-primary { background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: background 0.3s; font-weight: 600; }
+.btn-primary:hover { background: #2563eb; }
+.btn-danger { background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+.layout-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top:2rem;}
+.card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+.card h2 { margin-top:0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.badge-info { background: #dbeafe; color: #1e40af; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.badge-success { background: #d1fae5; color: #065f46; }
+.badge-danger { background: #fee2e2; color: #991b1b; }
+.toggle-btn { padding: 4px 8px; border-radius: 4px; border:none; cursor: pointer; color:white; }
+.toggle-on { background: #10b981; }
+.toggle-off { background: #6b7280; }
