@@ -178,4 +178,13 @@ class Item
         ]);
     }
 
+    public function delete($id, $user_id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id AND user_id = :user_id");
+        return $stmt->execute([
+            'id' => $id,
+            'user_id' => $user_id
+        ]);
+    }
+
 
