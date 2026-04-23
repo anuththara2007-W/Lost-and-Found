@@ -11,7 +11,7 @@
                 <div class="success-card">
                     <div class="success-image">
                         <?php if(!empty($item['image_path'])): ?>
-                            <img src="<?= BASE_URL ?>/public/uploads/<?= escape($item['image_path']) ?>" alt="<?= escape($item['title']) ?>">
+                            <img src="<?= BASE_URL ?>/uploads/<?= escape($item['image_path']) ?>" alt="<?= escape($item['title']) ?>">
                         <?php else: ?>
                             <div class="success-placeholder">
                                 <i class="fas <?= $item['type'] === 'lost' ? 'fa-search' : 'fa-hand-holding-heart' ?>"></i>
@@ -34,6 +34,7 @@
                         <p class="success-desc">
                             <?= escape(substr($item['description'], 0, 100)) ?>...
                         </p>
+                        <a href="<?= BASE_URL ?>/item/show/<?= $item['report_id'] ?>" class="btn btn-secondary success-view-btn">View Details</a>
                     </div>
                 </div>
             <?php endforeach; ?>
