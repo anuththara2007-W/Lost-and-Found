@@ -231,7 +231,6 @@ if (usernameInput !== null) {
 
 //   Profile Image Preview
 
-
 const imageInput = document.getElementById("profile_image");
 const imagePreview = document.getElementById("avatar-preview-img");
 
@@ -267,3 +266,38 @@ if (imageInput !== null && imagePreview !== null) {
     reader.readAsDataURL(file);
   });
 }
+
+//   Toast System
+
+function showToast(message, type) {
+  if (!type) {
+    type = "info";
+  }
+
+  let container = document.getElementById("toast-container");
+
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+
+    container.style.position = "fixed";
+    container.style.bottom = "20px";
+    container.style.right = "20px";
+
+    document.body.appendChild(container);
+  }
+
+  let toast = document.createElement("div");
+  toast.textContent = message;
+
+  toast.style.padding = "12px";
+  toast.style.marginTop = "10px";
+
+  container.appendChild(toast);
+
+  setTimeout(function () {
+    toast.remove();
+  }, 3000);
+}
+
+window.showToast = showToast;
