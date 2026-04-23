@@ -76,3 +76,28 @@
         </div>
     </section>
 
+     <section id="how" class="section">
+        <div class="section-inner">
+            <div class="eyebrow"><?= escape(t('home_process')) ?></div>
+            <h2 class="sec-title"><?= t('home_how_recovery_html') ?></h2>
+            <p class="sec-sub"><?= escape(t('home_three_steps')) ?></p>
+            <div class="steps-grid">
+                <div class="step-card" data-num="01">
+                    <div class="step-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="step-title"><?= escape(t('home_step1_title')) ?></div>
+                    <p class="step-text"><?= escape(t('home_step1_text')) ?></p>
+                </div>
+                <div class="step-card" data-num="02">
+                    <div class="step-icon"><i class="fa-solid fa-link"></i></div>
+                    <div class="step-title"><?= escape(t('home_step2_title')) ?></div>
+                    <p class="step-text"><?= escape(t('home_step2_text')) ?></p>
+                </div>
+                <div class="step-card" data-num="03">
+                    <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <div class="step-title"><?= escape(t('home_step3_title')) ?></div>
+                    <p class="step-text"><?= escape(t('home_step3_text')) ?></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
