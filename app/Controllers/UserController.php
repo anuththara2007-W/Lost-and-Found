@@ -5,10 +5,9 @@ use App\Core\Controller;
 
 class UserController extends Controller
 {
-     private $userModel;
+    private $userModel;
     private $itemModel;
 
- //feat: initialize UserController with User and Item models and enforce login
     public function __construct()
     {
         requireLogin();
@@ -16,8 +15,7 @@ class UserController extends Controller
         $this->itemModel = $this->model('Item');
     }
 
-    //feat: add dashboard method to display user reports and account info
-public function dashboard()
+    public function dashboard()
     {
         if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
             redirect('/admin/dashboard');
@@ -32,14 +30,14 @@ public function dashboard()
         $myReports = $this->itemModel->getReportsByUser($userId);
 
         $data = [
-            'title' => 'My Dashboard - Lost & Found',
+            'title' => 'My Dashboard - Lost and Found',
             'user' => $user,
             'reports' => $myReports
         ];
 
         $this->view('dashboard', $data);
     }
-   //feat: implement profile view for logged-in users
+
     public function profile()
     {
         if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
@@ -49,12 +47,13 @@ public function dashboard()
         $userId = $_SESSION['user_id'];
         $user = $this->userModel->findById($userId);
         $data = [
-            'title' => 'My Profile - Lost & Found',
+            'title' => 'My Profile - Lost and Found',
             'user' => $user
         ];
         $this->view('user/profile', $data);
     }
-public function updateProfile()
+
+    public function updateProfile()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $userId = $_SESSION['user_id'];
@@ -62,7 +61,7 @@ public function updateProfile()
             
             $data = [
                 'full_name' => trim($_POST['full_name']),
-                'phone' => trim($_POST['phone']) // Used trim for WhatsApp injection
+                'phone' => trim($_POST['phone']) // Used for WhatsApp injection
             ];
 
             // Handle Profile Image Upload
