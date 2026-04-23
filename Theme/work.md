@@ -54,19 +54,19 @@ C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
-main view home - index.php
+main view home - index.php  ✅
 
 📂 Controllers
 
-app/Controllers/ItemController.php
+app/Controllers/ItemController.php      ✅
 
 📂 Models
 
-app/Models/Item.php
+app/Models/Item.php     ✅
 
 📂 Views – Items
 
-resources/views/items/create.php
+resources/views/items/create.php    
 
 resources/views/items/show.php
 
