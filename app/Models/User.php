@@ -79,4 +79,11 @@ class User
         return $stmt->execute($params);
     }
 
+    public function getAllUsers()
+    {
+        $stmt = $this->db->prepare("SELECT user_id, username, email, full_name, phone, date_joined as created_at, badge_status, is_banned FROM users ORDER BY date_joined DESC");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
 }
