@@ -1,15 +1,24 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 
+<!-- Link the premium auth CSS — place auth-premium.css in your public/css/ folder -->
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap">
+<style>
+  main {
+    max-width: none;
+    width: 100%;
+    padding: 0;
+  }
+</style>
 
+<!-- Ambient background glows -->
 
 
 <main class="auth-shell">
   <div class="auth-page">
 
-    <!--  LEFT PANEL  -->
+    <!-- ── LEFT PANEL ── -->
     <div class="auth-panel">
       <div class="panel-logo">
         <div class="panel-logo-mark">L</div>
@@ -47,7 +56,7 @@
       </div>
     </div>
 
-    <!--  RIGHT PANEL (FORM)  -->
+    <!-- ── RIGHT PANEL (FORM) ── -->
     <div class="auth-form-panel">
       <div class="auth-form-wrap">
 
@@ -146,7 +155,6 @@
 </main>
 
 <script>
-  
 // Password eye toggle
 document.getElementById('eyeBtn').addEventListener('click', function () {
   const inp = document.getElementById('password');
