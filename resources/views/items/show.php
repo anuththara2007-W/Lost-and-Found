@@ -308,3 +308,213 @@
                     </ul>
                 </div>
             <?php endif; ?>
+ <!-- Comments Section -->
+            <?php if (isset($item['allow_platform_message']) && $item['allow_platform_message'] != 0): ?>
+                <div class="comments-section" id="comments-app">
+                    <h3 class="comments-title">Messages & Updates</h3>
+
+                    <?php
+                    // Group comments by parent_id for nested display
+                    // Note: requires backend adaptation. $comments normally is flat array.
+                    // We simulate grouping if backend hasn't been modified yet.
+                    $parentComments = [];
+                    $childComments = [];
+                    if (!empty($comments)) {
+                        foreach ($comments as $c) {
+                            if (isset($c['parent_id']) && $c['parent_id'] > 0) {
+                                $childComments[$c['parent_id']][] = $c;
+                            } else {
+                                $parentComments[] = $c;
+                            }
+                        }
+                    } else {
+                        $parentComments = $comments ?? [];
+                    }
+                    ?>
+
+                    <?php if (empty($parentComments)): ?>
+                        <p class="comments-empty">No messages yet. Be the first to reach out.</p>
+                    <?php else: ?>
+                        <div class="comments-list">
+                            <?php foreach ($parentComments as $comment): ?>
+                                <div class="comment-card" id="comment-<?= $comment['comment_id'] ?>">
+                                    <div class="comment-header">
+                                        <strong class="comment-author">
+                                            <?= escape($comment['username']) ?>
+                                            <?php if ($comment['user_id'] == $item['user_id'])
+                                                echo '<span class="badge-author">AUTHOR</span>'; ?>
+                                        </strong>
+                                        <span class="comment-date"><?= formatDate($comment['created_at']) ?></span>
+                                    </div>
+                                    <p class="comment-text"><?= nl2br(escape($comment['comment_text'] ?? $comment['message'])) ?>
+                                    </p>
+
+                                    <?php if (isLoggedIn()): ?>
+                                        <button class="reply-btn" onclick="setReply(<?= $comment['comment_id'] ?>)">Reply</button>
+                                    <?php endif; ?>
+
+                                    <!-- Child Comments -->
+                                    <?php $cId = $comment['comment_id']; ?>
+                                    <?php if (!empty($childComments[$cId])): ?>
+                                        <div class="child-comments">
+                                            <?php foreach ($childComments[$cId] as $child): ?>
+                                                <div class="comment-card"
+                                                    style="padding: 10px; background: var(--off-white); border: none;">
+                                                    <div class="comment-header">
+                                                        <strong class="comment-author">
+                                                            <?= escape($child['username']) ?>
+                                                            <?php if ($child['user_id'] == $item['user_id'])
+                                                                echo '<span class="badge-author">AUTHOR</span>'; ?>
+                                                        </strong>
+                                                        <span class="comment-date"><?= formatDate($child['created_at']) ?></span>
+                                                    </div>
+                                                    <p class="comment-text">
+                                                        <?= nl2br(escape($child['comment_text'] ?? $child['message'])) ?></p>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (isLoggedIn()): ?>
+                        <div id="comment-form-container" class="comment-form-box">
+                            <form action="<?= BASE_URL ?>/message/store" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="report_id" value="<?= $item['report_id'] ?>">
+                                <input type="hidden" name="redirect_context" value="item_show">
+                                <input type="hidden" id="parent_id" name="parent_id" value="0">
+
+                                <div class="input-group">
+                                    <label class="input-label" for="comment_text" id="reply-label">Post a message</label>
+                                    <textarea name="comment_text" id="comment_text" rows="3" class="input-field"
+                                        placeholder="Share an update or ask a question about this item..." required></textarea>
+                                </div>
+                                <div class="input-group" style="margin-bottom: 20px;">
+                                    <label class="input-label" for="attachment" style="font-size: 12px; font-weight: 500;"><svg
+                                            viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                            stroke-width="2" style="vertical-align: middle; margin-right: 5px;">
+                                            <path
+                                                d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                                        </svg> Attach Image (Optional)</label>
+                                    <input type="file" name="attachment" id="attachment" accept="image/*" class="input-field"
+                                        style="padding: 8px;">
+                                </div>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <button type="submit" class="btn btn-secondary">Post Message</button>
+                                    <button type="button" id="cancel-reply" class="reply-btn"
+                                        style="display:none; color: var(--terracotta);" onclick="cancelReply()">Cancel
+                                        Reply</button>
+                                </div>
+                            </form>
+                        </div>
+                    <?php else: ?>
+                        <div class="login-prompt-box">
+                            <a href="<?= BASE_URL ?>/auth/login" class="login-prompt-link">Log in</a> to post a message.
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <div class="comments-section">
+                    <p style="color:var(--clay); text-align:center; margin:20px 0;">The author disabled platform comments
+                        for this report.</p>
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var mapEl = document.getElementById('detailMap');
+        if (mapEl) {
+            var lat = parseFloat(mapEl.getAttribute('data-lat'));
+            var lng = parseFloat(mapEl.getAttribute('data-lng'));
+            var type = mapEl.getAttribute('data-type');
+
+            var map = L.map('detailMap').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            var color = type === 'lost' ? '#C96442' : '#5C7A65';
+            var iconHtml = "<div style='background-color: " + color + "; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.4);'></div>";
+
+            var customIcon = L.divIcon({
+                className: 'custom-div-icon',
+                html: iconHtml,
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+
+            L.marker([lat, lng], {
+                icon: customIcon
+            }).addTo(map);
+        }
+    });
+
+    function setReply(parentId) {
+        document.getElementById('parent_id').value = parentId;
+        document.getElementById('reply-label').textContent = 'Replying to message...';
+        document.getElementById('cancel-reply').style.display = 'inline-block';
+        document.getElementById('comment_text').focus();
+        // Scroll to form
+        document.getElementById('comment-form-container').scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+
+    function cancelReply() {
+        document.getElementById('parent_id').value = '0';
+        document.getElementById('reply-label').textContent = 'Post a message';
+        document.getElementById('cancel-reply').style.display = 'none';
+        document.getElementById('comment_text').value = '';
+    }
+
+    function printFlyer() {
+        var title = "<?= escape(addslashes($item['title'])) ?>";
+        var desc = "<?= escape(addslashes($item['description'])) ?>";
+        var type = "<?= escape($item['type']) ?>";
+        var contact = "<?= escape(addslashes($item['contact_info'])) ?>";
+        // Using QuickChart.io as an alternative reliable API for the QR generation 
+        var qrUrl = "https://quickchart.io/qr?size=150&text=" + encodeURIComponent(window.location.href);
+        var imgHtml = "<?= !empty($item['image_path']) ? '<img src=\"' . BASE_URL . '/uploads/' . $item['image_path'] . '\" style=\"max-width:400px; max-height:400px; border-radius:8px; margin-bottom:20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);\">' : '' ?>";
+
+        var printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+        <html>
+        <head>
+            <title>Print Flyer</title>
+            <style>
+                body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-align: center; padding: 40px; color: #333; }
+                h1 { color: ${type === 'lost' ? '#d93025' : '#188038'}; font-size: 4.5rem; text-transform: uppercase; margin: 0 0 20px 0; letter-spacing: 5px; }
+                h2 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 500; }
+                p { font-size: 1.4rem; margin-bottom: 30px; line-height: 1.6; max-width: 700px; margin-left: auto; margin-right: auto; }
+                .qr-box { margin-top: 50px; padding: 20px; display: inline-block; background: #f8f9fa; border-radius: 12px; border: 2px dashed #ccc; }
+            </style>
+        </head>
+        <body>
+            <h1>${type === 'lost' ? 'MISSING' : 'FOUND'}</h1>
+            ${imgHtml}
+            <h2>${title}</h2>
+            <p>${desc}</p>
+            ${contact ? `<p style="font-size: 1.8rem; font-weight: bold; background: #fff3cd; padding: 15px; display: inline-block; border-radius: 8px;">Contact: ${contact}</p>` : ''}
+            <div style="margin-top:20px;"></div>
+            <div class="qr-box">
+                <p style="font-size:1.1rem; margin-bottom:15px; color:#555;">Scan this code to view live details online</p>
+                <img src="${qrUrl}" alt="QR Code" width="150" height="150">
+            </div>
+            <script>window.onload = function() { window.print(); }<\/script>
+        </body>
+        </html>
+    `);
+        printWindow.document.close();
+    }
+</script>
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
