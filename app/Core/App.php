@@ -3,7 +3,7 @@ namespace App\Core;
 
 class App
 {
-    protected $controller = 'App\\Controllers\\HomeController';
+    protected $controller = 'HomeController';
     protected $method = 'index';
     protected $params = [];
 
@@ -12,24 +12,29 @@ class App
         $url = $this->parseUrl();
 
         // 1. Controller
-        $controllerName = isset($url[0]) ? ucfirst(strtolower($url[0])) . 'Controller' : 'HomeController';
-        $controllerClass = 'App\\Controllers\\' . $controllerName;
+        $controllerName = !empty($url[0])
+            ? ucfirst(strtolower($url[0])) . 'Controller'
+            : 'HomeController';
+
         $controllerFile = ROOT . '/app/Controllers/' . $controllerName . '.php';
 
         if (file_exists($controllerFile)) {
-            $this->controller = $controllerClass;
+            require_once $controllerFile;
+            $this->controller = 'App\\Controllers\\' . $controllerName;
             unset($url[0]);
+        } else {
+            // fallback to HomeController
+            require_once ROOT . '/app/Controllers/HomeController.php';
+            $this->controller = 'App\\Controllers\\HomeController';
         }
 
-        require_once ROOT . '/app/Controllers/' . str_replace('App\\Controllers\\', '', $this->controller) . '.php';
+        // Create controller object
         $this->controller = new $this->controller;
 
         // 2. Method
-        if (isset($url[1])) {
-            if (method_exists($this->controller, $url[1])) {
-                $this->method = $url[1];
-                unset($url[1]);
-            }
+        if (isset($url[1]) && method_exists($this->controller, $url[1])) {
+            $this->method = $url[1];
+            unset($url[1]);
         }
 
         // 3. Params
