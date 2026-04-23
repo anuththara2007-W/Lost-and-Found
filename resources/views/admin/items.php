@@ -1,52 +1,57 @@
-<?php
-if (!defined('ROOT')) {
-    require_once dirname(__DIR__, 3) . '/config/config.php';
-}
-$pageCss = ['admin/admin-items.css'];
-require_once ROOT . '/resources/views/layouts/header.php';
-if (empty($data)) {
-    $data = [
-        'reports' => [
-            ['report_id' => '101', 'title' => 'Lost Wallet', 'status' => 'active'],
-            ['report_id' => '102', 'title' => 'Found Keys', 'status' => 'resolved']
-        ]
-    ];
-}
-?>
-<div style="max-width: 1000px; margin: 40px auto; min-height: 50vh;">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--midnight); padding-bottom: 15px; margin-bottom: 30px;">
-        <h1 style="font-size: 2.2rem; color: var(--midnight);">Admin: Manage Items</h1>
-        <a href="<?= BASE_URL ?>/admin/dashboard" class="btn btn-secondary" style="font-size: 12px; padding: 6px 15px;">&larr; Back to Dashboard</a>
-    </div>
-    <div style="background: var(--white); padding: 20px; border-radius: 12px; border: 1px solid var(--parchment);">
-        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
-            <thead style="background: var(--off-white); border-bottom: 2px solid var(--parchment); text-align: left;">
-                <tr>
-                    <th style="padding: 12px 15px; color: var(--clay);">Item ID</th>
-                    <th style="padding: 12px 15px; color: var(--clay);">Title</th>
-                    <th style="padding: 12px 15px; color: var(--clay);">Status</th>
-                    <th style="padding: 12px 15px; color: var(--clay);">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach (($data['reports'] ?? []) as $report): ?>
-                <tr style="border-bottom: 1px solid var(--parchment);">
-                    <td style="padding: 12px 15px; color: var(--midnight); font-weight: 500;"><?= $report['report_id'] ?></td>
-                    <td style="padding: 12px 15px; color: var(--midnight);"><a href="<?= BASE_URL ?>/item/show/<?= $report['report_id'] ?>" style="color:var(--midnight);"><?= escape($report['title']) ?></a></td>
-                    <td style="padding: 12px 15px; color: var(--clay);"><?= ucfirst(escape($report['status'])) ?></td>
-                    <td style="padding: 12px 15px;">
-                        <form action="<?= BASE_URL ?>/admin/delete_report/<?= $report['report_id'] ?>" method="POST" onsubmit="return confirm('Delete this item?');">
-                            <button type="submit" style="background:none; border:none; color:var(--terracotta); cursor:pointer; font-weight:500; text-decoration:underline;">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <?php if(empty($data['reports'])): ?>
-            <div style="padding: 30px; text-align: center; color: var(--clay);">No items found.</div>
-        <?php endif; ?>
-    </div>
-</div>
+<?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
 
+<div class="admin-wrapper">
+    <aside class="admin-sidebar">
+        <div class="sidebar-header"><h2>Admin Panel</h2></div>
+        <ul class="sidebar-menu">
+            <li><a href="<?= BASE_URL ?>/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
+            <li class="active"><a href="<?= BASE_URL ?>/admin/items"><i class="fas fa-box"></i> Manage Items</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/contact_requests"><i class="fas fa-envelope"></i> Contact Requests</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/monitor"><i class="fas fa-chart-line"></i> Real-time Monitor</a></li>
+            <li><a href="<?= BASE_URL ?>/admin/backup"><i class="fas fa-database"></i> Backup & Restore</a></li>
+            <li><a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-topbar">
+            <h1>Manage Items</h1>
+        </header>
+        <section class="admin-content">
+            <div class="table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($data['reports'])): ?>
+                            <?php foreach ($data['reports'] as $report): ?>
+                                <tr>
+                                    <td>#<?= (int)$report['report_id'] ?></td>
+                                    <td><a href="<?= BASE_URL ?>/item/show/<?= (int)$report['report_id'] ?>"><?= escape($report['title']) ?></a></td>
+                                    <td><?= ucfirst(escape($report['status'])) ?></td>
+                                    <td>
+                                        <form action="<?= BASE_URL ?>/admin/delete_report/<?= (int)$report['report_id'] ?>" method="POST" onsubmit="return confirm('Delete this item?');">
+                                            <button type="submit" class="btn-delete">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr><td colspan="4" class="text-center">No items found.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
 <?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
