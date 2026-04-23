@@ -1,18 +1,18 @@
 :root {
-  /* ── palette (from design system) ── */
-  --white: #fafaf8;
-  --off-white: #f2f0eb;
-  --parchment: #e8e3d8;
-  --warm-mid: #c9c0ae;
-  --clay: #9c8c78;
-  --ink: #3a3830;
-  --midnight: #1e2027;
+  /* Palette aligned to requested homepage theme */
+  --white: #f8f7f4;
+  --off-white: #ffffff;
+  --parchment: #e8e5df;
+  --warm-mid: #c8c4bb;
+  --clay: #6b6a67;
+  --ink: #111110;
+  --midnight: #111110;
 
-  --terracotta: #c96442;
-  --terracotta-lt: #edd5c8;
+  --terracotta: #e0402a;
+  --terracotta-lt: #fff0ed;
   --terracotta-dk: #a84e2f;
-  --sage: #5c7a65;
-  --sage-lt: #d1dfcf;
+  --sage: #2d7a4f;
+  --sage-lt: #edf6f1;
   --amber: #d4940a;
   --amber-lt: #f5e9c8;
 
@@ -42,7 +42,9 @@ body {
 }
 
 body {
-  font-family: "DM Sans", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: var(--ink);
@@ -161,7 +163,9 @@ body::after {
   color: inherit;
 }
 .header-logo {
-  font-family: "Cormorant Garamond", serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 21px;
   font-weight: 400;
   color: var(--midnight);
@@ -204,7 +208,9 @@ body::after {
   border: 1px solid var(--warm-mid);
   background: var(--white);
   color: var(--ink);
-  font-family: "DM Sans", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -230,17 +236,76 @@ body::after {
 .auth-shell {
   position: relative;
   z-index: 1;
-  margin-top: -50px;
-  padding: 40px 0 80px;
+  margin-top: 0;
+  padding: 20px 0 40px;
 }
 .auth-page {
-  max-width: 1100px;
+  max-width: none;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 40px;
   display: grid;
   grid-template-columns: 1.12fr 0.88fr;
   gap: 20px;
   animation: fadeUp 0.55s var(--ease) both;
+}
+
+/* Align with current login.php markup classes */
+.panel-logo-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--midnight);
+  letter-spacing: -0.2px;
+}
+
+.panel-logo-text em {
+  color: var(--terracotta);
+  font-style: italic;
+}
+
+.panel-content {
+  margin-top: 30px;
+}
+
+.panel-body {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--clay);
+  max-width: 420px;
+  line-height: 1.75;
+}
+
+.panel-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.panel-badges .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid var(--parchment);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.panel-badges .badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--terracotta);
+  box-shadow: 0 0 0 3px var(--terracotta-lt);
+}
+
+.panel-badges .badge-dot.moss {
+  background: var(--sage);
+  box-shadow: 0 0 0 3px var(--sage-lt);
 }
 
 /* ══════════════════════════════
@@ -343,7 +408,9 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Cormorant Garamond", serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 17px;
   font-weight: 600;
   color: #fff;
@@ -354,7 +421,9 @@ body::after {
     0 4px 14px rgba(201, 100, 66, 0.35);
 }
 .panel-logo-name {
-  font-family: "Cormorant Garamond", serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 18px;
   font-weight: 400;
   color: var(--midnight);
@@ -365,7 +434,9 @@ body::after {
 }
 
 .panel-headline {
-  font-family: "Cormorant Garamond", serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-weight: 300;
   font-size: 56px;
   line-height: 0.98;
@@ -535,7 +606,9 @@ body::after {
 
 /* title */
 .form-title {
-  font-family: "Cormorant Garamond", serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 36px;
   font-weight: 400;
   letter-spacing: -0.6px;
@@ -620,7 +693,9 @@ body::after {
   background: var(--white);
   border: 1px solid var(--warm-mid);
   padding: 12px 14px;
-  font-family: "DM Sans", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 14px;
   color: var(--ink);
   outline: none;
@@ -738,7 +813,9 @@ body::after {
   );
 
   color: #fff;
-  font-family: "DM Sans", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.2px;
@@ -827,7 +904,9 @@ body::after {
   border: 1px solid var(--warm-mid);
   background: linear-gradient(180deg, var(--white) 0%, var(--off-white) 100%);
   color: var(--ink);
-  font-family: "DM Sans", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
+    Arial, sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
