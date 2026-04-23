@@ -155,3 +155,15 @@
         </div>
     </section>
 
+    <div class="cta">
+        <h2><?= escape(t('home_cta_title')) ?></h2>
+        <p><?= escape(t('home_cta_sub')) ?></p>
+        <div class="cta-btns">
+            <a href="<?= BASE_URL ?>/item/create?type=lost" class="btn btn-white btn-lg"><?= escape(t('home_report_lost_item')) ?></a>
+            <a href="<?= BASE_URL ?>/item/create?type=found" class="btn btn-border btn-lg"><?= escape(t('home_report_found_item')) ?></a>
+        </div>
+    </div>
+</div>
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
+
