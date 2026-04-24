@@ -1,7 +1,14 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/item-form.css">
+<style>
+    main {
+        max-width: none;
+        width: 100%;
+        padding: 24px 22px 40px;
+    }
+</style>
 
-<div class="form-container item-form-wrapper">
+<div class="item-form-wrapper">
     <div class="form-header">
         <?php if($type === 'lost'): ?>
             <h2 class="item-form-title-lost">Report a Lost Item</h2>
@@ -12,10 +19,10 @@
         <?php endif; ?>
     </div>
 
-     <form action="<?= BASE_URL ?>/item/create" method="POST" enctype="multipart/form-data">
+    <form action="<?= BASE_URL ?>/item/create" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="type" value="<?= escape($type) ?>">
 
-        <div class="input-group">
+        <div class="input-group full-row">
             <label class="input-label" for="title">Item Name (Short Reference)</label>
             <input type="text" id="title" name="title" class="input-field" placeholder="e.g. Blue Hydro Flask" required value="<?= old('title') ?>">
         </div>
@@ -43,7 +50,7 @@
             <input type="text" id="location" name="location" class="input-field" placeholder="e.g. Central Library, Level 2" required value="<?= old('location') ?>">
         </div>
 
-         <div class="input-group">
+        <div class="input-group full-row">
             <label class="input-label">Pinpoint Exact Location (Optional but recommended)</label>
             <p class="item-form-map-hint">Click on the map to set a precise pin for this item.</p>
             <div id="pickerMap" class="item-form-map-container"></div>
@@ -55,7 +62,7 @@
             </div>
         </div>
 
-         <div class="input-group">
+        <div class="input-group full-row">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                 <label class="input-label" for="description" style="margin-bottom: 0;">Detailed Description</label>
                 <button type="button" onclick="generateDescription()" class="btn-secondary" style="padding: 2px 8px; font-size: 11px; border-radius: 4px; color: #d97706; border-color: #fcd34d; background: #fef3c7;">
@@ -65,23 +72,23 @@
             <textarea id="description" name="description" class="input-field" rows="4" placeholder="Distinctive features, contents, brand, colors..." required><?= old('description') ?></textarea>
         </div>
 
-         <div class="input-group">
+        <div class="input-group">
             <label class="input-label" for="contact_info">Contact Info (Optional)</label>
             <input type="text" id="contact_info" name="contact_info" class="input-field" placeholder="Phone number or specific instructions" value="<?= old('contact_info') ?>">
         </div>
-
+        
         <div class="input-group">
             <label class="input-label" for="whatsapp_contact">WhatsApp Number (Optional)</label>
             <input type="text" id="whatsapp_contact" name="whatsapp_contact" class="input-field" placeholder="Number to be contacted via WhatsApp..." value="<?= old('whatsapp_contact') ?>">
         </div>
 
-         <div class="input-group" style="display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 20px;">
+        <div class="input-group full-row" style="display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 20px;">
             <input type="checkbox" id="allow_platform_message" name="allow_platform_message" value="1" <?= (empty($_SESSION['old']) || old('allow_platform_message')) ? 'checked' : '' ?> style="width: 16px; height: 16px;">
             <label class="input-label" for="allow_platform_message" style="margin-bottom: 0;">Allow user to message me through platform</label>
         </div>
 
         <?php if($type === 'lost'): ?>
-        <div class="input-group">
+        <div class="input-group full-row">
             <label class="input-label" for="reward_amount">Reward Amount (Optional)</label>
             <div style="display:flex; align-items:center;">
                 <span style="padding: 12px 16px; background: var(--warm-mid); color: white; border-radius: 8px 0 0 8px; font-weight: bold;">$</span>
@@ -91,12 +98,12 @@
         </div>
         <?php endif; ?>
 
-        <div class="input-group mb-20">
+        <div class="input-group full-row mb-20">
             <label class="input-label" for="image">Upload Images (Optional, multiple allowed)</label>
             <input type="file" id="image" name="images[]" multiple class="input-field item-form-file-input" accept="image/*">
         </div>
 
-        <button type="submit" class="btn <?= $type === 'lost' ? 'btn-primary' : 'btn-found' ?> w-full item-form-submit-btn">
+        <button type="submit" class="btn <?= $type === 'lost' ? 'btn-primary' : 'btn-found' ?> w-full item-form-submit-btn full-row">
             Submit Report
         </button>
     </form>
@@ -193,6 +200,7 @@ function generateDescription() {
         btn.innerHTML = originalHtml;
     }, 800);
 }
+
 // AI Auto-Tagging via JS Heuristics
 document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('title');
@@ -251,4 +259,3 @@ document.addEventListener('DOMContentLoaded', function() {
 clearOld(); 
 require_once ROOT . '/resources/views/layouts/footer.php'; 
 ?>
-
