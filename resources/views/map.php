@@ -154,3 +154,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
