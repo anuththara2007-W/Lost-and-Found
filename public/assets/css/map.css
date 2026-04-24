@@ -32,13 +32,13 @@
 
 .map-badge-lost {
   background: var(--terracotta-lt, #f6e4dc);
-  color: var(--terracotta, #c96442);
+  color: var(--terracotta, #e0402a);
   margin: 0 5px;
 }
 
 .map-badge-found {
   background: var(--sage-lt, #e3ebe6);
-  color: var(--sage, #5c7a65);
+  color: var(--sage, #2d7a4f);
 }
 
 .map-wrapper {
@@ -63,7 +63,7 @@
   width: 100%;
   height: 100%;
   border-radius: 12px;
-  font-family: "DM Sans", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
 }
 
 .custom-div-icon {
@@ -72,7 +72,7 @@
 }
 
 .custom-marker-lost {
-  background-color: #c96442;
+  background-color: #e0402a;
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -81,7 +81,7 @@
 }
 
 .custom-marker-found {
-  background-color: #5c7a65;
+  background-color: #2d7a4f;
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -90,7 +90,7 @@
 }
 
 .popup-container {
-  font-family: "DM Sans", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   min-width: 180px;
 }
 
@@ -99,13 +99,13 @@
 }
 
 .popup-badge-lost {
-  color: #c96442;
+  color: #e0402a;
   font-weight: bold;
   font-size: 10px;
 }
 
 .popup-badge-found {
-  color: #5c7a65;
+  color: #2d7a4f;
   font-weight: bold;
   font-size: 10px;
 }
@@ -125,7 +125,7 @@
 }
 
 .popup-link {
-  color: #c96442;
+  color: #e0402a;
   text-decoration: none;
   font-size: 12px;
   font-weight: 500;
