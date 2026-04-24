@@ -108,3 +108,69 @@
         </button>
     </form>
 </div>
+
+<!-- LEAFLET MAP INJECTION -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+function toggleCustomCategory() {
+    var select = document.getElementById('category_id');
+    var customGroup = document.getElementById('custom_category_group');
+    if (select.value === 'other') {
+        customGroup.style.display = 'block';
+        document.getElementById('custom_category').required = true;
+    } else {
+        customGroup.style.display = 'none';
+        document.getElementById('custom_category').required = false;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Default center on Sri Lanka
+    var defaultLat = 7.8731;
+    var defaultLng = 80.7718;
+    
+    var existingLat = document.getElementById('latitude').value;
+    var existingLng = document.getElementById('longitude').value;
+    
+    var startLat = existingLat ? parseFloat(existingLat) : defaultLat;
+    var startLng = existingLng ? parseFloat(existingLng) : defaultLng;
+    var startZoom = existingLat ? 15 : 7;
+
+    // Initialize Map
+    var map = L.map('pickerMap').setView([startLat, startLng], startZoom);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker = null;
+
+    // If we have existing data from a failed form sub, immediately place it
+    if(existingLat && existingLng) {
+        marker = L.marker([startLat, startLng]).addTo(map);
+        document.getElementById('latDisplay').textContent = startLat.toFixed(5);
+        document.getElementById('lngDisplay').textContent = startLng.toFixed(5);
+    }
+
+    // Handle Map Clicks
+    map.on('click', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Update hidden inputs
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+        
+        // Update display text
+        document.getElementById('latDisplay').textContent = lat.toFixed(5);
+        document.getElementById('lngDisplay').textContent = lng.toFixed(5);
+
+        // Move or create marker
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+    });
+});
