@@ -51,7 +51,7 @@
                          [ NO PHOTO ]
                     </div>
                 <?php else: ?>
-                    <div class="card-image-container" style="background: url('<?= BASE_URL ?>/public/uploads/<?= $item['image_path'] ?>') center/cover;">
+                    <div class="card-image-container" style="background: url('<?= BASE_URL ?>/uploads/<?= $item['image_path'] ?>') center/cover;">
                     </div>
                 <?php endif; ?>
                 
@@ -64,7 +64,7 @@
                 </div>
                 
                 <div class="card-info-location">
-                    📍 <?= escape($item['location']) ?>
+                    <i class="fa-solid fa-location-dot"></i> <?= escape($item['location']) ?>
                 </div>
 
                 <a href="<?= BASE_URL ?>/item/show/<?= $item['report_id'] ?>" class="btn btn-secondary w-full">View Details</a>
