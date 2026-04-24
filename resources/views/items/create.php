@@ -254,3 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
     descInput.addEventListener('blur', autoTag);
 });
 </script>
+
+<?php 
+clearOld(); 
+require_once ROOT . '/resources/views/layouts/footer.php'; 
+?>
