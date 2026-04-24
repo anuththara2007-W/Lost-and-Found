@@ -72,3 +72,5 @@
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
+
+<?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
