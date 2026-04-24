@@ -2,9 +2,15 @@
 
 .search-header-container {
     margin-bottom: 30px;
+}
+
+.search-header-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .search-title {
@@ -74,6 +80,71 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
+}
+
+.advanced-search-form {
+    margin-top: 20px;
+    background: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--parchment);
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.filter-panel {
+    display: none;
+}
+
+.filter-panel.is-open {
+    display: block;
+}
+
+.filter-group {
+    margin-bottom: 0;
+}
+
+.filter-label {
+    font-size: 13px;
+}
+
+.filter-action {
+    display: flex;
+    align-items: flex-end;
+}
+
+.filter-submit-btn {
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.no-results-card {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--card);
+    border-radius: 12px;
+    margin-top: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.no-results-icon {
+    font-size: 3rem;
+    color: var(--clay);
+    margin-bottom: 15px;
+}
+
+.no-results-text {
+    font-size: 1.2rem;
+    color: var(--midnight);
+}
+
+.no-results-btn {
+    margin-top: 15px;
 }
 
 /* Card Styles (Reused from home.css to ensure encapsulation as requested) */
@@ -168,4 +239,14 @@
 .index-action-btn {
     font-size: 12px;
     padding: 8px 16px;
+}
+
+.filter-toggle-btn {
+    background: var(--card);
+}
+
+@media (max-width: 768px) {
+    .advanced-search-form {
+        grid-template-columns: 1fr;
+    }
 }
