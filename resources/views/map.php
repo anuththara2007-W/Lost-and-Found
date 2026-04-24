@@ -86,50 +86,60 @@ document.addEventListener('DOMContentLoaded', function () {
         iconAnchor: [9, 9]
     });
 
-    const bounds = [];
-    let addedCount = 0;
+    const markerLayer = L.layerGroup().addTo(map);
 
-    items.forEach(function (item, index) {
-        let lat = parseFloat(item.latitude);
-        let lng = parseFloat(item.longitude);
+    function renderMarkers(inputItems, fitView) {
+        markerLayer.clearLayers();
+        const bounds = [];
+        let addedCount = 0;
 
-        // fallback for items with missing coordinates
-        if (!validLatLng(lat, lng)) {
-            lat = 6.9271 + ((index % 10) * 0.02);
-            lng = 79.8612 + ((index % 10) * 0.02);
-        }
+        inputItems.forEach(function (item, index) {
+            let lat = parseFloat(item.latitude);
+            let lng = parseFloat(item.longitude);
+            if (!validLatLng(lat, lng)) {
+                lat = 6.9271 + ((index % 10) * 0.02);
+                lng = 79.8612 + ((index % 10) * 0.02);
+            }
+            const safeTitle = escapeHtml(item.title || 'Lost Item');
+            const safeLocation = escapeHtml(item.location || 'Unknown Location');
+            const reportId = encodeURIComponent(item.report_id || '');
 
-        const safeTitle = escapeHtml(item.title || 'Lost Item');
-        const safeLocation = escapeHtml(item.location || 'Unknown Location');
-        const reportId = encodeURIComponent(item.report_id || '');
-
-        const popupContent = `
-            <div class="popup-container">
-                <div class="popup-badge-wrapper">
-                    <span class="popup-badge-lost">LOST</span>
+            const popupContent = `
+                <div class="popup-container">
+                    <div class="popup-badge-wrapper"><span class="popup-badge-lost">LOST</span></div>
+                    <strong class="popup-title">${safeTitle}</strong>
+                    <div class="popup-location"><i class="fa-solid fa-location-dot"></i> ${safeLocation}</div>
+                    <a href="${baseUrl}/item/show/${reportId}" class="popup-link">View Details &rarr;</a>
                 </div>
-                <strong class="popup-title">${safeTitle}</strong>
-                <div class="popup-location">📍 ${safeLocation}</div>
-                <a href="${baseUrl}/item/show/${reportId}" class="popup-link">View Details &rarr;</a>
-            </div>
-        `;
+            `;
 
-        L.marker([lat, lng], { icon: iconLost })
-            .addTo(map)
-            .bindPopup(popupContent);
-
-        bounds.push([lat, lng]);
-        addedCount++;
-    });
-
-    if (addedCount > 0) {
-        map.fitBounds(bounds, {
-            padding: [40, 40],
-            maxZoom: 14
+            L.marker([lat, lng], { icon: iconLost }).addTo(markerLayer).bindPopup(popupContent);
+            bounds.push([lat, lng]);
+            addedCount++;
         });
-    } else {
-        map.setView([7.8731, 80.7718], 7);
+
+        if (fitView) {
+            if (addedCount > 0) {
+                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+            } else {
+                map.setView([7.8731, 80.7718], 7);
+            }
+        }
     }
+
+    renderMarkers(items, true);
+
+    async function refreshMarkers() {
+        try {
+            const res = await fetch(`${baseUrl}/map/api_markers`, { credentials: 'same-origin' });
+            const data = await res.json();
+            const liveLost = Array.isArray(data.items) ? data.items.filter(x => String(x.type || '').toLowerCase() === 'lost') : [];
+            renderMarkers(liveLost, false);
+        } catch (e) {
+            console.error('Live map refresh failed', e);
+        }
+    }
+    setInterval(refreshMarkers, 10000);
 
     setTimeout(function () {
         map.invalidateSize();
