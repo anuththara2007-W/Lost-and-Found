@@ -1,9 +1,32 @@
 /* item-form.css - Styling for the item creation/reporting form */
 
 .item-form-wrapper {
-    max-width: 600px;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    width: 100%;
+    max-width: 1060px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 30px;
+    background: var(--card);
+    border: 1px solid var(--parchment);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: var(--shadow-card);
+}
+
+.item-form-wrapper form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+}
+
+.item-form-wrapper .form-header {
+    text-align: left;
+    margin-bottom: 22px;
+}
+
+.full-row {
+    grid-column: 1 / -1;
 }
 
 .item-form-title-lost {
@@ -44,4 +67,17 @@
 .item-form-submit-btn {
     padding: 12px;
     font-size: 15px;
+}
+
+@media (max-width: 900px) {
+    .item-form-wrapper {
+        max-width: none;
+    }
+
+    .item-form-wrapper form {
+        grid-template-columns: 1fr;
+    }
+    .full-row {
+        grid-column: auto;
+    }
 }
