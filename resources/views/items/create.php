@@ -174,3 +174,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+function generateDescription() {
+    var title = document.getElementById('title').value;
+    var type = "<?= escape($type) ?>";
+    if (!title) {
+        alert('Please enter an Item Name first so the AI can generate a description!');
+        return;
+    }
+    
+    var btn = document.querySelector('button[onclick="generateDescription()"]');
+    var originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+    
+    // Simulate AI generation delay seamlessly
+    setTimeout(function() {
+        var desc = "";
+        if (type === 'lost') {
+            desc = "I recently lost my " + title + " in this general area. It holds significant value to me. If anyone has seen it or picked it up, please contact me immediately. A reward is available for its safe return.";
+        } else {
+            desc = "I found a " + title + " abandoned at this location. It looks fully intact. I am holding onto it safely. If this belongs to you, please message me through the platform with identifying details so I can return it.";
+        }
+        
+        document.getElementById('description').value = desc;
+        btn.innerHTML = originalHtml;
+    }, 800);
+}
+
+// AI Auto-Tagging via JS Heuristics
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.getElementById('title');
+    const descInput = document.getElementById('description');
+    const categorySelect = document.getElementById('category_id');
+
+    const keywords = {
+        'electronics': ['phone', 'iphone', 'samsung', 'laptop', 'macbook', 'ipad', 'tablet', 'charger', 'headphones', 'airpods', 'earbuds', 'camera', 'watch', 'apple watch'],
+        'keys': ['key', 'keys', 'car key', 'house keys', 'fob'],
+        'wallet': ['wallet', 'purse', 'cardholder', 'cash', 'money', 'credit card'],
+        'documents': ['id', 'passport', 'license', 'certificate', 'document', 'folder', 'binder'],
+        'clothing': ['jacket', 'coat', 'sweater', 'hoodie', 'hat', 'cap', 'scarf', 'gloves', 'shoes', 'sneakers'],
+        'jewelry': ['ring', 'necklace', 'bracelet', 'earring', 'jewelry', 'gold', 'silver', 'diamond'],
+        'bag': ['bag', 'backpack', 'tote', 'luggage', 'suitcase', 'briefcase']
+    };
