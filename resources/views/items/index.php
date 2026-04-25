@@ -117,135 +117,33 @@
 <?php endif; ?>
 
 <script>
-    "use strict";
+(() => {
+    const toggleBtn = document.getElementById('filterToggleBtn');
+    const panel = document.getElementById('filterPanel');
+    if (!toggleBtn || !panel) return;
 
-   //FILTER TOGGLE SYSTEM
+    const hasFilters = window.location.search.length > 0;
+    if (hasFilters) panel.classList.add('is-open');
 
-function initFilterToggle()
-{
-    const toggleBtn = document.getElementById("filterToggleBtn");
-    const panel = document.getElementById("filterPanel");
-
-    if (toggleBtn === null || panel === null)
-    {
-        return;
-    }
-
-    // If URL already has filters, open panel
-    let queryString = window.location.search;
-
-    if (queryString.length > 0)
-    {
-        panel.classList.add("is-open");
-    }
-
-    // Toggle panel open/close on button click
-    toggleBtn.addEventListener("click", function ()
-    {
-        if (panel.classList.contains("is-open"))
-        {
-            panel.classList.remove("is-open");
-        }
-        else
-        {
-            panel.classList.add("is-open");
-        }
+    toggleBtn.addEventListener('click', () => {
+        panel.classList.toggle('is-open');
     });
-}
 
+    const form = document.querySelector('.advanced-search-form');
+    if (!form) return;
 
-//   SEARCH FORM AUTO SUBMIT SYSTEM
+    const typingInputs = [form.querySelector('#q'), form.querySelector('#location')].filter(Boolean);
+    const selectInputs = [form.querySelector('#type'), form.querySelector('#category_id'), form.querySelector('#date')].filter(Boolean);
 
-function initSearchForm()
-{
-    const form = document.querySelector(".advanced-search-form");
+    let debounceTimer;
+    const scheduleSubmit = () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => form.submit(), 350);
+    };
 
-    if (form === null)
-    {
-        return;
-    }
-
-    const searchInput = form.querySelector("#q");
-    const locationInput = form.querySelector("#location");
-
-    const typeSelect = form.querySelector("#type");
-    const categorySelect = form.querySelector("#category_id");
-    const dateSelect = form.querySelector("#date");
-
-    let typingInputs = [];
-    let selectInputs = [];
-
-    if (searchInput !== null)
-    {
-        typingInputs.push(searchInput);
-    }
-
-    if (locationInput !== null)
-    {
-        typingInputs.push(locationInput);
-    }
-
-    if (typeSelect !== null)
-    {
-        selectInputs.push(typeSelect);
-    }
-
-    if (categorySelect !== null)
-    {
-        selectInputs.push(categorySelect);
-    }
-
-    if (dateSelect !== null)
-    {
-        selectInputs.push(dateSelect);
-    }
-
-    let timer = null;
-
-    function submitFormWithDelay()
-    {
-        clearTimeout(timer);
-
-        timer = setTimeout(function ()
-        {
-            form.submit();
-        }, 350);
-    }
-
-    function submitImmediately()
-    {
-        form.submit();
-    }
-
-    // Typing inputs (debounced)
-    let i = 0;
-    while (i < typingInputs.length)
-    {
-        typingInputs[i].addEventListener("input", submitFormWithDelay);
-        i++;
-    }
-
-    // Select inputs (instant submit)
-    let j = 0;
-    while (j < selectInputs.length)
-    {
-        selectInputs[j].addEventListener("change", submitImmediately);
-        j++;
-    }
-}
-
-
-   //INIT EVERYTHING
-
-
-function initPage()
-{
-    initFilterToggle();
-    initSearchForm();
-}
-
-// Start script after load
-initPage();
+    typingInputs.forEach((input) => input.addEventListener('input', scheduleSubmit));
+    selectInputs.forEach((input) => input.addEventListener('change', () => form.submit()));
+})();
 </script>
 
 <?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
