@@ -97,27 +97,41 @@ class ItemController extends Controller
             // Handle multiple file uploads
             $imagePath = null;
             $uploadedImages = [];
-            if (isset($_FILES['images']) && is_array($_FILES['images']['name']) && count($_FILES['images']['name']) > 0) {
-                $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+            if (isset($_FILES['images']) && isset($_FILES['images']['name'])) {
+                $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'jfif', 'avif', 'heic', 'heif', 'tif', 'tiff'];
                 $uploadDir = ROOT . '/public/uploads/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
 
-                foreach ($_FILES['images']['name'] as $key => $fileName) {
-                    if ($_FILES['images']['error'][$key] == 0) {
-                        $fileTmp = $_FILES['images']['tmp_name'][$key];
-                        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                $fileNames = $_FILES['images']['name'];
+                $fileTmps = $_FILES['images']['tmp_name'];
+                $fileErrors = $_FILES['images']['error'];
 
-                        if (in_array($fileExt, $allowed)) {
-                            $newFileName = uniqid() . '_' . $key . '.' . $fileExt;
-                            if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
-                                $uploadedImages[] = $newFileName;
-                                // Primary image is just the first uploaded one
-                                if ($imagePath === null) {
-                                    $imagePath = $newFileName;
-                                }
-                            }
+                if (!is_array($fileNames)) {
+                    $fileNames = [$fileNames];
+                    $fileTmps = [$fileTmps];
+                    $fileErrors = [$fileErrors];
+                }
+
+                foreach ($fileNames as $key => $fileName) {
+                    if (!isset($fileErrors[$key]) || $fileErrors[$key] !== 0) {
+                        continue;
+                    }
+
+                    $fileTmp = $fileTmps[$key];
+                    $fileExt = strtolower(pathinfo((string)$fileName, PATHINFO_EXTENSION));
+
+                    if (!in_array($fileExt, $allowed, true)) {
+                        continue;
+                    }
+
+                    $newFileName = uniqid('img_', true) . '_' . $key . '.' . $fileExt;
+                    if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                        $uploadedImages[] = $newFileName;
+                        // Primary image is the first uploaded one
+                        if ($imagePath === null) {
+                            $imagePath = $newFileName;
                         }
                     }
                 }
@@ -168,7 +182,21 @@ class ItemController extends Controller
             $this->view('items/create', $data);
         }
     }
+
+    public function resolve($id)
+    {
+        requireLogin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            redirect('/user/dashboard');
+        }
+
+        if ($this->itemModel->markResolved($id, $_SESSION['user_id'])) {
+            $_SESSION['flash_success'] = 'Report marked as resolved.';
+        } else {
+            $_SESSION['flash_error'] = 'Unable to mark report as resolved.';
+        }
+
+        redirect('/user/dashboard');
+    }
 }
-
-
-
