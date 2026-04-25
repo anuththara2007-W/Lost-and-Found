@@ -1,0 +1,183 @@
+/* public/assets/css/dashboard.css - User Dashboard styling */
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Left Sidebar: Profile */
+.dashboard-sidebar {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+}
+
+.dashboard-profile-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  border: 1px solid var(--parchment);
+}
+
+.dashboard-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-weight: bold;
+}
+
+.dashboard-user-name {
+  font-size: 1.5rem;
+  margin-bottom: 5px;
+}
+
+.dashboard-username-handle {
+  color: var(--clay);
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.dashboard-user-details {
+  text-align: left;
+  padding-top: 15px;
+  border-top: 1px solid var(--parchment);
+  font-size: 13px;
+}
+
+.dashboard-detail-item {
+  margin-bottom: 8px;
+}
+
+.dashboard-trust-badge {
+  color: var(--amber);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Right Content: Reports */
+.dashboard-content {
+  flex: 3;
+  min-width: 300px;
+}
+
+.dashboard-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--parchment);
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.dashboard-content-title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-small {
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+.dashboard-empty {
+  text-align: center;
+  padding: 40px;
+  background: var(--card);
+  border-radius: 12px;
+  color: var(--clay);
+  border: 1px solid var(--parchment);
+}
+
+.dashboard-reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.dashboard-report-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--parchment);
+}
+
+.report-card-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.badge-small {
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+.badge-status-resolved {
+  font-size: 10px;
+  font-weight: bold;
+  color: #10b981;
+  text-transform: uppercase;
+}
+
+.report-card-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+}
+
+.report-card-link {
+  color: var(--midnight);
+  text-decoration: none;
+}
+
+.report-card-location {
+  font-size: 11px;
+  color: var(--clay);
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.report-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-flex {
+  flex: 1;
+  text-align: center;
+  padding: 6px;
+  font-size: 11px;
+}
+
+.btn-flex-form {
+  flex: 1;
+}
+
+.btn-flex-form .btn-flex {
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .dashboard-sidebar {
+    max-width: 100%;
+  }
+}
