@@ -1,61 +1,393 @@
-/* item-detail.css - Styling for the single item details view */
+/* ============================================================
+   item-detail.css
+   All styling for the single-item detail page.
+   No inline styles should exist anywhere in item-detail.php.
 
+   HOW THIS FILE IS ORGANISED (for beginners):
+   Each section matches a part of the page from top to bottom.
+   CSS variables like var(--clay) are defined in the global
+   stylesheet — think of them as named colour presets.
+============================================================ */
+
+/* ── Page Layout ────────────────────────────────────────────
+   The <main> tag wraps the whole page content.
+   We remove the default max-width so the card can stretch
+   edge-to-edge and add comfortable padding around it.
+──────────────────────────────────────────────────────────── */
+main {
+  max-width: none; /* let it fill the full browser width */
+  width: 100%;
+  padding: 20px 40px 40px; /* top | left+right | bottom breathing room */
+}
+
+/* The outermost wrapper div for this page */
 .item-detail-container {
   width: 100%;
   max-width: none;
   margin: 20px 0;
 }
 
+/* ── Back Link ──────────────────────────────────────────────
+   The "← Back to Recent" anchor at the top of the page.
+──────────────────────────────────────────────────────────── */
 .item-detail-back-link {
-  display: inline-flex;
+  display: inline-flex; /* puts the arrow and text on one line */
   align-items: center;
   color: var(--clay);
   text-decoration: none;
   font-size: 13px;
   font-weight: 500;
-  margin-bottom: 24px;
+  margin-bottom: 24px; /* space below before the card starts */
 }
 
+/* Underline on hover so users know it is clickable */
+.item-detail-back-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Card ───────────────────────────────────────────────────
+   The white rounded box that holds the left and right columns.
+   `display: flex` places the two columns side by side.
+   `flex-wrap: wrap` lets them stack on narrow screens.
+──────────────────────────────────────────────────────────── */
 .item-detail-card {
   background: var(--card);
   border-radius: 16px;
   padding: 40px;
   box-shadow: var(--shadow-card);
   display: flex;
-  flex-wrap: wrap;
-  gap: 40px;
+  flex-wrap: wrap; /* columns wrap to a new row on small screens */
+  gap: 40px; /* space between the left and right columns */
   border: 1px solid var(--parchment);
 }
 
+/* ── Left Column ────────────────────────────────────────────
+   Contains the timeline, photo gallery, and map.
+   `flex: 1` means it shares available space with the right column.
+   `min-width: 300px` stops it from shrinking too narrow.
+──────────────────────────────────────────────────────────── */
 .item-detail-left {
   flex: 1;
   min-width: 300px;
 }
 
-.item-detail-image-container {
-  width: 100%;
-  height: 350px;
+/* ── Progress Timeline ──────────────────────────────────────
+   Three numbered steps (Reported → Activity → Resolved)
+   connected by horizontal lines.
+──────────────────────────────────────────────────────────── */
+
+/* Outer row that holds all three steps and the connectors */
+.item-timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: var(--card);
   border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+/* Each step (circle + label below it) */
+.item-timeline-step {
+  text-align: center;
+  flex: 1; /* all three steps share equal width */
+}
+
+/* The numbered circle bubble */
+.item-timeline-step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* makes it a circle */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Colour variants — PHP adds the matching class based on state */
+.item-timeline-step-circle--active {
+  background: var(--red);
+  color: white;
+}
+.item-timeline-step-circle--inactive {
+  background: #e2e8f0;
+  color: var(--clay);
+}
+.item-timeline-step-circle--success {
+  background: var(--success, #34c759);
+  color: white;
+}
+
+/* The small text label underneath each circle */
+.item-timeline-step-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Colour variants for the label text */
+.item-timeline-step-label--active {
+  color: var(--midnight);
+}
+.item-timeline-step-label--inactive {
+  color: var(--clay);
+}
+
+/* The horizontal line connecting two steps */
+.item-timeline-connector {
+  flex: 1; /* stretches to fill the gap between steps */
+  height: 3px;
+  margin: 0 10px;
+}
+
+/* Colour variants for the connector line */
+.item-timeline-connector--active {
+  background: var(--red);
+}
+.item-timeline-connector--inactive {
+  background: #e2e8f0;
+}
+.item-timeline-connector--success {
+  background: var(--success, #34c759);
+}
+
+/* ── Gallery ────────────────────────────────────────────────
+   The main large photo area. Clicking it opens the lightbox.
+──────────────────────────────────────────────────────────── */
+
+/* Wrapper that crops the photo and keeps a 4:3 aspect ratio */
+.item-gallery-container {
+  position: relative; /* needed so the badge can be placed inside */
+  border-radius: 12px;
+  overflow: hidden; /* hides anything that pokes outside the rounded corners */
+  background: var(--parchment);
+  aspect-ratio: 4 / 3; /* always 4 wide : 3 tall, regardless of screen size */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: zoom-in; /* shows a magnifying-glass cursor on hover */
+}
+
+/* Shown when no photo was uploaded */
+.item-gallery-empty {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--clay);
+  font-weight: bold;
+  background: #e2e8f0;
 }
 
-.item-detail-image-empty-text {
-  font-size: 14px;
+/* The actual <img> tag filling the gallery area */
+.item-gallery-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* crops to fill without stretching */
+  transition: opacity 0.3s; /* smooth fade when swapping images */
+}
+
+/* Small "+3" badge in the bottom-right corner of the gallery */
+.item-gallery-badge {
+  position: absolute; /* placed relative to .item-gallery-container */
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6); /* semi-transparent dark pill */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ── Thumbnail Strip ────────────────────────────────────────
+   A horizontal scrollable row of small preview images
+   shown below the main gallery when there are 2+ photos.
+──────────────────────────────────────────────────────────── */
+.gallery-thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  overflow-x: auto; /* scroll horizontally if there are many thumbnails */
+  padding-bottom: 5px; /* space for the scrollbar so it doesn't overlap images */
+}
+
+/* Each individual thumbnail image */
+.gallery-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent; /* transparent by default; turns red when active */
+  transition: border-color 0.2s;
+}
+
+/* The currently-selected thumbnail gets a red border */
+.gallery-thumb--active {
+  border-color: var(--red);
+}
+
+/* ── Lightbox ───────────────────────────────────────────────
+   A full-screen dark overlay that shows the photo enlarged.
+   It starts hidden (display: none).
+   JavaScript adds the --open class to make it visible.
+──────────────────────────────────────────────────────────── */
+.image-lightbox {
+  display: none; /* hidden by default */
+  position: fixed; /* covers the whole browser window */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95); /* almost-black overlay */
+  z-index: 9999; /* sits on top of everything else */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* JS adds this class to show the lightbox */
+.image-lightbox--open {
+  display: flex;
+}
+
+/* Stops the page from scrolling while the lightbox is open */
+.body-no-scroll {
+  overflow: hidden;
+}
+
+/* The × close button in the top-right corner */
+.lightbox-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10000; /* above the lightbox itself */
+}
+
+/* Shared styles for the ← and → navigation arrows */
+.lightbox-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); /* vertically centred */
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+/* Slightly brighter on hover */
+.lightbox-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Position the previous (←) button on the left */
+.lightbox-nav-btn--prev {
+  left: 20px;
+}
+
+/* Position the next (→) button on the right */
+.lightbox-nav-btn--next {
+  right: 20px;
+}
+
+/* The enlarged photo in the centre of the lightbox */
+.lightbox-main-img {
+  max-width: 90%;
+  max-height: 85vh; /* never taller than 85% of the screen height */
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s;
+}
+
+/* "1 / 3" counter shown below the photo */
+.lightbox-counter {
+  color: white;
+  margin-top: 15px;
+  font-weight: bold;
   letter-spacing: 1px;
 }
 
+/* ── Map ────────────────────────────────────────────────────
+   The Leaflet.js interactive map section.
+──────────────────────────────────────────────────────────── */
+
+/* Wrapper with top spacing so the map doesn't stick to the gallery */
+.item-detail-map-container {
+  margin-top: 30px;
+}
+
+/* The div that Leaflet renders the actual map into */
+.item-detail-map-element {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  z-index: 1; /* keeps the map below the lightbox overlay */
+}
+
+/*
+ * Custom Leaflet marker pin.
+ * JavaScript creates: <div class="map-marker-dot" data-type="lost|found">
+ * We use the CSS attribute selector [data-type="..."] to colour it
+ * based on whether the item is lost or found — no inline colour in JS.
+ */
+
+/* The transparent Leaflet icon wrapper — we want no default styling */
+.map-marker-wrapper {
+  background: none;
+  border: none;
+}
+
+/* The actual coloured dot */
+.map-marker-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Lost items get an orange-red dot */
+.map-marker-dot[data-type="lost"] {
+  background-color: #c96442;
+}
+
+/* Found items get a green dot */
+.map-marker-dot[data-type="found"] {
+  background-color: #5c7a65;
+}
+
+/* ── Right Column ───────────────────────────────────────────
+   Contains badges, title, description, buttons, and comments.
+   `flex: 1.5` makes it 50% wider than the left column.
+──────────────────────────────────────────────────────────── */
 .item-detail-right {
   flex: 1.5;
   min-width: 300px;
 }
 
+/* ── Badges ─────────────────────────────────────────────────
+   The row of coloured pills at the top of the right column
+   (Lost/Found, Resolved, Reward).
+──────────────────────────────────────────────────────────── */
 .item-detail-badges {
   margin-bottom: 20px;
 }
 
+/* The grey "Resolved" pill badge */
 .badge-resolved {
   display: inline-flex;
   align-items: center;
@@ -70,10 +402,26 @@
   color: #4b5563;
 }
 
+/* The yellow "Reward" badge — overrides the default badge colours */
+.badge-reward {
+  background: #fbbf24;
+  color: #78350f;
+  font-weight: bold;
+}
+
+/* The dot inside the reward badge matches its dark text colour */
+.badge-reward .badge-dot {
+  background: #78350f;
+}
+
+/* ── Title & Meta ───────────────────────────────────────────
+   The item title heading and the small "reported by / location"
+   line below it.
+──────────────────────────────────────────────────────────── */
 .item-detail-title {
   font-size: 2.2rem;
   margin-bottom: 15px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.02em; /* slightly tighter tracking for large headings */
 }
 
 .item-detail-meta {
@@ -81,9 +429,18 @@
   font-size: 13px;
   margin-bottom: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid var(--parchment);
+  border-bottom: 1px solid var(--parchment); /* separator line below meta */
 }
 
+/* ── Description ────────────────────────────────────────────
+   The block containing the description text and the
+   "Generate QR Flyer" button.
+──────────────────────────────────────────────────────────── */
+.item-detail-desc-block {
+  margin-bottom: 30px;
+}
+
+/* Section headings like "Description" and "Map Location" */
 .item-detail-desc-title {
   font-size: 16px;
   margin-bottom: 10px;
@@ -91,12 +448,25 @@
   color: var(--midnight);
 }
 
+/* The description paragraph text */
 .item-detail-desc-text {
-  white-space: pre-wrap;
+  white-space: pre-wrap; /* preserves line breaks the user typed */
   color: var(--ink);
   line-height: 1.8;
 }
 
+/* The small "Generate QR Flyer" button under the description */
+.item-detail-flyer-btn {
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  border-color: var(--warm-mid);
+  margin-top: 15px;
+}
+
+/* ── Contact Box ────────────────────────────────────────────
+   A highlighted box shown when the poster provided contact info.
+──────────────────────────────────────────────────────────── */
 .item-detail-contact-box {
   background: var(--parchment);
   padding: 15px 20px;
@@ -104,6 +474,7 @@
   margin-bottom: 30px;
 }
 
+/* The small "PROVIDED CONTACT INFO" label above the value */
 .item-detail-contact-title {
   font-size: 12px;
   text-transform: uppercase;
@@ -113,6 +484,11 @@
   margin-bottom: 5px;
 }
 
+/* ── Action Buttons Row ─────────────────────────────────────
+   The WhatsApp + Direct Chat (or login) buttons side by side.
+──────────────────────────────────────────────────────────── */
+
+/* Vertical stack that holds the button row and social share */
 .item-detail-actions-stack {
   margin-top: 40px;
   display: flex;
@@ -120,50 +496,59 @@
   gap: 15px;
 }
 
+/* The horizontal row that holds WhatsApp and Chat buttons */
+.item-detail-action-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch; /* makes both buttons the same height */
+  margin-bottom: 20px;
+}
+
+/* Utility: makes a button grow to fill available width */
+.btn-action-grow {
+  flex-grow: 1;
+}
+
+/* Utility: centres text inside a button */
+.btn-action-center {
+  text-align: center;
+  justify-content: center;
+}
+
+/* The green WhatsApp button — fully self-styled, no base .btn needed */
 .btn-whatsapp {
   background: #25d366;
   color: white;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: 8px;
+  border: none;
   text-decoration: none;
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
+  box-sizing: border-box;
   transition: all 0.2s;
 }
 
+/* Slightly darker green + lifts up on hover */
 .btn-whatsapp:hover {
   background: #20ba56;
   transform: translateY(-2px);
 }
 
-.item-detail-action-row {
-  display: flex;
-  gap: 15px;
-}
-
-.flex-grow {
-  flex-grow: 1;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.btn-large-pad {
-  padding: 12px 24px;
-}
-
+/* The "This is your own report." placeholder that replaces the Chat button */
 .item-detail-own-report {
-  background: var(--off-white);
-  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background: var(--parchment);
   border-radius: 8px;
-  width: 100%;
-  text-align: center;
   border: 1px solid var(--parchment);
 }
 
@@ -174,18 +559,171 @@
   margin: 0;
 }
 
-/* Comments */
+/* ── Social Share ───────────────────────────────────────────
+   The Facebook / Twitter / WhatsApp icon row below the buttons.
+──────────────────────────────────────────────────────────── */
+.social-share {
+  border-top: 1px solid var(--parchment);
+  padding-top: 15px;
+  margin-bottom: 30px;
+}
+
+/* The "Share to Social Media:" label */
+.social-share-label {
+  font-size: 13px;
+  color: var(--clay);
+  margin-right: 10px;
+}
+
+/* Each icon link */
+.social-share-link {
+  font-size: 1.5rem;
+  text-decoration: none;
+  margin-right: 15px;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+/* No margin after the last icon */
+.social-share-link:last-child {
+  margin-right: 0;
+}
+
+/* Lifts slightly on hover */
+.social-share-link:hover {
+  transform: translateY(-2px);
+}
+
+/* Brand colours for each platform */
+.social-share-link--facebook {
+  color: #1877f2;
+}
+.social-share-link--twitter {
+  color: #1da1f2;
+}
+.social-share-link--whatsapp {
+  color: #25d366;
+}
+
+/* ── Potential Matches ──────────────────────────────────────
+   A list of other items in the same category that might
+   be related to this one.
+──────────────────────────────────────────────────────────── */
+.potential-matches {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  padding: 15px;
+  background: var(--parchment);
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+/* Section heading */
+.potential-matches-title {
+  margin-top: 0;
+  color: var(--midnight);
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+/* The magic-wand icon colour */
+.potential-matches-title i {
+  color: var(--red);
+}
+
+/* Small italic subtitle under the heading */
+.potential-matches-subtitle {
+  font-size: 12px;
+  color: var(--clay);
+  margin-top: -8px;
+  margin-bottom: 10px;
+}
+
+/* The <ul> list wrapper */
+.potential-matches-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each <li> row: thumbnail on the left, text on the right */
+.potential-matches-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* No border/spacing after the very last item */
+.potential-matches-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Small square thumbnail photo */
+.potential-matches-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0; /* never squish the thumbnail */
+}
+
+/* Grey placeholder box when a match has no photo */
+.potential-matches-thumb-empty {
+  width: 40px;
+  height: 40px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a0aec0;
+  flex-shrink: 0;
+}
+
+/* The text column next to the thumbnail */
+.potential-matches-info {
+  min-width: 0; /* allows the title text to truncate with ellipsis */
+}
+
+/* The clickable item title link */
+.potential-matches-link {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* shows "…" if the title is too long */
+}
+
+/* The small location line below the title */
+.potential-matches-location {
+  font-size: 11px;
+  color: var(--clay);
+}
+
+/* ── Comments Section ───────────────────────────────────────
+   The "Messages & Updates" area at the bottom of the right column.
+──────────────────────────────────────────────────────────── */
 .comments-section {
   margin-top: 50px;
   border-top: 1px solid var(--parchment);
   padding-top: 30px;
 }
 
+/* "Messages & Updates" heading */
 .comments-title {
   font-size: 1.5rem;
   margin-bottom: 20px;
 }
 
+/* Shown when there are no messages yet */
 .comments-empty {
   color: var(--clay);
   font-size: 13px;
@@ -193,6 +731,7 @@
   margin-bottom: 20px;
 }
 
+/* The vertical stack of comment cards */
 .comments-list {
   display: flex;
   flex-direction: column;
@@ -200,6 +739,7 @@
   margin-bottom: 30px;
 }
 
+/* Each individual comment bubble */
 .comment-card {
   background: var(--white);
   border: 1px solid var(--parchment);
@@ -207,17 +747,27 @@
   border-radius: 12px;
 }
 
+/* Reply / child comment — slightly indented styling */
+.comment-card--child {
+  padding: 10px;
+  background: var(--off-white);
+  border: none;
+}
+
+/* Row at the top of each comment: username on the left, date on the right */
 .comment-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
 }
 
+/* The poster's username */
 .comment-author {
   color: var(--midnight);
   font-size: 13px;
 }
 
+/* The "AUTHOR" pill badge next to the item poster's name */
 .badge-author {
   background: var(--terracotta-lt);
   color: var(--terracotta);
@@ -227,11 +777,13 @@
   margin-left: 5px;
 }
 
+/* The timestamp on the right side of the header */
 .comment-date {
   color: var(--clay);
   font-size: 11px;
 }
 
+/* The message text body */
 .comment-text {
   color: var(--ink);
   font-size: 13px;
@@ -239,56 +791,27 @@
   line-height: 1.5;
 }
 
-.comment-form-box {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid var(--parchment);
-}
-
-.login-prompt-box {
-  background: var(--parchment);
-  padding: 15px;
-  text-align: center;
-  border-radius: 8px;
-}
-
-.login-prompt-link {
-  color: var(--terracotta);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-/* Map specific for item detail */
-.item-detail-map-container {
-  margin-top: 30px;
-}
-
-.item-detail-map-element {
-  width: 100%;
-  height: 250px;
-  border-radius: 12px;
-  z-index: 1;
-}
-
-/* Nested Reply feature */
+/* The indented area that holds replies to a comment */
 .child-comments {
   margin-left: 20px;
   margin-top: 10px;
-  border-left: 2px solid var(--parchment);
+  border-left: 2px solid var(--parchment); /* vertical indent line */
   padding-left: 15px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* ── Reply Button ───────────────────────────────────────────
+   The small "Reply" link that appears under each comment.
+──────────────────────────────────────────────────────────── */
 .reply-btn {
   background: none;
   border: none;
   color: var(--clay);
   font-size: 11px;
-  cursor: pointer;
   font-weight: 500;
+  cursor: pointer;
   margin-top: 10px;
   padding: 0;
   display: inline-block;
@@ -297,4 +820,62 @@
 .reply-btn:hover {
   color: var(--terracotta);
   text-decoration: underline;
+}
+
+/* The "Cancel Reply" variant uses a terracotta colour */
+.reply-btn--cancel {
+  color: var(--terracotta);
+}
+
+/*
+ * Hidden state for the Cancel Reply button.
+ * JavaScript removes this class to reveal the button,
+ * and adds it back to hide it again.
+ * This replaces using style="display:none" inline.
+ * !important ensures nothing else accidentally overrides it.
+ */
+.reply-btn--hidden {
+  display: none !important;
+}
+
+/* ── Comment Form ───────────────────────────────────────────
+   The textarea + submit button box for posting a message.
+──────────────────────────────────────────────────────────── */
+.comment-form-box {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--parchment);
+}
+
+/* Row that holds "Post Message" and "Cancel Reply" side by side */
+.comment-form-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Shown when the author has turned off platform messaging */
+.comments-disabled-notice {
+  color: var(--clay);
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* ── Login Prompt ───────────────────────────────────────────
+   Shown instead of the comment form when the user is not logged in.
+──────────────────────────────────────────────────────────── */
+.login-prompt-box {
+  background: var(--parchment);
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+/* The "Log in" link inside the prompt */
+.login-prompt-link {
+  color: var(--terracotta);
+  text-decoration: none;
+  font-weight: 500;
 }
