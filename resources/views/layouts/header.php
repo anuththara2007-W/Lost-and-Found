@@ -125,4 +125,4 @@
     </script>
 
     <main>
-        <?php displayFlashMessages(); ?>
+        <?php displayFlashMessages(); ?>// recommit this 
