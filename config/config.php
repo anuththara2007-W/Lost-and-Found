@@ -1,80 +1,50 @@
 <?php
 /**
- * Lost & Found — Application Configuration
+ * config/config.php
+ * C:/xampp/htdocs/Lost & Found/Lost-and-Found/config/config.php
+ *
+ * Uses __DIR__ so ROOT always resolves correctly regardless of which
+ * file includes this. BASE_URL uses a plain URL (no %20 encoding)
+ * which is fine for <a href> but NOT used in header() redirects
+ * (we use relative redirects instead).
  */
-define('DEBUG_MODE', true); 
 
-// ── Base Paths ──────────────────────────────────────────────
+// Absolute filesystem path to project root (no trailing slash)
 define('ROOT', dirname(__DIR__));
-define('BASE_URL', 'http://localhost/Lost-and-Found/public');
 
-// ── Database ────────────────────────────────────────────────
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306'); // 🔥 FIX: Added this line
-define('DB_NAME', 'lost_and_found');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+// Web-accessible base URL — auto-detected from current request
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
+$basePath = rtrim($scriptDir, '/');
+define('BASE_URL', $scheme . '://' . $host . $basePath);
+
+// ── Database ───────────────────────────────────────────────────────
+define('DB_HOST',    'localhost');
+define('DB_PORT',    '3306');
+define('DB_NAME',    'lost_and_found');
+define('DB_USER',    'root');    // default XAMPP user
+define('DB_PASS',    '');        // default XAMPP password (blank)
 define('DB_CHARSET', 'utf8mb4');
 
-// ── App ─────────────────────────────────────────────────────
-define('APP_NAME', 'Lost & Found');
-define('APP_ENV', 'development');   // change to 'production' when live
-define('APP_DEBUG', true);
-
-// ── Session ─────────────────────────────────────────────────
-define('SESSION_NAME', 'laf_session');
-define('SESSION_LIFETIME', 7200); // 2 hours
-
-// ── Mail ────────────────────────────────────────────────────
-define('MAIL_HOST', 'smtp.mailtrap.io');
-define('MAIL_PORT', 2525);
-define('MAIL_USER', '');
-define('MAIL_PASS', '');
-define('MAIL_FROM', 'noreply@lostandfound.sg');
-define('MAIL_FROM_NAME', 'Lost & Found');
-
-// ── Upload limits ───────────────────────────────────────────
-define('UPLOAD_MAX_SIZE', 2 * 1024 * 1024); // 2 MB
-define('UPLOAD_DIR', ROOT . '/public/uploads/');
-
-// ── Error display ───────────────────────────────────────────
-if (APP_DEBUG) {
+// ── Debug ──────────────────────────────────────────────────────────
+define('DEBUG_MODE', true);
+if (DEBUG_MODE) {
     error_reporting(E_ALL);
     ini_set('display_errors', '1');
-} else {
-    error_reporting(0);
-    ini_set('display_errors', '0');
 }
 
-// ── Autoloader ──────────────────────────────────────────────
-spl_autoload_register(function (string $class): void {
-    $base = ROOT . '/';
+// ── Timezone ───────────────────────────────────────────────────────
+date_default_timezone_set('Asia/Singapore');
 
-    $map = [
-        'App\\Controllers\\' => 'app/Controllers/',
-        'App\\Models\\'      => 'app/Models/',
-        'App\\Core\\'        => 'app/Core/',
-    ];
-
-    foreach ($map as $prefix => $dir) {
-        if (strncmp($prefix, $class, strlen($prefix)) === 0) {
-            $relative = substr($class, strlen($prefix));
-            $file = $base . $dir . str_replace('\\', '/', $relative) . '.php';
-
-            if (file_exists($file)) {
-                require_once $file;
-                return;
-            }
-        }
-    }
-});
-
-// ── Helpers ─────────────────────────────────────────────────
-require_once ROOT . '/includes/helpers.php';
-
-// ── Start session ───────────────────────────────────────────
-session_name(SESSION_NAME);
-
+// ── Session — only start once ──────────────────────────────────────
 if (session_status() === PHP_SESSION_NONE) {
+    session_name('laf_sess');
+    session_set_cookie_params([
+        'lifetime' => 7200,
+        'path'     => '/',
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
     session_start();
 }
