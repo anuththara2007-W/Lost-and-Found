@@ -2,6 +2,7 @@
 /**
  * Lost & Found — Application Configuration
  */
+define('DEBUG_MODE', true); 
 
 // ── Base Paths ──────────────────────────────────────────────
 define('ROOT', dirname(__DIR__));
