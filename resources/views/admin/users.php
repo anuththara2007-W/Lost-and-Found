@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../layouts/header.php';
 ?>
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin_dashboard.css">
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/users.css">
 
 <div class="admin-wrapper">

@@ -1,5 +1,5 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin_dashboard.css">
 
 <div class="admin-wrapper">
     <aside class="admin-sidebar">
