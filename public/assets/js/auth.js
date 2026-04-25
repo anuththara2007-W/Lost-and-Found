@@ -1,4 +1,8 @@
-//   Password Visibility Toggle
+"use strict";
+
+/* =========================================================
+   Password Visibility Toggle
+========================================================= */
 
 const passwordButtons = document.querySelectorAll(".toggle-password");
 
@@ -34,7 +38,9 @@ passwordButtons.forEach(function (button) {
   });
 });
 
-//   Password Strength Checker
+/* =========================================================
+   Password Strength Checker
+========================================================= */
 
 const passwordInput = document.getElementById("password");
 const strengthBar = document.querySelector(".strength-fill");
@@ -64,8 +70,8 @@ if (passwordInput !== null && strengthBar !== null && strengthText !== null) {
     strengthText.style.color = result.color;
   });
 }
-/* Password score function */
 
+/* Password score function */
 function getPasswordScore(password) {
   if (!password) {
     return 0;
@@ -95,7 +101,10 @@ function getPasswordScore(password) {
 
   return score;
 }
-//   Confirm Password Match
+
+/* =========================================================
+   Confirm Password Match
+========================================================= */
 
 const confirmPasswordInput = document.getElementById("confirm_password");
 
@@ -133,6 +142,10 @@ if (confirmPasswordInput !== null && passwordInput !== null) {
   confirmPasswordInput.addEventListener("input", checkPasswordMatch);
   passwordInput.addEventListener("input", checkPasswordMatch);
 }
+
+/* =========================================================
+   Email Validation
+========================================================= */
 
 const emailInput = document.getElementById("email");
 
@@ -178,6 +191,10 @@ if (emailInput !== null) {
 
   emailInput.addEventListener("blur", validateEmailField);
 }
+
+/* =========================================================
+   Username Check (API)
+========================================================= */
 
 const usernameInput = document.getElementById("username");
 
@@ -229,7 +246,9 @@ if (usernameInput !== null) {
   }
 }
 
-//   Profile Image Preview
+/* =========================================================
+   Profile Image Preview
+========================================================= */
 
 const imageInput = document.getElementById("profile_image");
 const imagePreview = document.getElementById("avatar-preview-img");
@@ -267,7 +286,9 @@ if (imageInput !== null && imagePreview !== null) {
   });
 }
 
-//   Toast System
+/* =========================================================
+   Toast System
+========================================================= */
 
 function showToast(message, type) {
   if (!type) {
