@@ -173,7 +173,7 @@
 
             <div class="item-detail-meta">
                 Reported by <strong><?= escape($item['username']) ?></strong> &middot; <?= formatDate($item['date_posted']) ?>
-                <br>
+                <br> 
                 <i class="fa-solid fa-location-dot"></i> <?= escape($item['location']) ?> &middot; Category: <?= escape(!empty($item['custom_category']) ? $item['custom_category'] : ($item['category_name'] ?? 'Uncategorized')) ?>
             </div>
 
