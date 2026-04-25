@@ -1,83 +1,215 @@
-/* item-form.css - Styling for the item creation/reporting form */
 
+main {
+    max-width: none;            /* remove any global width cap */
+    width: 100%;
+    padding: 24px 22px 40px;   /* top | left+right | bottom */
+}
+
+
+/* ── Form Wrapper ───────────────────────────────────────────
+   The outermost div that centres and constrains the form card.
+──────────────────────────────────────────────────────────── */
 .item-form-wrapper {
-    width: 100%;
-    max-width: 1060px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 16px;
+    max-width: 800px;          /* keeps the form readable on wide screens */
+    margin: 0 auto;            /* centres horizontally */
+}
+
+
+/* ── Form Header ────────────────────────────────────────────
+   The title + subtitle block at the very top of the form.
+──────────────────────────────────────────────────────────── */
+.form-header {
     margin-bottom: 30px;
-    background: var(--card);
-    border: 1px solid var(--parchment);
-    border-radius: 18px;
-    padding: 28px;
-    box-shadow: var(--shadow-card);
 }
 
-.item-form-wrapper form {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px 18px;
-}
-
-.item-form-wrapper .form-header {
-    text-align: left;
-    margin-bottom: 22px;
-}
-
-.full-row {
-    grid-column: 1 / -1;
-}
-
+/* "Report a Lost Item" title — uses a warm/terracotta colour */
 .item-form-title-lost {
-    color: var(--terracotta);
+    color: var(--terracotta, #C96442);
+    margin-bottom: 6px;
 }
 
+/* "Report a Found Item" title — uses a green/found colour */
 .item-form-title-found {
-    color: var(--sage);
+    color: var(--found, #5C7A65);
+    margin-bottom: 6px;
 }
 
-.item-form-map-hint {
-    font-size: 13px;
-    color: var(--clay);
-    margin-bottom: 10px;
+
+/* ── Hidden Utility Class ───────────────────────────────────
+   Replaces any inline style="display:none" in the PHP.
+   JavaScript removes this class to show the element,
+   and adds it back to hide it again.
+   !important ensures nothing accidentally overrides it.
+──────────────────────────────────────────────────────────── */
+.item-form-hidden {
+    display: none !important;
 }
 
+
+/* ── Map Container ──────────────────────────────────────────
+   The div that Leaflet renders the interactive map into.
+──────────────────────────────────────────────────────────── */
 .item-form-map-container {
-    height: 300px;
     width: 100%;
+    height: 300px;
     border-radius: 12px;
     border: 1px solid var(--parchment);
-    background: #eee;
     margin-bottom: 10px;
-    z-index: 1;
+    z-index: 1;               /* keeps the map below any overlays */
 }
 
-.item-form-coords-display {
-    display: flex;
-    gap: 10px;
+/* The small italic hint text shown above the map */
+.item-form-map-hint {
     font-size: 12px;
     color: var(--clay);
+    margin-bottom: 8px;
+    font-style: italic;
 }
 
+
+/* ── Coordinate Display ─────────────────────────────────────
+   The "Lat: -- / Lng: --" readout shown below the map.
+   Updates live via JavaScript when the user clicks on the map.
+──────────────────────────────────────────────────────────── */
+.item-form-coords-display {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--clay);
+    margin-top: 6px;
+}
+
+
+/* ── Description Header Row ─────────────────────────────────
+   The row that holds "Detailed Description" label on the left
+   and the "AI Generate" button on the right, side by side.
+──────────────────────────────────────────────────────────── */
+.item-form-desc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+/* The label inside the description header — no bottom margin
+   because the header div already controls spacing */
+.item-form-desc-label {
+    margin-bottom: 0;
+}
+
+
+/* ── AI Generate Button ─────────────────────────────────────
+   The small amber/yellow "AI Generate" button next to the
+   description label. All the colour and sizing that was
+   previously inline is now here.
+──────────────────────────────────────────────────────────── */
+.btn-ai-generate {
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-body);
+
+    /* Amber/yellow colour scheme to suggest "smart / AI" */
+    color: #d97706;
+    border: 1px solid #fcd34d;
+    background: #fef3c7;
+
+    /* Inherit the global button transition if one is defined */
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-ai-generate:hover {
+    background: #fde68a;  /* slightly deeper yellow on hover */
+}
+
+
+/* ── Checkbox Row ───────────────────────────────────────────
+   The "Allow user to message me through platform" checkbox
+   and its label, displayed side by side on one line.
+──────────────────────────────────────────────────────────── */
+.item-form-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* The checkbox itself — give it an explicit size */
+.item-form-checkbox {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;  /* never squish the checkbox */
+    cursor: pointer;
+}
+
+/* The label next to the checkbox — no bottom margin needed
+   because the row uses flex alignment instead */
+.item-form-checkbox-label {
+    margin-bottom: 0;
+    cursor: pointer;  /* clicking the label also toggles the checkbox */
+}
+
+
+/* ── Reward Row ─────────────────────────────────────────────
+   The "$" prefix badge + number input, displayed side by side.
+   Only visible on lost-item forms.
+──────────────────────────────────────────────────────────── */
+
+/* Flex wrapper that joins the badge and input seamlessly */
+.item-form-reward-row {
+    display: flex;
+    align-items: center;
+}
+
+/* The "$" badge on the left side of the reward input */
+.item-form-reward-prefix {
+    padding: 12px 16px;
+    background: var(--warm-mid);
+    color: white;
+    font-weight: bold;
+    border-radius: 8px 0 0 8px;   /* rounded on the left only */
+    line-height: 1;
+}
+
+/* The number input on the right side — rounded on the right only
+   so it joins flush with the "$" badge */
+.item-form-reward-input {
+    border-radius: 0 8px 8px 0;   /* rounded on the right only */
+    flex: 1;                       /* fills the remaining width */
+}
+
+/* The hint text below the reward row */
+.item-form-reward-hint {
+    margin-top: 5px;
+}
+
+
+/* ── File Upload Input ──────────────────────────────────────
+   Subtle styling for the image upload <input type="file">.
+──────────────────────────────────────────────────────────── */
 .item-form-file-input {
-    padding: 9px 12px;
+    cursor: pointer;
 }
 
+
+/* ── Submit Button ──────────────────────────────────────────
+   Extra top spacing so the button doesn't sit too close
+   to the last form field.
+──────────────────────────────────────────────────────────── */
 .item-form-submit-btn {
-    padding: 12px;
-    font-size: 15px;
+    margin-top: 10px;
 }
 
-@media (max-width: 900px) {
-    .item-form-wrapper {
-        max-width: none;
-    }
 
-    .item-form-wrapper form {
-        grid-template-columns: 1fr;
-    }
-    .full-row {
-        grid-column: auto;
-    }
+/* ── Auto-tag Badge ─────────────────────────────────────────
+   The small green "✨ Auto-tagged!" label that briefly appears
+   next to "Category" after the AI auto-tagger fires.
+   Previously this was an inline style="color:#34c759" in JS.
+──────────────────────────────────────────────────────────── */
+.item-form-autotag-badge {
+    color: #34c759;
+    font-size: 11px;
+    margin-left: 5px;
 }
