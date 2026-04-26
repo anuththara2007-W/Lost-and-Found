@@ -1,6 +1,25 @@
 <?php
+/**
+ * Admin View: System Settings
+ *
+ * Two side-by-side settings panels:
+ *   1. Manage Categories – add or delete item report categories.
+ *   2. Global Configuration – update site name, admin email, maintenance
+ *      mode, and notification preferences.
+ *
+ * Expected $data keys:
+ *   - categories (array): All category records (category_id, name).
+ *   - config     (array): Key-value pairs from the system_config table
+ *                         (site_name, admin_email, maintenance_mode,
+ *                          notify_new_report, notify_new_message,
+ *                          notify_contact_request).
+ */
 require_once __DIR__ . '/../layouts/header.php';
 ?>
+<!-- Load admin dashboard base styles -->
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
+
+<!-- Page-scoped styles for the two-column settings layout -->
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin_dashboard.css">
 <style>
 .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
@@ -17,58 +36,83 @@ require_once __DIR__ . '/../layouts/header.php';
 </style>
 
 <div class="admin-wrapper">
+    <!-- Admin Sidebar Navigation -->
     <aside class="admin-sidebar">
         <div class="sidebar-header"><h2>Admin Panel</h2></div>
         <ul class="sidebar-menu">
             <li><a href="<?= BASE_URL ?>/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="<?= BASE_URL ?>/admin/users"><i class="fas fa-users"></i> Manage Users</a></li>
             <li><a href="<?= BASE_URL ?>/admin/reports"><i class="fas fa-file-alt"></i> Manage Reports</a></li>
+            <!-- "System Settings" is the currently active page -->
             <li class="active"><a href="<?= BASE_URL ?>/admin/settings"><i class="fas fa-cog"></i> System Settings</a></li>
             <li><a href="<?= BASE_URL ?>/auth/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </aside>
 
     <main class="admin-main">
+        <!-- Page header -->
         <header class="admin-topbar">
             <h1>System Settings</h1>
         </header>
 
+        <!-- Two-column settings grid -->
         <section class="admin-content settings-grid">
-            <!-- Categories Management -->
+
+            <!-- Panel 1: Categories Management -->
             <div class="settings-card">
                 <h2>Manage Categories</h2>
+
+                <!-- Inline form to add a new category -->
                 <form action="<?= BASE_URL ?>/admin/add_category" method="POST" style="display:flex; gap: 10px; margin-bottom: 1.5rem;">
-                    <input type="text" name="category_name" placeholder="New Category Name" required style="flex:1; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                    <input type="text" name="category_name" placeholder="New Category Name" required
+                           style="flex:1; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px;">
                     <button type="submit" class="btn-primary" style="padding: 0.5rem 1rem;">Add</button>
                 </form>
+
+                <!-- List of existing categories, each with an inline delete form -->
                 <ul class="cat-list">
-                    <?php if(!empty($data['categories'])): ?>
-                        <?php foreach($data['categories'] as $cat): ?>
+                    <?php if (!empty($data['categories'])): ?>
+                        <?php foreach ($data['categories'] as $cat): ?>
                             <li>
+                                <!-- Category name (XSS-safe) -->
                                 <span><?php echo htmlspecialchars($cat['name']); ?></span>
-                                <form action="<?= BASE_URL ?>/admin/delete_category/<?php echo $cat['category_id']; ?>" method="POST" onsubmit="return confirm('Delete this category?');">
+
+                                <!-- Delete form with confirmation dialog -->
+                                <form action="<?= BASE_URL ?>/admin/delete_category/<?php echo $cat['category_id']; ?>"
+                                      method="POST" onsubmit="return confirm('Delete this category?');">
                                     <button type="submit" class="btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
                             </li>
                         <?php endforeach; ?>
                     <?php else: ?>
+                        <!-- Empty state when no categories have been configured -->
                         <li>No categories configured.</li>
                     <?php endif; ?>
                 </ul>
             </div>
 
-            <!-- Global Site Configurations -->
+            <!-- Panel 2: Global Site Configuration -->
             <div class="settings-card">
                 <h2>Global Configuration</h2>
+
+                <!-- All settings are saved together via a single POST request -->
                 <form action="<?= BASE_URL ?>/admin/update_config" method="POST">
+
+                    <!-- Site display name (shown in the header/title) -->
                     <div class="form-group">
                         <label>Site Name</label>
-                        <input type="text" name="site_name" value="<?php echo htmlspecialchars($data['config']['site_name'] ?? 'Lost & Found Express'); ?>">
+                        <input type="text" name="site_name"
+                               value="<?php echo htmlspecialchars($data['config']['site_name'] ?? 'Lost & Found Express'); ?>">
                     </div>
+
+                    <!-- Email address that receives admin notification emails -->
                     <div class="form-group">
                         <label>Admin Notification Email</label>
-                        <input type="email" name="admin_email" value="<?php echo htmlspecialchars($data['config']['admin_email'] ?? 'admin@gmail.com'); ?>">
+                        <input type="email" name="admin_email"
+                               value="<?php echo htmlspecialchars($data['config']['admin_email'] ?? 'admin@gmail.com'); ?>">
                     </div>
+
+                    <!-- Maintenance mode: 0 = live, 1 = under construction (blocks public access) -->
                     <div class="form-group">
                         <label>Maintenance Mode</label>
                         <select name="maintenance_mode">
@@ -76,15 +120,38 @@ require_once __DIR__ . '/../layouts/header.php';
                             <option value="1" <?php echo ($data['config']['maintenance_mode'] ?? '0') == '1' ? 'selected' : ''; ?>>Enabled - Under Construction</option>
                         </select>
                     </div>
+
+                    <!-- Notification checkboxes: each sends value="1" when checked -->
+                    <!-- Notify when a new report is submitted -->
                     <div class="form-group">
-                        <label><input type="checkbox" name="notify_new_report" value="1" <?php echo ($data['config']['notify_new_report'] ?? '1') === '1' ? 'checked' : ''; ?> style="width:auto; margin-right:6px;"> Notify on new reports</label>
+                        <label>
+                            <input type="checkbox" name="notify_new_report" value="1"
+                                   <?php echo ($data['config']['notify_new_report'] ?? '1') === '1' ? 'checked' : ''; ?>
+                                   style="width:auto; margin-right:6px;">
+                            Notify on new reports
+                        </label>
                     </div>
+
+                    <!-- Notify when a new message is sent between users -->
                     <div class="form-group">
-                        <label><input type="checkbox" name="notify_new_message" value="1" <?php echo ($data['config']['notify_new_message'] ?? '1') === '1' ? 'checked' : ''; ?> style="width:auto; margin-right:6px;"> Notify on new messages</label>
+                        <label>
+                            <input type="checkbox" name="notify_new_message" value="1"
+                                   <?php echo ($data['config']['notify_new_message'] ?? '1') === '1' ? 'checked' : ''; ?>
+                                   style="width:auto; margin-right:6px;">
+                            Notify on new messages
+                        </label>
                     </div>
+
+                    <!-- Notify when a new contact/support request is submitted -->
                     <div class="form-group">
-                        <label><input type="checkbox" name="notify_contact_request" value="1" <?php echo ($data['config']['notify_contact_request'] ?? '1') === '1' ? 'checked' : ''; ?> style="width:auto; margin-right:6px;"> Notify on contact requests</label>
+                        <label>
+                            <input type="checkbox" name="notify_contact_request" value="1"
+                                   <?php echo ($data['config']['notify_contact_request'] ?? '1') === '1' ? 'checked' : ''; ?>
+                                   style="width:auto; margin-right:6px;">
+                            Notify on contact requests
+                        </label>
                     </div>
+
                     <button type="submit" class="btn-primary" style="width: 100%;">Save Configuration</button>
                 </form>
             </div>
