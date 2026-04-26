@@ -46,7 +46,7 @@
 
     <nav class="navbar">
         <div class="nav-container">
-            <a href="<?= BASE_URL ?>/" class="nav-logo">Lost &amp; <span>Found</span></a>
+            <a href="<?= BASE_URL ?>/" class="nav-logo">Dakkada<span>.LK</span></a>
             
             <div class="nav-links">
                 <a href="<?= BASE_URL ?>/item/index" class="nav-link"><?= escape(t('browse')) ?></a>
