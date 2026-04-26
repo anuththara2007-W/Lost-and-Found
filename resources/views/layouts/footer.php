@@ -3,7 +3,7 @@
     <footer class="site-footer">
         <div class="footer-content footer-grid">
             <div class="footer-brand">
-                <a href="<?= BASE_URL ?>/" class="nav-logo footer-logo">Lost &amp; <span>Found</span></a>
+                <a href="<?= BASE_URL ?>/" class="nav-logo footer-logo"><span class="brand-main">Dakkada</span><span class="brand-suffix">.LK</span></a>
                 <p class="footer-tagline"><?= escape(t('footer_tagline')) ?></p>
             </div>
             <div class="footer-col">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="footer-bottom-row">
-            <span>&copy; <?= date('Y') ?> Lost &amp; Found. <?= escape(t('footer_rights')) ?></span>
+            <span>&copy; <?= date('Y') ?> Dakkada.LK. <?= escape(t('footer_rights')) ?></span>
             <span><?= escape(t('footer_safety')) ?></span>
         </div>
     </footer>
