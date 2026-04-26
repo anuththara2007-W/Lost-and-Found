@@ -1,6 +1,6 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 
-<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/about.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/pages/about.css">
 
 <!-- About Page Container -->
 <div class="about-container">
