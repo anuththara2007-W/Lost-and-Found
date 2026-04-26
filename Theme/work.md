@@ -1,57 +1,48 @@
-                    Updated Work.md
                                     👤 1️⃣ ANUTHTHARA – Authentication & Users + Legal
 
-📂 Controllers
-hello
-app/Controllers/AuthController.php - ✅
-
-app/Controllers/UserController.php - ✅
-
-📂 Models
-
-app/Models/User.php - ✅
-
 📂 Views – Auth
+├── resources/views/auth/login.php ✅
+├── resources/views/auth/register.php ✅
+├── resources/views/auth/forgot.php ✅
+└── resources/views/auth/reset.php ✅
 
-resources/views/auth/login.php - ✅
-
-resources/views/auth/register.php - ✅
-
-resources/views/auth/forgot.php - ✅
-
-resources/views/auth/reset.php - ✅
-
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\items\index.php - ✅
+📂 Views – Items
+└── resources/views/items/index.php ✅
 
 📂 Views – Pages
-
-resources/views/pages/contact.php - ✅
+└── resources/views/pages/contact.php ✅
 
 📂 Legal
+├── legal/privacy.php ✅
+└── legal/terms.php ✅
 
-legal/privacy.php - ✅
+📂 Controllers
+├── app/Controllers/AuthController.php ✅
+├── app/Core/HookManager.php ✅
+├── app/Controllers/PageController.php ✅
+├── app/Controllers/UserController.php ✅
+└── app/Controllers/MapController.php ✅
 
-legal/terms.php - ✅
+📂 Services
+└── app/Services/NotificationService.php ✅
+
+📂 Models
+├── app/Models/User.php ✅
+└── app/Models/SystemConfig.php ✅
 
 📂 CSS
-
-public/assets/css/login.css - ✅
-
-public/assets/css/register.css - ✅
-
-public/assets/css/auth/ - ✅
+├── public/assets/css/login.css ✅
+├── public/assets/css/register.css ✅
+├── public/assets/css/auth/reset.css ✅
+├── public/assets/css/Profile.css ✅
+├── public/assets/css/success.css ✅
+└── public/assets/css/admin/users.css ✅
 
 📂 JS
+└── public/assets/js/auth.js ✅
 
-public/assets/js/auth.js - ✅
-
-C:\xampp\ht docs\Lost & Found\Lost-and-Found\app\Services\NotificationService.php - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\Profile.css - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\success.css - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
+📂 Public
+└── public/.htaccess ✅
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
@@ -93,62 +84,43 @@ public/assets/css/map.css ✅
 
 public/assets/css/home.css ✅
 
-
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
-
-
-main view home - index.php  ✅
+main view home - index.php ✅
 
 📂 Controllers
 
-app/Controllers/ItemController.php      ✅
-
-
+app/Controllers/ItemController.php ✅
 
 📂 Models
 
-app/Models/Item.php     ✅
-
-
+app/Models/Item.php ✅
 
 📂 Views – Items
 
-resources/views/items/create.php    ✅
-
-
-
+resources/views/items/create.php ✅
 
 📂 Views – Search & Map
 
-resources/views/search.php      ✅
+resources/views/search.php ✅
 
-resources/views/map.php     ✅
-
-
+resources/views/map.php ✅
 
 📂 Views – Main
 
 resources/views/home.php
 
-
-
 📂 CSS
 
-public/assets/css/item-form.css         ✅  
+public/assets/css/item-form.css ✅
 
-public/assets/css/item-detail.css       ✅
+public/assets/css/item-detail.css ✅
 
-public/assets/css/search.css        ✅
+public/assets/css/search.css ✅
 
-public/assets/css/map.css       ✅
+public/assets/css/map.css ✅
 
-public/assets/css/home.css      ✅
-
-
-
-
-
+public/assets/css/home.css ✅
 
                                             👤 3️⃣ PABASARA – Messaging + Informational Pages
 
@@ -256,4 +228,4 @@ docs/README.md
 
 📂 APP/CORE
 
-C:\xampp\htdocs\ls\Lost-and-Found\app\Core\HookManager.php - All Members
+C:\xampp\htdocs\ls\Lost-and-Found\app\Core\HookManager.php
