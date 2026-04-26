@@ -39,21 +39,13 @@ class App
          * -> ItemController
          */
 
-      // Get controller name from URL or default to HomeController
-$controllerName = isset($url[0])
-   // If URL segment exists, convert it to Controller name format (e.g. user → UserController)
-$controllerName = isset($url[0])
-    // Capitalize first letter and append 'Controller'
-            // /ucfirst() = makes the first letter uppercase
-    ? ucfirst(strtolower($url[0])) . 'Controller'
-    // Default controller if no URL segment is provided
-    : 'HomeController';
+        $controllerName = isset($url[0])
+        //upercase the first letter and the convert whole thing to lowercase to ensure consistent controller naming (e.g. item -> ItemController)
+            ? ucfirst(strtolower($url[0])) . 'Controller'
+            : 'HomeController';
 
-// Build full namespace path for controller class
-$controllerClass = 'App\\Controllers\\' . $controllerName;
-
-// Build file path where controller PHP file is located
-$controllerFile = ROOT . '/app/Controllers/' . $controllerName . '.php';
+        $controllerClass = 'App\\Controllers\\' . $controllerName;
+        $controllerFile = ROOT . '/app/Controllers/' . $controllerName . '.php';
 
         // Check if controller file exists
         if (file_exists($controllerFile)) {
