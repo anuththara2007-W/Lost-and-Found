@@ -3,7 +3,6 @@ namespace App\Core;
 
 /**
  * App Class (Core Router)
- * ------------------------
  * This class is responsible for:
  * 1. Reading the URL
  * 2. Loading the correct Controller
@@ -41,6 +40,7 @@ class App
          */
 
         $controllerName = isset($url[0])
+        //upercase the first letter and the convert whole thing to lowercase to ensure consistent controller naming (e.g. item -> ItemController)
             ? ucfirst(strtolower($url[0])) . 'Controller'
             : 'HomeController';
 

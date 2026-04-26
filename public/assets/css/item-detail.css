@@ -504,6 +504,12 @@ main {
   margin-bottom: 20px;
 }
 
+.item-detail-action-row > .btn,
+.item-detail-action-row > .btn-whatsapp,
+.item-detail-action-row > .item-detail-own-report {
+  min-height: 46px;
+}
+
 /* Utility: makes a button grow to fill available width */
 .btn-action-grow {
   flex-grow: 1;
@@ -523,13 +529,13 @@ main {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px 16px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: 999px;
   border: none;
   text-decoration: none;
   font-family: var(--font-body);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   box-sizing: border-box;
   transition: all 0.2s;
@@ -539,6 +545,14 @@ main {
 .btn-whatsapp:hover {
   background: #20ba56;
   transform: translateY(-2px);
+}
+
+.btn-whatsapp--disabled,
+.btn-whatsapp--disabled:hover {
+  background: #9aa5ad;
+  color: #f5f5f5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* The "This is your own report." placeholder that replaces the Chat button */
