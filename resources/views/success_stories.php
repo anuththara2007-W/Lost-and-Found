@@ -1,4 +1,5 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/pages/success.css">
 
 <!-- Success Stories Page Container -->
 <div class="success-container">
