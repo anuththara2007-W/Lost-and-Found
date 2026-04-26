@@ -1,120 +1,117 @@
+/* Main container */
 .success-container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-  min-height: 60vh;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
 }
 
+/* Header section */
 .success-header {
-  text-align: center;
-  margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .success-header h1 {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue",
-    Arial, sans-serif;
-  color: var(--midnight);
-  font-size: 2.5rem;
-  margin-bottom: 10px;
+    font-size: 2.5rem;
+    color: var(--midnight);
+    margin-bottom: 10px;
 }
 
 .success-header p {
-  color: var(--clay);
-  font-size: 1.1rem;
+    color: var(--clay);
+    font-size: 15px;
 }
 
+/* Grid layout */
 .success-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
 }
 
+/* Card design */
 .success-card {
-  background: var(--card, #ffffff);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: 0.3s ease;
 }
 
 .success-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
 }
 
+/* Image section */
 .success-image {
-  width: 100%;
-  height: 200px;
-  position: relative;
-  background: var(--faint, #e8e5df);
+    position: relative;
+    height: 200px;
+    background: var(--off-white);
 }
 
 .success-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
+/* Placeholder */
 .success-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-  color: var(--clay);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 40px;
+    color: var(--clay);
 }
 
+/* Badge */
 .success-badge-wrapper {
-  position: absolute;
-  top: 15px;
-  right: 15px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .success-badge {
-  background: var(--success, #34c759);
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: var(--sage);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
 }
 
+/* Content */
 .success-content {
-  padding: 20px;
+    padding: 15px;
 }
 
 .success-content h3 {
-  margin: 0 0 10px 0;
-  color: var(--midnight);
-  font-size: 1.2rem;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--midnight);
 }
 
 .success-meta {
-  font-size: 0.85rem;
-  color: var(--clay);
-  margin-bottom: 15px;
+    font-size: 13px;
+    color: var(--clay);
+    margin-bottom: 10px;
 }
 
 .success-reward {
-  color: var(--warm-mid);
-  font-size: 0.95rem;
-  margin-bottom: 10px;
-  font-weight: 500;
+    font-size: 13px;
+    color: var(--terracotta);
+    margin-bottom: 10px;
 }
 
 .success-desc {
-  color: var(--muted, #6b6a67);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin: 0;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 15px;
 }
 
+/* Button */
 .success-view-btn {
-  margin-top: 14px;
-  width: 100%;
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 8px;
 }
