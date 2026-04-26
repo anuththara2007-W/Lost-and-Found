@@ -42,7 +42,7 @@ $wpNumber = !empty($item['whatsapp_contact'])
     : $posterPhone;
 
 // Strip everything except digits — wa.me URLs need numbers only (e.g. 1234567890)
-$wpPhone = preg_replace('/[^0-9]/', '', $wpNumber);
+$wpPhone = preg_replace('/[^0-9]/', '', $wpNumber ?? '');
 
 // Pre-encode the message that will be pre-filled in WhatsApp
 $wpMessage = urlencode(
