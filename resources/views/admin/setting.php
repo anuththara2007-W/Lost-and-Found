@@ -20,6 +20,7 @@ require_once __DIR__ . '/../layouts/header.php';
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin-dashboard.css">
 
 <!-- Page-scoped styles for the two-column settings layout -->
+<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/admin/admin_dashboard.css">
 <style>
 .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
 .settings-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
