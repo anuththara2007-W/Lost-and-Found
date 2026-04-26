@@ -29,6 +29,10 @@
     ======================== -->
     <style>
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+        }
+
         /* Fluid background canvas */
         #fluid-glass-canvas {
             position: fixed;
@@ -114,6 +118,11 @@
             font-size: 12px;
             color: #fff;
             z-index: 1;
+        }
+
+        .nav-btn-logout {
+            font-size: 0.85rem !important;
+            padding: 6px 12px !important;
         }
 
     </style>
