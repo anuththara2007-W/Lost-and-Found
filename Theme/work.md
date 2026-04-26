@@ -93,215 +93,62 @@ public/assets/css/map.css ✅
 
 public/assets/css/home.css ✅
 
-📂 JS
 
-public/assets/js/map.js
+                                        👤 2️⃣ PAWAN – Item System + Search + Map + Home
 
-pawans files explaination ------------------------------------------------------------------------------------
+
+
+main view home - index.php  ✅
+
 📂 Controllers
-app/Controllers/ItemController.php
 
-👉 The brain for items.
+app/Controllers/ItemController.php      ✅
 
-Handles things like:
 
-adding a lost/found item
-
-showing an item
-
-searching items
-
-sending item data to views
-
-Example actions inside it:
-
-createItem()
-
-showItem()
-
-searchItems()
-
-Basically:
-User clicks something → Controller decides what happens.
 
 📂 Models
-app/Models/Item.php
 
-👉 Talks to the database.
+app/Models/Item.php     ✅
 
-Handles:
 
-saving item data
-
-getting items from DB
-
-searching items
-
-Example methods:
-
-saveItem()
-
-getItemById()
-
-searchItems()
-
-Basically:
-Controller asks → Model fetches/saves data.
 
 📂 Views – Items
-resources/views/items/create.php
 
-👉 UI page to add an item
+resources/views/items/create.php    ✅
 
-User fills:
 
-item name
 
-description
-
-location
-
-image upload
-
-Form sends data → ItemController.
-
-resources/views/items/show.php
-
-👉 Item details page
-
-Shows:
-
-item photo
-
-description
-
-location
-
-contact owner button
-
-Like a product page on Daraz/Amazon but for lost items.
 
 📂 Views – Search & Map
-resources/views/search.php
 
-👉 Search results page
+resources/views/search.php      ✅
 
-Shows:
+resources/views/map.php     ✅
 
-list of items matching search
 
-filters
-
-item cards
-
-Example:
-
-Lost iPhone
-Lost Wallet
-Found Keys
-resources/views/map.php
-
-👉 Map showing item locations
-
-Pins show where items were lost/found.
-
-Example:
-
-📍 Wallet lost here
-📍 Phone found here
-
-Usually uses Google Maps or Leaflet.
 
 📂 Views – Main
+
 resources/views/home.php
 
-👉 Homepage of the website
 
-Shows things like:
 
-latest lost items
+📂 CSS
 
-latest found items
+public/assets/css/item-form.css         ✅  
 
-search bar
+public/assets/css/item-detail.css       ✅
 
-quick navigation
+public/assets/css/search.css        ✅
 
-Basically the landing page.
+public/assets/css/map.css       ✅
 
-📂 CSS (Styling)
-public/assets/css/item-form.css
+public/assets/css/home.css      ✅
 
-👉 Styles the add item page
 
-Controls:
 
-form layout
 
-buttons
 
-spacing
-
-public/assets/css/item-detail.css
-
-👉 Styles the item details page
-
-Controls:
-
-image size
-
-description layout
-
-contact button
-
-public/assets/css/search.css
-
-👉 Styles the search results page
-
-Controls:
-
-item cards
-
-grid layout
-
-filters
-
-public/assets/css/map.css
-
-👉 Styles the map page
-
-Controls:
-
-map container
-
-markers
-
-responsive layout
-
-public/assets/css/home.css
-
-👉 Styles the homepage
-
-Controls:
-
-hero section
-
-featured items
-
-layout
-
-🧠 Simple way to remember
-Type Role
-Controller Logic / actions
-Model Database
-View UI pages
-CSS Styling
-
-Or even simpler:
-
-User → Controller → Model → Database
-↓
-View → User
 
                                             👤 3️⃣ PABASARA – Messaging + Informational Pages
 
