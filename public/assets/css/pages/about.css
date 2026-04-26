@@ -1,109 +1,118 @@
 /* =========================
-   ABOUT PAGE CONTAINER
+   PAGE BACKGROUND
+========================= */
+body {
+    background: #f4f6f9;
+}
+
+/* =========================
+   MAIN CARD
 ========================= */
 .about-container {
     max-width: 850px;
-    margin: 60px auto;
-    background: linear-gradient(145deg, #ffffff, #f7f8fa);
-    padding: 50px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
+    margin: 70px auto;
+    background: #ffffff;
+    padding: 50px 45px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
 }
 
-.about-container:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+/* subtle top accent line */
+.about-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 6px;
+    width: 100%;
+    background: linear-gradient(90deg, #25D366, #00c6ff);
 }
 
 /* =========================
    TITLE
 ========================= */
 .about-title {
-    font-size: 2.6rem;
+    font-size: 2.4rem;
     margin-bottom: 25px;
-    color: var(--midnight);
+    color: #1f2d3d;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    text-align: center;
 }
 
 /* =========================
-   CONTENT
+   TEXT AREA
 ========================= */
 .about-content {
-    color: var(--ink);
-    line-height: 1.9;
     font-size: 16px;
+    line-height: 1.9;
+    color: #4a5568;
+    text-align: center;
 }
 
-/* Paragraph */
+/* paragraph spacing */
 .about-text {
     margin-bottom: 18px;
-    opacity: 0.9;
 }
 
 /* =========================
-   ACTION BUTTON AREA
+   BUTTON AREA
 ========================= */
 .about-actions {
-    margin-top: 45px;
-    text-align: center;
+    margin-top: 40px;
     display: flex;
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
 }
 
-/* Base button style */
+/* base button */
 .about-actions a {
-    padding: 12px 28px;
-    text-decoration: none;
-    display: inline-block;
+    padding: 12px 26px;
     border-radius: 30px;
+    text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: 0.3s ease;
+    display: inline-block;
 }
 
-/* =========================
-   FOUND BUTTON (PRIMARY)
-========================= */
+/* GREEN PRIMARY BUTTON */
 .btn-found {
     background: #25D366;
     color: white;
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
 }
 
 .btn-found:hover {
+    transform: translateY(-3px);
     background: #1ebe5d;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
 }
 
-/* =========================
-   SECONDARY BUTTON
-========================= */
+/* SECONDARY BUTTON */
 .btn-secondary {
-    background: #f1f3f5;
+    background: #f1f3f6;
     color: #333;
 }
 
 .btn-secondary:hover {
-    background: #e2e6ea;
-    transform: translateY(-2px);
+    background: #e2e8f0;
+    transform: translateY(-3px);
 }
 
 /* =========================
    MOBILE RESPONSIVE
 ========================= */
 @media (max-width: 600px) {
+
     .about-container {
         margin: 30px 15px;
         padding: 30px;
     }
 
     .about-title {
-        font-size: 2rem;
-        text-align: center;
+        font-size: 1.8rem;
     }
 
     .about-actions {
