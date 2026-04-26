@@ -475,6 +475,16 @@ main {
   margin-bottom: 10px;
 }
 
+.footer-logo .brand-main {
+  color: #ffffff !important;
+  font-style: normal;
+}
+
+.footer-logo .brand-suffix {
+  color: #f59e0b;
+  font-style: normal;
+}
+
 .footer-tagline {
   color: #8a8a8a;
   font-size: 13px;
