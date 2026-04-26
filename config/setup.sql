@@ -1,6 +1,4 @@
 -- Lost & Found Database Setup Script
--- To deploy: Copy this entire block and paste it into the "SQL" tab in phpMyAdmin.
--- This will create the database, tables, and insert default test data so you can log in immediately.
 
 CREATE DATABASE IF NOT EXISTS lost_and_found
   CHARACTER SET utf8mb4
