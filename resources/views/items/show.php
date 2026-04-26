@@ -548,40 +548,140 @@ function cancelReply() {
    PRINT FLYER
 ──────────────────────────────────────────────── */
 function printFlyer() {
-    const title    = <?= json_encode(escape($item['title'])) ?>;
-    const desc     = <?= json_encode(escape($item['description'])) ?>;
-    const type     = <?= json_encode(escape($item['type'])) ?>;
-    const contact  = <?= json_encode(escape($item['contact_info'] ?? '')) ?>;
+    const title   = <?= json_encode(escape($item['title'])) ?>;
+    const desc    = <?= json_encode(escape($item['description'])) ?>;
+    const type    = <?= json_encode(escape($item['type'])) ?>;
+    const contact = <?= json_encode(escape($item['contact_info'] ?? '')) ?>;
     const flyerImg = <?= json_encode($flyerImageTag) ?>;
-    const cssUrl   = <?= json_encode(BASE_URL . '/assets/css/flyer-print.css') ?>;
 
-    const qrUrl        = `https://quickchart.io/qr?size=150&text=${encodeURIComponent(window.location.href)}`;
+    // Step 1: Build dynamic parts
     const heading      = type === 'lost' ? 'MISSING' : 'FOUND';
-    const contactBlock = contact ? `<p class="flyer-contact">Contact: ${contact}</p>` : '';
+    const accentColor  = type === 'lost' ? '#C0392B' : '#1A6E3C';
+    const contactBlock = contact
+        ? `<div class="contact-box">&#128222; ${contact}</div>`
+        : '';
 
+    const qrUrl = `https://quickchart.io/qr?size=160&text=${encodeURIComponent(window.location.href)}`;
+
+    // Step 2: Write all CSS inline so it works in the popup window
+    const css = `
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Source+Sans+3:wght@400;600&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 40px;
+        }
+
+        .flyer {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 3px solid ${accentColor};
+            padding: 36px 40px 32px;
+            min-height: 95vh;
+        }
+
+        .flyer-heading {
+            font-family: 'Oswald', sans-serif;
+            font-size: 72px;
+            font-weight: 700;
+            color: ${accentColor};
+            text-align: center;
+            letter-spacing: 6px;
+            border-bottom: 3px solid ${accentColor};
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .flyer-img {
+            display: block;
+            max-width: 100%;
+            max-height: 300px;
+            margin: 0 auto 20px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .flyer-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .flyer-desc {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-box {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            color: ${accentColor};
+            border: 2px solid ${accentColor};
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin-bottom: 20px;
+        }
+
+        .flyer-qr-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 2px dashed #ccc;
+        }
+
+        .flyer-qr-label {
+            font-size: 13px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media print {
+            body { padding: 0; }
+            .flyer { border-color: ${accentColor}; }
+        }
+    `;
+
+    // Step 3: Open a new blank window and write the full HTML into it
     const win = window.open('', '_blank');
     win.document.write(`
-        <!DOCTYPE html><html><head>
-        <title>Lost &amp; Found Flyer</title>
-        <link rel="stylesheet" href="${cssUrl}">
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Lost &amp; Found Flyer</title>
+            <style>${css}</style>
         </head>
-        <body class="flyer-type-${type}">
-        <h1 class="flyer-heading">${heading}</h1>
-        ${flyerImg}
-        <h2 class="flyer-title">${title}</h2>
-        <p class="flyer-desc">${desc}</p>
-        ${contactBlock}
-        <div class="flyer-spacer"></div>
-        <div class="flyer-qr-box">
-            <p class="flyer-qr-label">Scan to view live details online</p>
-            <img src="${qrUrl}" class="flyer-qr-img" alt="QR Code" width="150" height="150">
-        </div>
-        <script>window.onload = () => window.print()<\/script>
-        </body></html>
+        <body>
+            <div class="flyer">
+                <h1 class="flyer-heading">${heading}</h1>
+                ${flyerImg}
+                <h2 class="flyer-title">${title}</h2>
+                <p class="flyer-desc">${desc}</p>
+                ${contactBlock}
+                <div class="flyer-qr-box">
+                    <p class="flyer-qr-label">Scan to view live details online</p>
+                    <img src="${qrUrl}" alt="QR Code" width="160" height="160">
+                </div>
+            </div>
+            <script>window.onload = () => window.print()<\/script>
+        </body>
+        </html>
     `);
     win.document.close();
 }
-
 </script>
 
 <?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
