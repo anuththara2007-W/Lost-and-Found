@@ -133,7 +133,7 @@
             <label class="check-label">
               <input type="checkbox" name="remember" value="1"> Keep me signed in
             </label>
-            <a href="<?= BASE_URL ?>/auth/forgot-password" class="forgot">Forgot password?</a>
+            <span class="forgot">Forgot password?</span>
           </div>
 
           <button type="submit" class="btn-submit" id="submitBtn">

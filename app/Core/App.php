@@ -3,7 +3,6 @@ namespace App\Core;
 
 /**
  * App Class (Core Router)
- * ------------------------
  * This class is responsible for:
  * 1. Reading the URL
  * 2. Loading the correct Controller
@@ -40,12 +39,21 @@ class App
          * -> ItemController
          */
 
-        $controllerName = isset($url[0])
-            ? ucfirst(strtolower($url[0])) . 'Controller'
-            : 'HomeController';
+      // Get controller name from URL or default to HomeController
+$controllerName = isset($url[0])
+   // If URL segment exists, convert it to Controller name format (e.g. user → UserController)
+$controllerName = isset($url[0])
+    // Capitalize first letter and append 'Controller'
+            // /ucfirst() = makes the first letter uppercase
+    ? ucfirst(strtolower($url[0])) . 'Controller'
+    // Default controller if no URL segment is provided
+    : 'HomeController';
 
-        $controllerClass = 'App\\Controllers\\' . $controllerName;
-        $controllerFile = ROOT . '/app/Controllers/' . $controllerName . '.php';
+// Build full namespace path for controller class
+$controllerClass = 'App\\Controllers\\' . $controllerName;
+
+// Build file path where controller PHP file is located
+$controllerFile = ROOT . '/app/Controllers/' . $controllerName . '.php';
 
         // Check if controller file exists
         if (file_exists($controllerFile)) {

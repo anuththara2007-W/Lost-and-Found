@@ -32,13 +32,14 @@ class AdminController extends Controller
 
         $resolvedCount = 0;
         $activeCount = 0;
-        foreach ($reports as $r) {
+        foreach ($reports as $r ) {
             if ($r['status'] === 'resolved') $resolvedCount++;
             else $activeCount++;
         }
-
+//  $data = [] = key-value container.
         $data = [
             'title' => 'Admin Dashboard - Lost and Found',
+            //Put the content of $users inside the key named "users"
             'users' => $users,
             'reports' => $reports,
             'resolvedCount' => $resolvedCount,
@@ -60,6 +61,7 @@ class AdminController extends Controller
     {
         $this->requireAdminLogin();
         $filters = [
+            // q = search query  /admin/reports?q=wallet
             'q' => trim($_GET['q'] ?? ''),
             'type' => trim($_GET['type'] ?? ''),
             'status' => trim($_GET['status'] ?? ''),

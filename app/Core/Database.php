@@ -31,9 +31,10 @@ class Database
      */
     private function __construct()
     {
-        // Build DSN (Data Source Name) for MySQL connection
-        $dsn = sprintf(
-            'mysql:host=%s;port=%s;dbname=%s;charset=%s',
+        // Build DSN (Data Source Name) for MySQL connection to determine how to connect to the database
+
+        $dsn = sprintf( //sprintf() = string formatter
+            'mysql:host=%s;port=%s;dbname=%s;charset=%s', //%s = “put a string here”
             DB_HOST,
             DB_PORT,
             DB_NAME,
@@ -45,7 +46,8 @@ class Database
             $this->pdo = new PDO($dsn, DB_USER, DB_PASS, [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // throw errors
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // associative arrays
-                PDO::ATTR_EMULATE_PREPARES   => false,                  // real prepared statements
+                PDO::ATTR_EMULATE_PREPARES   => false,                  // EMULATE PREPARES for real prepared statements
+                //In PDO: Attributes are configuration settings that control how the database connection behaves.
             ]);
 
         } catch (PDOException $e) {
@@ -89,7 +91,7 @@ class Database
     private function __clone() {}
 
     /**
-     * Prevent unserialization
+     * Prevent unserialization (Serialization = converting object → string)
      */
     public function __wakeup()
     {

@@ -76,9 +76,11 @@ class AuthController extends Controller
     {
         // Check for POST
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Process form
+            // Process form takes all form input ($_POST) and sanitizes it
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
+
+            //It stores the submitted form data into session.
             $_SESSION['old'] = $_POST;
 
             $data = [

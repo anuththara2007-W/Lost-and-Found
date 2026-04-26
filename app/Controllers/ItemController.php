@@ -28,7 +28,7 @@ class ItemController extends Controller
         
         $items = $this->itemModel->searchItems($keyword, $type, $category_id, $location, $date);
         $categories = $this->itemModel->getCategories();
-        
+        //data package (container) that holds everything needed for a page.
         $data = [
             'title' => 'Browse & Search - Lost and Found',
             'items' => $items,
@@ -44,7 +44,7 @@ class ItemController extends Controller
     }
 
     // Show details for a single item
-    public function show($id)
+    public function show($id)//$id is retrived by the item url like show/6 so id=6
     {
         $item = $this->itemModel->getReportById($id);
 
@@ -57,24 +57,49 @@ class ItemController extends Controller
         $messageModel = $this->model('Message');
         $comments = $messageModel->getCommentsByReport($id);
 
-        // Fetch all images for this report
-        $db = \App\Core\Database::getInstance()->getConnection();
-        $imgStmt = $db->prepare("SELECT image_path FROM report_images WHERE report_id = :id ORDER BY created_at ASC");
-        $imgStmt->execute(['id' => $id]);
-        $images = $imgStmt->fetchAll(\PDO::FETCH_COLUMN);
+       // Get database connection instance (:: used to access static singleton method)
+$db = \App\Core\Database::getInstance()->getConnection();
 
-        // If no images in report_images but there is an image_path in reports, use that as fallback
-        if (empty($images) && !empty($item['image_path'])) {
-            $images = [$item['image_path']];
-        }
+// Prepare SQL to fetch all images for this report ID
+$imgStmt = $db->prepare("SELECT image_path FROM report_images WHERE report_id = :id ORDER BY created_at ASC");
 
-        // Fetch Potential Matches (same category, opposite type)
-        $oppositeType = $item['type'] === 'lost' ? 'found' : 'lost';
-        $db = \App\Core\Database::getInstance()->getConnection();
-        $stmt = $db->prepare("SELECT * FROM reports WHERE type = :type AND category_id = :cat AND status = 'open' AND report_id != :id ORDER BY date_posted DESC LIMIT 3");
-        $stmt->execute(['type' => $oppositeType, 'cat' => $item['category_id'], 'id' => $id]);
-        $potentialMatches = $stmt->fetchAll();
+// Execute query with report ID parameter (prevents SQL injection)
+$imgStmt->execute(['id' => $id]);
 
+// Fetch all image paths as a simple array (FETCH_COLUMN = only one column values)
+$images = $imgStmt->fetchAll(\PDO::FETCH_COLUMN);
+
+// If no multiple images exist AND main report has an image, use it as fallback
+if (empty($images) && !empty($item['image_path'])) {
+    $images = [$item['image_path']]; // Wrap single image into array
+}
+
+// Decide opposite type (lost → found OR found → lost) for matching suggestions
+$oppositeType = $item['type'] === 'lost' ? 'found' : 'lost';
+
+// Get database connection again (:: used for static class access)
+$db = \App\Core\Database::getInstance()->getConnection();
+
+// Prepare query to find similar reports (same category + opposite type)
+$stmt = $db->prepare("
+    SELECT * FROM reports 
+    WHERE type = :type 
+    AND category_id = :cat 
+    AND status = 'open' 
+    AND report_id != :id 
+    ORDER BY date_posted DESC 
+    LIMIT 3
+");
+
+// Execute query with safe bound parameters
+$stmt->execute([
+    'type' => $oppositeType, // match opposite type (lost/found)
+    'cat' => $item['category_id'], // same category (e.g., wallet, phone)
+    'id' => $id // exclude current item
+]);
+
+// Fetch all matching reports as array of results
+$potentialMatches = $stmt->fetchAll();
         $data = [
             'title' => $item['title'] . ' - Lost and Found',
             'item' => $item,
@@ -99,11 +124,17 @@ class ItemController extends Controller
             $uploadedImages = [];
             if (isset($_FILES['images']) && isset($_FILES['images']['name'])) {
                 $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'jfif', 'avif', 'heic', 'heif', 'tif', 'tiff'];
-                $uploadDir = ROOT . '/public/uploads/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
+               // Define the full path to the uploads directory inside the project
+$uploadDir = ROOT . '/public/uploads/';
 
+                // Check if the uploads directory does NOT exist
+                    if (!is_dir($uploadDir)) {
+
+                  // Create the uploads directory with full permissions r=4,w=2,x=1
+              // 'true' allows creation of nested folders if needed
+              mkdir($uploadDir, 0777, true);
+}                   
+                    //gets the names of uploaded files from a form input called images
                 $fileNames = $_FILES['images']['name'];
                 $fileTmps = $_FILES['images']['tmp_name'];
                 $fileErrors = $_FILES['images']['error'];
@@ -114,26 +145,43 @@ class ItemController extends Controller
                     $fileErrors = [$fileErrors];
                 }
 
-                foreach ($fileNames as $key => $fileName) {
-                    if (!isset($fileErrors[$key]) || $fileErrors[$key] !== 0) {
-                        continue;
-                    }
+               // Loop through each uploaded file name with its index
+foreach ($fileNames as $key => $fileName) {
 
-                    $fileTmp = $fileTmps[$key];
-                    $fileExt = strtolower(pathinfo((string)$fileName, PATHINFO_EXTENSION));
+    // Check if this file has no error OR error index is missing
+    if (!isset($fileErrors[$key]) || $fileErrors[$key] !== 0) {
 
-                    if (!in_array($fileExt, $allowed, true)) {
-                        continue;
-                    }
+        // Skip this file and move to the next one in the loop
+        continue;
+    }
+}
+              // Get temporary uploaded file path from PHP server
+$fileTmp = $fileTmps[$key];
 
-                    $newFileName = uniqid('img_', true) . '_' . $key . '.' . $fileExt;
-                    if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
-                        $uploadedImages[] = $newFileName;
-                        // Primary image is the first uploaded one
-                        if ($imagePath === null) {
-                            $imagePath = $newFileName;
-                        }
-                    }
+// Extract file extension and convert it to lowercase (e.g. JPG → jpg)
+$fileExt = strtolower(pathinfo((string)$fileName, PATHINFO_EXTENSION));
+
+// Check if file extension is NOT allowed (security check)
+if (!in_array($fileExt, $allowed, true)) {
+
+    // Skip this file if extension is not in allowed list
+    continue;
+}
+
+// Generate a unique file name to avoid overwriting existing files
+$newFileName = uniqid('img_', true) . '_' . $key . '.' . $fileExt;
+
+// Move file from temporary folder to permanent upload directory
+if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+
+    // Store uploaded file name in array for database saving
+    $uploadedImages[] = $newFileName;
+
+    // Set first uploaded image as primary image if not already set
+    if ($imagePath === null) {
+        $imagePath = $newFileName;
+    }
+}
                 }
             }
 
