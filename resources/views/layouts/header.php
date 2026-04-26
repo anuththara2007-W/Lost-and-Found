@@ -6,7 +6,7 @@
     <title><?= isset($data['title']) ? escape($data['title']) : 'Lost & Found' ?></title>
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-display">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/google-sans">
 
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -29,8 +29,17 @@
     ======================== -->
     <style>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+        .nav-logo {
+            font-family: "Google Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 650;
+            font-style: normal;
+            font-variation-settings: "GRAD" 0;
+        }
+
+        .nav-logo span {
+            font-weight: 650;
+            font-style: normal;
         }
 
         /* Fluid background canvas */
@@ -160,7 +169,7 @@ if (!empty($activeAnnouncements)):
 <nav class="navbar">
     <div class="nav-container">
 
-        <a href="<?= BASE_URL ?>/" class="nav-logo">Lost &amp; <span>Found</span></a>
+        <a href="<?= BASE_URL ?>/" class="nav-logo">Dakkada<span>.LK</span></a>
 
         <div class="nav-links">
 
