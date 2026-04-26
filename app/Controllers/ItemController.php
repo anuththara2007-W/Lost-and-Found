@@ -145,43 +145,26 @@ $uploadDir = ROOT . '/public/uploads/';
                     $fileErrors = [$fileErrors];
                 }
 
-               // Loop through each uploaded file name with its index
-foreach ($fileNames as $key => $fileName) {
+                foreach ($fileNames as $key => $fileName) {
+                    if (!isset($fileErrors[$key]) || $fileErrors[$key] !== 0) {
+                        continue;
+                    }
 
-    // Check if this file has no error OR error index is missing
-    if (!isset($fileErrors[$key]) || $fileErrors[$key] !== 0) {
+                    $fileTmp = $fileTmps[$key];
+                    $fileExt = strtolower(pathinfo((string)$fileName, PATHINFO_EXTENSION));
 
-        // Skip this file and move to the next one in the loop
-        continue;
-    }
-}
-              // Get temporary uploaded file path from PHP server
-$fileTmp = $fileTmps[$key];
+                    if (!in_array($fileExt, $allowed, true)) {
+                        continue;
+                    }
 
-// Extract file extension and convert it to lowercase (e.g. JPG → jpg)
-$fileExt = strtolower(pathinfo((string)$fileName, PATHINFO_EXTENSION));
-
-// Check if file extension is NOT allowed (security check)
-if (!in_array($fileExt, $allowed, true)) {
-
-    // Skip this file if extension is not in allowed list
-    continue;
-}
-
-// Generate a unique file name to avoid overwriting existing files
-$newFileName = uniqid('img_', true) . '_' . $key . '.' . $fileExt;
-
-// Move file from temporary folder to permanent upload directory
-if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
-
-    // Store uploaded file name in array for database saving
-    $uploadedImages[] = $newFileName;
-
-    // Set first uploaded image as primary image if not already set
-    if ($imagePath === null) {
-        $imagePath = $newFileName;
-    }
-}
+                    $newFileName = uniqid('img_', true) . '_' . $key . '.' . $fileExt;
+                    if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                        $uploadedImages[] = $newFileName;
+                        // Primary image is the first uploaded one
+                        if ($imagePath === null) {
+                            $imagePath = $newFileName;
+                        }
+                    }
                 }
             }
 

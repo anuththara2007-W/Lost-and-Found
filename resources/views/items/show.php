@@ -11,10 +11,20 @@ $posterPhone = $stmt->fetchColumn();
 /* ─────────────────────────────────────────────
    STEP 2 – Build the WhatsApp link
 ──────────────────────────────────────────────── */
-// Prefer the item's own WhatsApp field, fall back to profile phone
-$wpNumber  = !empty($item['whatsapp_contact']) ? $item['whatsapp_contact'] : $posterPhone;
-$wpPhone   = preg_replace('/[^0-9]/', '', $wpNumber ?? '');
-$wpMessage = urlencode('Hello, I am inquiring about your ' . $item['type'] . ' item: ' . $item['title']);
+// Prefer report WhatsApp -> joined profile phone -> fallback profile phone query -> contact info
+$wpNumber = !empty($item['whatsapp_contact'])
+    ? $item['whatsapp_contact']
+    : (!empty($item['phone']) ? $item['phone'] : $posterPhone);
+
+if (empty($wpNumber) && !empty($item['contact_info'])) {
+    $wpNumber = $item['contact_info'];
+}
+
+$wpPhone = preg_replace('/\D+/', '', (string)($wpNumber ?? ''));
+$wpMessage = urlencode('Hello, I am inquiring about your item: ' . $item['title']);
+$whatsAppUrl = !empty($wpPhone)
+    ? ('https://wa.me/' . $wpPhone . '?text=' . $wpMessage)
+    : ('https://wa.me/?text=' . $wpMessage);
 
 
 /* ─────────────────────────────────────────────
@@ -240,12 +250,10 @@ $flyerImageTag = !empty($item['image_path'])
             <div class="item-detail-actions-stack">
                 <div class="item-detail-action-row">
 
-                    <?php if (!empty($wpNumber)): ?>
-                        <a href="https://wa.me/<?= $wpPhone ?>?text=<?= $wpMessage ?>"
-                           target="_blank" class="btn-whatsapp btn-action-grow">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                    <?php endif; ?>
+                    <a href="<?= $whatsAppUrl ?>"
+                       target="_blank" rel="noopener noreferrer" class="btn-whatsapp btn-action-grow">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
 
                     <?php if ($messagingOn): ?>
                         <?php if (isLoggedIn() && !$isOwnReport): ?>
@@ -567,7 +575,7 @@ function printFlyer() {
     const css = `
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Source+Sans+3:wght@400;600&display=swap');
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin-top: 30px; padding: 0; }
 
         body {
             font-family: 'Source Sans 3', sans-serif;
@@ -581,7 +589,7 @@ function printFlyer() {
             margin: 0 auto;
             border: 3px solid ${accentColor};
             padding: 36px 40px 32px;
-            min-height: 95vh;
+            min-height:65vh;
         }
 
         .flyer-heading {
