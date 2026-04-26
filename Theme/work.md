@@ -13,7 +13,6 @@ app/Models/User.php - ✅
 
 📂 Views – Auth
 
-
 resources/views/auth/login.php - ✅
 
 resources/views/auth/register.php - ✅
@@ -21,6 +20,8 @@ resources/views/auth/register.php - ✅
 resources/views/auth/forgot.php - ✅
 
 resources/views/auth/reset.php - ✅
+
+C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\items\index.php - ✅
 
 📂 Views – Pages
 
@@ -47,12 +48,50 @@ public/assets/js/auth.js - ✅
 C:\xampp\ht docs\Lost & Found\Lost-and-Found\app\Services\NotificationService.php - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\Profile.css - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\success.css - ✅
-C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\items\index.php - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\resources\views\admin\login.php - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\assets\css\admin\users.css - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\app\Controllers\MapController.php - ✅
 C:\xampp\htdocs\Lost & Found\Lost-and-Found\public\.htaccess - ✅
 
+                                        👤 2️⃣ PAWAN – Item System + Search + Map + Home
+
+main view home - index.php ✅
+
+📂 Controllers
+
+app/Controllers/ItemController.php ✅
+
+📂 Models
+
+app/Models/Item.php ✅
+
+📂 Views – Items
+
+resources/views/items/create.php ✅
+
+resources/views/items/show.php ✅
+
+📂 Views – Search & Map
+
+resources/views/search.php ✅
+
+resources/views/map.php ✅
+
+📂 Views – Main
+
+resources/views/home.php
+
+📂 CSS
+
+public/assets/css/item-form.css ✅
+
+public/assets/css/item-detail.css ✅
+
+public/assets/css/search.css ✅
+
+public/assets/css/map.css ✅
+
+public/assets/css/home.css ✅
 
 
                                         👤 2️⃣ PAWAN – Item System + Search + Map + Home
@@ -215,9 +254,6 @@ public/assets/js/main.js
 
 docs/README.md
 
-
-
 📂 APP/CORE
 
-C:\xampp\htdocs\ls\Lost-and-Found\app\Core\HookManager.php   -  All Members
-
+C:\xampp\htdocs\ls\Lost-and-Found\app\Core\HookManager.php - All Members

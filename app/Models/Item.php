@@ -261,8 +261,25 @@ class Item
 
     public function deleteReport($id)
     {
-        $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id");
-        return $stmt->execute(['id' => $id]);
+        try {
+            $this->db->beginTransaction();
+
+            // Delete child records that reference this report (foreign key constraints)
+            $this->db->prepare("DELETE FROM comments WHERE report_id = :id")->execute(['id' => $id]);
+            $this->db->prepare("DELETE FROM report_images WHERE report_id = :id")->execute(['id' => $id]);
+
+            // Now delete the report itself
+            $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id");
+            $stmt->execute(['id' => $id]);
+
+            $this->db->commit();
+            return true;
+        } catch (\Throwable $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+            return false;
+        }
     }
 }
 

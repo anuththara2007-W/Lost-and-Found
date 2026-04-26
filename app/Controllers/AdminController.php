@@ -89,8 +89,7 @@ class AdminController extends Controller
                 $_SESSION['flash_error'] = 'Failed to delete report.';
             }
         }
-        $redirectTo = $_SERVER['HTTP_REFERER'] ?? '/admin/reports';
-        redirect($redirectTo);
+        redirect('/admin/reports');
     }
 
     public function assign_badge($user_id)
