@@ -1,22 +1,36 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
+
+<!-- WhatsApp-style chat CSS -->
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/messages/chat-conversation.css">
 
+<!-- Main Chat Container -->
 <div class="wa-chat-container">
 
-    <!-- LEFT SIDEBAR -->
+    <!-- ================= LEFT SIDEBAR (CHAT LIST) ================= -->
     <div class="wa-sidebar">
+
+        <!-- Sidebar Header -->
         <div class="wa-sidebar-header">
             <h2 class="wa-sidebar-title">Chats</h2>
         </div>
 
+        <!-- Chat List -->
         <div class="wa-chat-list">
+
+            <!-- If no conversations exist -->
             <?php if (empty($data['conversations'])): ?>
                 <div class="wa-chat-empty-state">No ongoing conversations.</div>
+
             <?php else: ?>
+
+                <!-- Loop through all conversations -->
                 <?php foreach ($data['conversations'] as $convo): ?>
+
+                    <!-- Each chat item links to a report chat -->
                     <a href="<?= BASE_URL ?>/message/chat/<?= $convo['report_id'] ?>"
                        class="wa-chat-item <?= ($convo['report_id'] == $data['item']['report_id']) ? 'active' : '' ?>">
 
+                        <!-- Avatar icon -->
                         <div class="wa-chat-item-avatar">
                             <svg viewBox="0 0 24 24" width="24" height="24">
                                 <path fill="currentColor"
@@ -24,25 +38,35 @@
                             </svg>
                         </div>
 
+                        <!-- Chat info -->
                         <div class="wa-chat-item-info">
-                            <div class="wa-chat-item-title"><?= escape($convo['title']) ?></div>
-                            <div class="wa-chat-item-status"><?= escape($convo['status']) ?></div>
+                            <div class="wa-chat-item-title">
+                                <?= escape($convo['title']) ?>
+                            </div>
+                            <div class="wa-chat-item-status">
+                                <?= escape($convo['status']) ?>
+                            </div>
                         </div>
 
                     </a>
+
                 <?php endforeach; ?>
+
             <?php endif; ?>
+
         </div>
     </div>
 
 
-    <!-- MAIN CHAT -->
+    <!-- ================= MAIN CHAT AREA ================= -->
     <div class="wa-main">
 
+        <!-- Chat Header -->
         <div class="wa-main-header">
 
             <div class="wa-main-header-user">
 
+                <!-- Avatar -->
                 <div class="wa-main-header-avatar">
                     <svg viewBox="0 0 24 24" width="24" height="24">
                         <path fill="currentColor"
@@ -50,38 +74,45 @@
                     </svg>
                 </div>
 
+                <!-- Title + status -->
                 <div class="wa-main-header-info">
-                    <h3 class="wa-main-title"><?= escape($data['item']['title']) ?></h3>
+                    <h3 class="wa-main-title">
+                        <?= escape($data['item']['title']) ?>
+                    </h3>
+
+                    <!-- Online / typing indicator -->
                     <div id="chatStatusIndicator" class="wa-main-status"></div>
                 </div>
 
             </div>
 
+            <!-- Button to view item details -->
             <a href="<?= BASE_URL ?>/item/show/<?= $data['item']['report_id'] ?>"
-               class="btn btn-secondary"
-               style="font-size:13px;padding:6px 12px;border-radius:20px;">
+               class="btn btn-secondary">
                 View Item
             </a>
 
         </div>
 
 
-        <!-- MESSAGES -->
+        <!-- ================= MESSAGES AREA ================= -->
         <div class="wa-messages-area" id="chatMessagesArea">
             <div class="wa-messages-empty">Loading messages...</div>
         </div>
 
 
-        <!-- INPUT -->
+        <!-- ================= MESSAGE INPUT ================= -->
         <div class="wa-input-area">
 
             <form id="chatForm" class="wa-form">
 
+                <!-- Hidden report ID -->
                 <input type="hidden"
                        name="report_id"
                        id="report_id"
                        value="<?= $data['item']['report_id'] ?>">
 
+                <!-- Message input -->
                 <div class="wa-input-wrapper">
                     <input type="text"
                            name="comment_text"
@@ -91,6 +122,7 @@
                            autocomplete="off">
                 </div>
 
+                <!-- Send button -->
                 <button type="submit" class="wa-send-btn">
                     Send
                 </button>
@@ -103,16 +135,17 @@
 </div>
 
 
+<!-- ================= JAVASCRIPT (REAL-TIME CHAT LOGIC) ================= -->
 <script>
 
+// Get basic data from PHP
 const reportId = document.getElementById('report_id').value;
 const currentUserId = <?= json_encode($_SESSION['user_id']) ?>;
-const chatMessagesArea = document.getElementById('chatMessagesArea');
-const chatForm = document.getElementById('chatForm');
 const baseUrl = '<?= BASE_URL ?>';
+
 let lastMessageCount = 0;
 
-
+// Escape HTML for security (prevent XSS)
 function escapeHtml(text) {
     return (text || '')
         .replace(/&/g, "&amp;")
@@ -120,7 +153,7 @@ function escapeHtml(text) {
         .replace(/>/g, "&gt;");
 }
 
-
+// Render messages into chat UI
 function renderMessages(messages) {
 
     if (messages.length === 0) {
@@ -135,52 +168,44 @@ function renderMessages(messages) {
         const mine = msg.user_id == currentUserId;
 
         html += `
-<div class="wa-msg-row ${mine ? 'wa-msg-row-mine' : 'wa-msg-row-theirs'}">
+        <div class="wa-msg-row ${mine ? 'wa-msg-row-mine' : 'wa-msg-row-theirs'}">
 
-    <div class="wa-msg-bubble ${mine ? 'wa-bubble-mine' : 'wa-bubble-theirs'}">
+            <div class="wa-msg-bubble ${mine ? 'wa-bubble-mine' : 'wa-bubble-theirs'}">
 
-        ${escapeHtml(msg.comment_text || '')}
+                ${escapeHtml(msg.comment_text || '')}
 
-        <span class="wa-msg-time">
-            ${(msg.formatted_date || '').includes(',') ? msg.formatted_date.split(',')[1] : ''}
-        </span>
+                <span class="wa-msg-time">
+                    ${msg.formatted_date || ''}
+                </span>
 
-    </div>
+            </div>
 
-</div>`;
+        </div>`;
     });
 
     chatMessagesArea.innerHTML = html;
 
+    // Auto scroll to latest message
     if (messages.length > lastMessageCount) {
         chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
         lastMessageCount = messages.length;
     }
-
 }
 
-
+// Fetch messages from backend API
 function fetchMessages() {
 
     fetch(`${baseUrl}/message/apiGetMessages/${reportId}`, {
         credentials: 'same-origin'
     })
-
-    .then(async res => {
-        const text = await res.text();
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            throw new Error(text || 'Invalid server response');
-        }
-    })
-
+    .then(res => res.json())
     .then(data => {
 
         if (data.messages) {
             renderMessages(data.messages);
         }
 
+        // Typing / online status
         let status = document.getElementById('chatStatusIndicator');
 
         if (data.typing?.length) {
@@ -192,81 +217,46 @@ function fetchMessages() {
         }
 
     })
-
-    .catch(err => {
-        console.error("Fetch error", err);
-    });
-
+    .catch(err => console.error(err));
 }
 
-
+// Send message to backend
 function handleChatSubmit(e) {
 
     if (e) e.preventDefault();
 
     const textInput = document.getElementById('comment_text');
-    const submitBtn = chatForm.querySelector('button[type="submit"]');
 
     if (textInput.value.trim() === '') {
         alert('Please type a message');
         return;
     }
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = 'Sending...';
-
     const formData = new FormData(chatForm);
 
     fetch(`${baseUrl}/message/apiSendMessage`, {
-
         method: 'POST',
         body: formData,
         credentials: 'same-origin'
-
     })
-
-    .then(async res => {
-
-        const text = await res.text();
-
-        if (!res.ok) {
-            throw new Error(text);
-        }
-
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            throw new Error(text || 'Invalid JSON response');
-        }
-
-    })
-
+    .then(res => res.json())
     .then(data => {
 
         if (data.success) {
             textInput.value = '';
-            fetchMessages();
+            fetchMessages(); // refresh chat
         } else {
             alert(data.error || 'Send failed');
         }
 
     })
-
-    .catch(err => {
-        console.error(err);
-        alert(err?.message ? ('Message send failed: ' + err.message) : 'Message send failed');
-    })
-
-    .finally(() => {
-        submitBtn.disabled = false;
-        submitBtn.innerText = 'Send';
-    });
-
+    .catch(err => console.error(err));
 }
 
-
+// Events
 chatForm.addEventListener('submit', handleChatSubmit);
 
+// Send message on Enter key
 document.getElementById('comment_text').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         e.preventDefault();
@@ -274,6 +264,7 @@ document.getElementById('comment_text').addEventListener('keydown', function (e)
     }
 });
 
+// Initial load + auto refresh every 3 seconds
 fetchMessages();
 setInterval(fetchMessages, 3000);
 
