@@ -14,12 +14,14 @@ class ItemController extends Controller
 
     public function index()
     {
-        // Now redirects to search to utilize the full advanced filter capabilities
+        // all item listings use the search/filter system
         $this->search();
     }
 
+
     public function search()
     {
+        // Get search inputs from URL
         $keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
         $type = isset($_GET['type']) ? trim($_GET['type']) : '';
         $category_id = isset($_GET['category_id']) ? trim($_GET['category_id']) : '';
@@ -28,7 +30,8 @@ class ItemController extends Controller
         
         $items = $this->itemModel->searchItems($keyword, $type, $category_id, $location, $date);
         $categories = $this->itemModel->getCategories();
-        //data package (container) that holds everything needed for a page.
+
+        // Prepare data to send to the frontend page.
         $data = [
             'title' => 'Browse & Search - Lost and Found',
             'items' => $items,
@@ -40,14 +43,18 @@ class ItemController extends Controller
             'date' => $date
         ];
         
+        //Load the view and pass data to display
         $this->view('items/index', $data);
     }
 
+
     // Show details for a single item
-    public function show($id)//$id is retrived by the item url like show/6 so id=6
+    public function show($id)   //$id comes from URL
     {
+        //Get single item detail from DB
         $item = $this->itemModel->getReportById($id);
 
+        //If item not found, show error
         if (!$item) {
             $_SESSION['flash_error'] = 'Item not found.';
             redirect('/item/index');
@@ -57,30 +64,30 @@ class ItemController extends Controller
         $messageModel = $this->model('Message');
         $comments = $messageModel->getCommentsByReport($id);
 
-       // Get database connection instance (:: used to access static singleton method)
+       // Get database connection 
 $db = \App\Core\Database::getInstance()->getConnection();
 
-// Prepare SQL to fetch all images for this report ID
+// Get all images related to this report
 $imgStmt = $db->prepare("SELECT image_path FROM report_images WHERE report_id = :id ORDER BY created_at ASC");
 
-// Execute query with report ID parameter (prevents SQL injection)
+// Execute query safely
 $imgStmt->execute(['id' => $id]);
 
-// Fetch all image paths as a simple array (FETCH_COLUMN = only one column values)
+// Fetch all images
 $images = $imgStmt->fetchAll(\PDO::FETCH_COLUMN);
 
-// If no multiple images exist AND main report has an image, use it as fallback
+// If no extra images, use main image as fallback   
 if (empty($images) && !empty($item['image_path'])) {
     $images = [$item['image_path']]; // Wrap single image into array
 }
 
-// Decide opposite type (lost → found OR found → lost) for matching suggestions
+// Decide opposite type for matching
 $oppositeType = $item['type'] === 'lost' ? 'found' : 'lost';
 
-// Get database connection again (:: used for static class access)
+// Get database connection again for static class access
 $db = \App\Core\Database::getInstance()->getConnection();
 
-// Prepare query to find similar reports (same category + opposite type)
+// to find simiar items
 $stmt = $db->prepare("
     SELECT * FROM reports 
     WHERE type = :type 
@@ -91,15 +98,17 @@ $stmt = $db->prepare("
     LIMIT 3
 ");
 
-// Execute query with safe bound parameters
+// Execute query with safe parameters
 $stmt->execute([
-    'type' => $oppositeType, // match opposite type (lost/found)
-    'cat' => $item['category_id'], // same category (e.g., wallet, phone)
-    'id' => $id // exclude current item
+    'type' => $oppositeType,    // match opposite type (lost/found)
+    'cat' => $item['category_id'],   // same category
+    'id' => $id     // avoid current item
 ]);
 
-// Fetch all matching reports as array of results
+// Get all matching items from the query result
 $potentialMatches = $stmt->fetchAll();
+
+        // Prepare data to send to the view page
         $data = [
             'title' => $item['title'] . ' - Lost and Found',
             'item' => $item,
@@ -113,28 +122,30 @@ $potentialMatches = $stmt->fetchAll();
 
     public function create()
     {
+        //user must logged-in
         requireLogin();
 
+        // Check if form is submitted
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
-            $_SESSION['old'] = $_POST;
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);   //clean input data
+            $_SESSION['old'] = $_POST;      //store old data
 
             // Handle multiple file uploads
             $imagePath = null;
             $uploadedImages = [];
+
+            //check if images are uploaded
             if (isset($_FILES['images']) && isset($_FILES['images']['name'])) {
                 $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'jfif', 'avif', 'heic', 'heif', 'tif', 'tiff'];
-               // Define the full path to the uploads directory inside the project
-$uploadDir = ROOT . '/public/uploads/';
+                $uploadDir = ROOT . '/public/uploads/';
 
                 // Check if the uploads directory does NOT exist
                     if (!is_dir($uploadDir)) {
 
-                  // Create the uploads directory with full permissions r=4,w=2,x=1
-              // 'true' allows creation of nested folders if needed
-              mkdir($uploadDir, 0777, true);
+                // Create the uploads directory with full permissions
+                mkdir($uploadDir, 0777, true);
 }                   
-                    //gets the names of uploaded files from a form input called images
+                //gets file data
                 $fileNames = $_FILES['images']['name'];
                 $fileTmps = $_FILES['images']['tmp_name'];
                 $fileErrors = $_FILES['images']['error'];
@@ -145,22 +156,26 @@ $uploadDir = ROOT . '/public/uploads/';
                     $fileErrors = [$fileErrors];
                 }
 
+                //loop through each file
                 foreach ($fileNames as $key => $fileName) {
                     if (!isset($fileErrors[$key]) || $fileErrors[$key] !== 0) {
                         continue;
                     }
 
                     $fileTmp = $fileTmps[$key];
+                    //get file extention
                     $fileExt = strtolower(pathinfo((string)$fileName, PATHINFO_EXTENSION));
 
                     if (!in_array($fileExt, $allowed, true)) {
                         continue;
                     }
 
+                    // Create unique file name & Move file to uploads folder
                     $newFileName = uniqid('img_', true) . '_' . $key . '.' . $fileExt;
                     if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
                         $uploadedImages[] = $newFileName;
-                        // Primary image is the first uploaded one
+                        
+                        // first image is main image
                         if ($imagePath === null) {
                             $imagePath = $newFileName;
                         }
@@ -168,6 +183,7 @@ $uploadDir = ROOT . '/public/uploads/';
                 }
             }
 
+            //prepare data
             $data = [
                 'user_id' => $_SESSION['user_id'],
                 'category_id' => !empty($_POST['category_id']) ? $_POST['category_id'] : null,
@@ -186,11 +202,13 @@ $uploadDir = ROOT . '/public/uploads/';
                 'allow_platform_message' => isset($_POST['allow_platform_message']) ? 1 : 0
             ];
 
+            //validation
             if (empty($data['title']) || empty($data['description']) || empty($data['location'])) {
                 $_SESSION['flash_error'] = 'Please fill out all required fields.';
                 redirect('/item/create?type=' . $data['type']);
             }
 
+            //save to DB
             if ($this->itemModel->addReport($data)) {
                 clearOld();
                 $_SESSION['flash_success'] = 'Report successfully submitted.';
@@ -201,6 +219,7 @@ $uploadDir = ROOT . '/public/uploads/';
             }
 
         } else {
+            // If not submitted, just show form
             $categories = $this->itemModel->getCategories();
             $type = isset($_GET['type']) && in_array($_GET['type'], ['lost', 'found']) ? $_GET['type'] : 'lost';
 
@@ -216,18 +235,26 @@ $uploadDir = ROOT . '/public/uploads/';
 
     public function resolve($id)
     {
+        //user must logged-in
         requireLogin();
 
+        //allow only post request
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             redirect('/user/dashboard');
         }
 
+        // Try to mark the report as resolved in database
         if ($this->itemModel->markResolved($id, $_SESSION['user_id'])) {
+
+            // Success message
             $_SESSION['flash_success'] = 'Report marked as resolved.';
         } else {
+
+            // Error message
             $_SESSION['flash_error'] = 'Unable to mark report as resolved.';
         }
 
+        //redirect back to dashboard
         redirect('/user/dashboard');
     }
 }

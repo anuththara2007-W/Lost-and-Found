@@ -1,7 +1,7 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/search.css">
 
-<!-- ── Page Header & Action Buttons ────────────────────────────────────────── -->
+<!-- Page Header & Action Buttons-->
 <div class="search-header-container">
     <div class="search-header-row">
 
@@ -15,6 +15,7 @@
         <div class="index-actions-container">
             <a href="<?= BASE_URL ?>/item/create?type=lost"  class="btn btn-primary   index-action-btn">Report Lost</a>
             <a href="<?= BASE_URL ?>/item/create?type=found" class="btn btn-found     index-action-btn">Report Found</a>
+
             <!-- Toggles the filter panel open/closed -->
             <button type="button" class="btn btn-secondary index-action-btn filter-toggle-btn" id="filterToggleBtn">
                 <i class="fas fa-sliders-h"></i> Filters
@@ -22,7 +23,7 @@
         </div>
     </div>
 
-    <!-- ── Advanced Filter Panel (hidden by default, toggled via JS) ──────── -->
+    <!-- Advanced Filter Panel  -->
     <div class="filter-panel" id="filterPanel">
     <form action="<?= BASE_URL ?>/item/search" method="GET" class="advanced-search-form">
 
@@ -66,7 +67,7 @@
                    value="<?= isset($data['location']) ? escape($data['location']) : '' ?>">
         </div>
 
-        <!-- Date: today / past 7 days / past 30 days -->
+        <!-- Posted Date: today / past 7 days / past 30 days -->
         <div class="input-group filter-group">
             <label class="input-label filter-label" for="date">Posted Date</label>
             <select name="date" id="date" class="input-field">
@@ -77,7 +78,7 @@
             </select>
         </div>
 
-        <!-- Submit button -->
+        <!-- Apply Filters button -->
         <div class="filter-action">
             <button type="submit" class="btn btn-secondary w-full filter-submit-btn">
                 <i class="fas fa-filter"></i> Apply Filters
@@ -88,8 +89,7 @@
     </div>
 </div>
 
-<!-- ── Search Results ───────────────────────────────────────────────────────── -->
-
+<!--  Search Results (filter)  -->
 <?php if (empty($data['items'])): ?>
 
     <!-- No results state -->
@@ -140,34 +140,37 @@
 
 <?php endif; ?>
 
-<!-- ── Filter Panel Toggle + Auto-Submit Logic ─────────────────────────────── -->
+<!--  Filter Panel & Auto Submitting search  -->
 <script>
 (() => {
+
+    // Toggle filters and auto-submit search
     const toggleBtn = document.getElementById('filterToggleBtn');
     const panel     = document.getElementById('filterPanel');
     if (!toggleBtn || !panel) return;
-
-    // If the URL already has query params, keep the filter panel open on load
     if (window.location.search.length > 0) panel.classList.add('is-open');
 
     // Toggle panel open/closed when the Filters button is clicked
     toggleBtn.addEventListener('click', () => panel.classList.toggle('is-open'));
 
+    //select search form
     const form = document.querySelector('.advanced-search-form');
     if (!form) return;
 
-    // Text inputs: submit after the user stops typing (350ms debounce)
+    // keyword inputs
     const typingInputs = [form.querySelector('#q'), form.querySelector('#location')].filter(Boolean);
 
-    // Select inputs: submit immediately on change
+    // dropdowns
     const selectInputs = [form.querySelector('#type'), form.querySelector('#category_id'), form.querySelector('#date')].filter(Boolean);
 
+    //350ms after user stops typing, auto submit
     let debounceTimer;
     const scheduleSubmit = () => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => form.submit(), 350);
     };
 
+    //Auto search after user stops typing
     typingInputs.forEach(input => input.addEventListener('input',  scheduleSubmit));
     selectInputs.forEach(input => input.addEventListener('change', () => form.submit()));
 })();
