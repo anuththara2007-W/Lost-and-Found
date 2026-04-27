@@ -38,7 +38,7 @@ class AuthController extends Controller
                 redirect('/admin/dashboard');
                 exit;
             }
-
+                    // Attempt login using email and password
             $loggedInUser = $this->userModel->login($email, $password);
 
             if ($loggedInUser) {

@@ -1,21 +1,10 @@
 <?php
 namespace App\Core;
 
-/**
- * Base Controller Class
- * ---------------------
- * This is the parent class for all controllers in the MVC system.
- * It provides reusable functions:
- * - Loading models
- * - Loading views
- */
+//runs actoion from user requests
 class Controller
 {
-    /**
-     * Load a model dynamically
-     * ------------------------
-     * This function helps controllers access database logic.
-     */
+   //helps controller access database logic
     public function model($model)
     {
         // Build full class name (namespace + model name)
@@ -28,11 +17,7 @@ class Controller
         return new $modelClass();
     }
 
-    /**
-     * Load a view (UI file) and pass data to it
-     * -----------------------------------------
-     * This connects controller → view (presentation layer)
-     */
+    //this function loads a view file and passes data to it
     public function view($view, $data = [])
     {
         // Build full file path for the view

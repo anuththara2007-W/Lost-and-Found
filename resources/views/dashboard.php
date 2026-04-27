@@ -8,9 +8,9 @@
         <div class="dashboard-profile-card">
             <?php if(!empty($user['profile_image'])): ?>
                 <div class="dashboard-avatar" style="background: url('<?= BASE_URL ?>/uploads/avatars/<?= escape($user['profile_image']) ?>') center/cover; color: transparent;"></div>
-            <?php else: ?>
+            <?php else: ?> //runs when IF condition is false
                 <div class="dashboard-avatar">
-                    <?= strtoupper(substr($user['username'], 0, 1)) ?>
+                    <?= strtoupper(substr($user['username'], 0, 1)) ?>//get first letter of username from index 0 and make it uppercase
                 </div>
             <?php endif; ?>
             

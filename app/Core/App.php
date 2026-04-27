@@ -1,23 +1,17 @@
 <?php
 namespace App\Core;
-
-/**
- * App Class (Core Router)
- * This class is responsible for:
- * 1. Reading the URL
- * 2. Loading the correct Controller
- * 3. Calling the correct Method
- * 4. Passing parameters to methods
- */
+//Finds the controller based on the url
+//calling the correct method
+//decides what to run
 class App
 {
-    // Default controller if URL is empty
+    // Default controller if URL is empty rederect to HomeController
     protected $controller = 'App\\Controllers\\HomeController';
 
-    // Default method
+    // Default method -> if not specified rederect to index
     protected $method = 'index';
 
-    // URL parameters
+    // Stored URL parameters
     protected $params = [];
 
     /**
@@ -31,20 +25,14 @@ class App
         // Get URL parts
         $url = $this->parseUrl();
 
-        /* ----------------------------
-         * 1. CONTROLLER RESOLUTION
-         * ----------------------------
-         * Example URL:
-         * /item/show/5
-         * -> ItemController
-         */
-
         $controllerName = isset($url[0])
-        //upercase the first letter and the convert whole thing to lowercase to ensure consistent controller naming (e.g. item -> ItemController)
+        //upercase the first letter and the convert whole thing to lowercase to ensure consistent controller naming
             ? ucfirst(strtolower($url[0])) . 'Controller'
             : 'HomeController';
 
+        //build full class name
         $controllerClass = 'App\\Controllers\\' . $controllerName;
+        //build file path for the controller
         $controllerFile = ROOT . '/app/Controllers/' . $controllerName . '.php';
 
         // Check if controller file exists
@@ -59,13 +47,7 @@ class App
 
         // Create controller object
         $this->controller = new $this->controller;
-
-        /* ----------------------------
-         * 2. METHOD RESOLUTION
-         * ----------------------------
-         * Example:
-         * /item/show/5 -> show()
-         */
+        //check if method exists incontroller
         if (isset($url[1])) {
             if (method_exists($this->controller, $url[1])) {
                 $this->method = $url[1];
@@ -73,19 +55,10 @@ class App
             }
         }
 
-        /* ----------------------------
-         * 3. PARAMETERS
-         * ----------------------------
-         * Remaining URL values become parameters
-         * Example:
-         * /item/show/5 -> [5]
-         */
+        //remaining URL values become parameters
         $this->params = $url ? array_values($url) : [];
 
-        /* ----------------------------
-         * 4. EXECUTE CONTROLLER METHOD
-         * ----------------------------
-         */
+       //run controller method
         do_action('app.before_dispatch', $this->controller, $this->method, $this->params);
 
         call_user_func_array(
@@ -96,11 +69,10 @@ class App
         do_action('app.after_dispatch', $this->controller, $this->method, $this->params);
     }
 
-    /**
-     * Parse URL from browser request
-     */
+    //parse url from browser request
     public function parseUrl()
     {
+        //check if url exists
         if (isset($_GET['url'])) {
             return explode(
                 '/',

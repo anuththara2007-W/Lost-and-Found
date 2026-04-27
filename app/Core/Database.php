@@ -1,11 +1,5 @@
 <?php
-/**
- * Database.php
- * -------------------------
- * This class handles the database connection using PDO.
- * It follows the Singleton Design Pattern to ensure
- * only ONE database connection exists throughout the application.
- */
+//creates a one single database connection for the whole system
 
 namespace App\Core;
 
@@ -14,25 +8,18 @@ use PDOException;
 
 class Database
 {
-    /**
-     * Holds the single instance of this class
-     * (Singleton pattern)
-     */
+   //hold the single instanec of this class
     private static ?Database $instance = null;
 
-    /**
-     * PDO connection object
-     */
+    //pdo connection object
     private PDO $pdo;
 
-    /**
-     * Constructor is private to prevent direct object creation
-     * This ensures only one database connection is created.
-     */
+    //prevents creating multiple objects
+    //connection is only cretate once
     private function __construct()
     {
-        // Build DSN (Data Source Name) for MySQL connection to determine how to connect to the database
 
+        //create connection String
         $dsn = sprintf( //sprintf() = string formatter
             'mysql:host=%s;port=%s;dbname=%s;charset=%s', //%s = “put a string here”
             DB_HOST,
@@ -46,8 +33,8 @@ class Database
             $this->pdo = new PDO($dsn, DB_USER, DB_PASS, [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // throw errors
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // associative arrays
-                PDO::ATTR_EMULATE_PREPARES   => false,                  // EMULATE PREPARES for real prepared statements
-                //In PDO: Attributes are configuration settings that control how the database connection behaves.
+                PDO::ATTR_EMULATE_PREPARES   => false,                  //  real prepared statements
+                
             ]);
 
         } catch (PDOException $e) {
@@ -57,16 +44,12 @@ class Database
                 die('<b>Database connection failed:</b> ' . htmlspecialchars($e->getMessage()));
             }
 
-            // Otherwise show generic message (production safe)
+            // Otherwise show generic message
             die('Database connection failed. Please try again later.');
         }
     }
-
-    /**
-     * Get the single instance of Database class
-     * -----------------------------------------
-     * This ensures only ONE connection is used globally.
-     */
+    
+    //ensure only one connection is globally cerated
     public static function getInstance(): self
     {
         if (self::$instance === null) {
@@ -75,24 +58,16 @@ class Database
         return self::$instance;
     }
 
-    /**
-     * Return PDO connection object
-     * Used by Models to run queries
-     */
+   //used by models to run sql connection
     public function getConnection(): PDO
     {
         return $this->pdo;
     }
 
-    /**
-     * Prevent cloning of object
-     * (protects Singleton pattern)
-     */
+    //prevent cloning
     private function __clone() {}
 
-    /**
-     * Prevent unserialization (Serialization = converting object → string)
-     */
+    //stops restoring objects from the string
     public function __wakeup()
     {
         throw new \Exception('Cannot unserialize singleton');
