@@ -190,7 +190,7 @@ class MessageController extends Controller
     }
 
     /**
-     * API: Update typing status (real-time typing indicator)
+     * API: Update typing status
      */
     public function apiSetTyping()
     {
@@ -216,12 +216,12 @@ class MessageController extends Controller
     }
 
     /**
-     * API: Send message (AJAX)
+     * API: Send message 
      */
     public function apiSendMessage()
     {
         header('Content-Type: application/json');
-        
+        //check login
         if (!isset($_SESSION['user_id'])) {
             http_response_code(403);
             echo json_encode(['error' => 'Not logged in']);
