@@ -133,7 +133,7 @@ class MessageController extends Controller
      */
     public function apiGetMessages($report_id = null)
     {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json');//response in JSON format
         
         // Check login
         if (!isset($_SESSION['user_id'])) {
