@@ -2,6 +2,7 @@
 namespace App\Core;
 //Finds the controller based on the url
 //calling the correct method
+//decides what to run
 class App
 {
     // Default controller if URL is empty rederect to HomeController
