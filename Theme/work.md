@@ -4,10 +4,11 @@
 ├── resources/views/auth/login.php ✅
 ├── resources/views/auth/register.php ✅
 ├── resources/views/auth/forgot.php ✅
-└── resources/views/auth/reset.php ✅
+├── resources/views/auth/reset.php ✅
+└── resources/views/user/profile.php ✅
 
 📂 Views – Items
-└── resources/views/items/index.php ✅
+└── resources/views/items/show.php ✅
 
 📂 Views – Pages
 └── resources/views/pages/contact.php ✅
@@ -123,10 +124,10 @@ public/assets/css/map.css ✅
 public/assets/css/home.css ✅
 
                                             👤 3️⃣ PABASARA – Messaging + Informational Pages
+
 📂 Controllers
 
 ├── app/Controllers/MessageController.php ✅
-
 
 📂 Models
 

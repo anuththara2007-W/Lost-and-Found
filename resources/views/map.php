@@ -65,7 +65,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── 2. Data from PHP ──────────────────────────────────────────────────────
     // Pass lost items and base URL from PHP into JS safely
-    const items   = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
+// Convert PHP data to safe JSON for JavaScript
+// Protects from HTML/JS injection attacks
+// Escapes < > characters
+// Escapes single quotes
+// Escapes double quotes
+// Escapes & symbol
     const baseUrl = <?= json_encode(BASE_URL) ?>;
 
     // ── 3. Helper Functions ───────────────────────────────────────────────────
@@ -121,7 +127,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Parse coordinates; use fallback grid near Colombo if invalid
             let lat = parseFloat(item.latitude);
             let lng = parseFloat(item.longitude);
-            if (!validLatLng(lat, lng)) {
+            if (!validLatLng(lat, lng)) { //    // Set default Sri Lanka location (Colombo base)
+
                 lat = 6.9271 + ((index % 10) * 0.02);
                 lng = 79.8612 + ((index % 10) * 0.02);
             }
