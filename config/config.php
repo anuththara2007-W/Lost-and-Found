@@ -51,13 +51,16 @@ if (DEBUG_MODE) {
 date_default_timezone_set('Asia/Singapore');
 
 // ── Session — only start once ──────────────────────────────────────
-if (session_status() === PHP_SESSION_NONE) {
-    session_name('laf_sess');
-    session_set_cookie_params([
-        'lifetime' => 7200,
-        'path'     => '/',
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ]);
-    session_start();
+if (session_status() === PHP_SESSION_NONE) { // Check session not started
+
+    session_name('laf_sess'); // Set custom session name
+
+    session_set_cookie_params([ // Set session cookie settings
+        'lifetime' => 7200, // Session expires in 2 hours
+        'path'     => '/', // Available for entire site
+        'httponly' => true, // Block JavaScript access
+        'samesite' => 'Lax', // Prevent Cross-Site Request Forgery attacks
+    ]);// CSRF is an attack where a user is tricked into sending unwanted requests while logged in
+
+    session_start(); // Start session
 }

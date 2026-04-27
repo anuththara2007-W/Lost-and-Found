@@ -36,6 +36,7 @@ So the simple flow is:
 ## 2. Core Architecture Files (System Backbone)
 
 ### Entry + Config
+
 - `public/.htaccess`  
   Rewrites friendly URLs to `index.php`.
 - `public/index.php`  
@@ -52,6 +53,7 @@ So the simple flow is:
   - hook helper wrappers
 
 ### Core MVC Classes
+
 - `app/Core/App.php`  
   URL parser and request dispatcher.
 - `app/Core/Controller.php`  
@@ -132,57 +134,106 @@ So the simple flow is:
 
 ## 4. Full Website Route/Page Flow (with file links)
 
-| URL | Controller@Method | Models Used | View File | CSS Linked in View |
-|---|---|---|---|---|
-| `/` or `/home/index` | `HomeController@index` | `Item` | `resources/views/home.php` | `home.css` (+ global `style.css`) |
+| URL                  | Controller@Method      | Models Used | View File                  | CSS Linked in View                |
+| -------------------- | ---------------------- | ----------- | -------------------------- | --------------------------------- |
+| `/` or `/home/index` | `HomeController@index` | `Item`      | `resources/views/home.php` | `home.css` (+ global `style.css`) |
+
 | `/home/success_stories` | `HomeController@success_stories` | `Item` | `resources/views/success_stories.php` | via controller `css => ['success']` + `style.css` |
+
 | `/item/index` | `ItemController@index` -> `search()` | `Item` | `resources/views/items/index.php` | `search.css` + `style.css` |
+
 | `/item/search` | `ItemController@search` | `Item` | `resources/views/items/index.php` | `search.css` + `style.css` |
+
 | `/item/show/{id}` | `ItemController@show` | `Item`, `Message` | `resources/views/items/show.php` | `item-detail.css` + Leaflet CSS + `style.css` |
+
 | `/item/create` | `ItemController@create` | `Item` | `resources/views/items/create.php` | `item-form.css` + Leaflet CSS + `style.css` |
+
 | `/item/resolve/{id}` | `ItemController@resolve` | `Item` | no page (POST action + redirect) | - |
+
 | `/map/index` | `MapController@index` | `Item` (+ DB) | `resources/views/map.php` | `map.css` + Leaflet CSS + `style.css` |
+
 | `/map/api_markers` | `MapController@api_markers` | DB | JSON response | - |
+
 | `/message/index` | `MessageController@index` | `Message` | `resources/views/messages/index.php` | `messages/index-inbox.css` + `style.css` |
+
 | `/message/chat/{report_id}` | `MessageController@chat` | `Message`, `Item` | `resources/views/messages/chat.php` | `messages/chat-conversation.css` + `style.css` |
+
 | `/message/store` | `MessageController@store` | `Message`, `Item` | no page (POST action + redirect) | - |
+
 | `/message/apiGetMessages/{id}` | `MessageController@apiGetMessages` | `Message`, `Item` | JSON response | - |
+
 | `/message/apiSetTyping` | `MessageController@apiSetTyping` | `Message` | JSON response | - |
+
 | `/message/apiSendMessage` | `MessageController@apiSendMessage` | `Message`, `Item` | JSON response | - |
+
 | `/user/dashboard` | `UserController@dashboard` | `User`, `Item` | `resources/views/dashboard.php` | `dashboard.css` + `style.css` |
+
 | `/user/profile` | `UserController@profile` | `User` | `resources/views/user/profile.php` | tries `profile.css` (actual file is `Profile.css`) + `style.css` |
+
 | `/user/updateProfile` | `UserController@updateProfile` | `User` | no page (POST action + redirect) | - |
+
 | `/auth/login` | `AuthController@login` | `User` | `resources/views/auth/login.php` | `login.css` + `style.css` |
+
 | `/auth/register` | `AuthController@register` | `User` | `resources/views/auth/register.php` | inline styles + `style.css` |
+
 | `/auth/forgot` | `AuthController@forgot` | (none/model not needed) | `resources/views/auth/forgot.php` | inline styles + `style.css` |
+
 | `/auth/reset` | `AuthController@reset` | (none/model not needed) | `resources/views/auth/reset.php` | inline styles + `style.css` |
+
 | `/auth/logout` | `AuthController@logout` | - | no view (session destroy + redirect) | - |
+
 | `/page/about` | `PageController@about` | - | `resources/views/pages/about.php` | inline styles + `style.css` |
+
 | `/page/faq` | `PageController@faq` | - | `resources/views/pages/faq.php` | inline styles + `style.css` |
+
 | `/page/contact` | `PageController@contact` | `ContactRequest` | `resources/views/pages/contact.php` | inline styles + `style.css` |
+
 | `/page/set_language/{lang}` | `PageController@set_language` | - | no view (redirect back) | - |
+
 | `/admin/dashboard` | `AdminController@dashboard` | `User`, `Item` | `resources/views/admin/dashboard.php` | `admin/admin_dashboard.css` + `style.css` |
+
 | `/admin/users` | `AdminController@users` | `User` | `resources/views/admin/users.php` | `admin/admin_dashboard.css`, `admin/users.css`, `style.css` |
+
 | `/admin/reports` | `AdminController@reports` | `Item` | `resources/views/admin/reports.php` | `admin/admin_dashboard.css`, `admin/reports.css`, `style.css` |
+
 | `/admin/items` | `AdminController@items` | `Item` | `resources/views/admin/items.php` | `admin/admin_dashboard.css` + `style.css` |
+
 | `/admin/edit_report/{id}` | `AdminController@edit_report` | `Item` | `resources/views/admin/edit_report.php` | mainly inline + `style.css` |
+
 | `/admin/update_report/{id}` | `AdminController@update_report` | `Item` | no view (POST action + redirect) | - |
+
 | `/admin/delete_report/{id}` | `AdminController@delete_report` | `Item` | no view (POST action + redirect) | - |
+
 | `/admin/settings` | `AdminController@settings` | `SystemConfig`, `Item` | expects `resources/views/admin/settings.php` (actual file is `setting.php`) | `admin/admin_dashboard.css` + inline + `style.css` |
+
 | `/admin/add_category` | `AdminController@add_category` | direct DB | no view (POST action + redirect) | - |
+
 | `/admin/delete_category/{id}` | `AdminController@delete_category` | direct DB | no view (POST action + redirect) | - |
+
 | `/admin/update_config` | `AdminController@update_config` | `SystemConfig` | no view (POST action + redirect) | - |
+
 | `/admin/monitor` | `AdminController@monitor` | - | `resources/views/admin/monitor.php` | `admin/admin_dashboard.css` + `style.css` |
+
 | `/admin/monitor_stats` | `AdminController@monitor_stats` | direct DB | JSON response | - |
+
 | `/admin/contact_requests` | `AdminController@contact_requests` | `ContactRequest` | `resources/views/admin/contact_requests.php` | `admin/admin_dashboard.css` + `style.css` |
+
 | `/admin/resolve_contact/{id}` | `AdminController@resolve_contact` | `ContactRequest` | no view (POST action + redirect) | - |
+
 | `/admin/backup` | `AdminController@backup` | - | `resources/views/admin/backup.php` | `admin/admin_dashboard.css` + `style.css` |
+
 | `/admin/backup_download` | `AdminController@backup_download` | DB | SQL download | - |
+
 | `/admin/restore_backup` | `AdminController@restore_backup` | DB | no view (POST action + redirect) | - |
+
 | `/admin/announcements` | `AdminController@announcements` | `Announcement` | `resources/views/admin/announcements.php` | `admin/admin_dashboard.css`, `admin/announcements.css`, `style.css` |
+
 | `/admin/add_announcement` | `AdminController@add_announcement` | `Announcement` | no view (POST action + redirect) | - |
+
 | `/admin/delete_announcement/{id}` | `AdminController@delete_announcement` | `Announcement` | no view (POST action + redirect) | - |
+
 | `/admin/toggle_announcement/{id}` | `AdminController@toggle_announcement` | `Announcement` | no view (POST action + redirect) | - |
+
 | `/admin/export_data` | `AdminController@export_data` | `Item` | CSV download | - |
 
 ---
@@ -192,6 +243,7 @@ So the simple flow is:
 ## `resources/views/layouts/header.php`
 
 What it does for almost all pages:
+
 - Sets HTML head title.
 - Loads fonts and Font Awesome.
 - Loads **global base stylesheet**: `public/assets/css/style.css`.
@@ -206,6 +258,7 @@ What it does for almost all pages:
 ## `resources/views/layouts/footer.php`
 
 What it does:
+
 - Renders platform/resource/legal footer links.
 - Optional JS includes from `$data['js']` array.
 - Closes page HTML.
@@ -272,11 +325,13 @@ What it does:
 Below is the full file list detected from the project folder.
 
 ## Root docs + theme
+
 - `README.md`
 - `Theme/lost-found-palette.html`
 - `Theme/work.md`
 
 ## Includes + config + legal
+
 - `includes/helpers.php`
 - `config/config.php`
 - `config/setup.sql`
@@ -285,12 +340,14 @@ Below is the full file list detected from the project folder.
 - `legal/terms.php`
 
 ## Core
+
 - `app/Core/App.php`
 - `app/Core/Controller.php`
 - `app/Core/Database.php`
 - `app/Core/HookManager.php`
 
 ## Controllers
+
 - `app/Controllers/AdminController.php`
 - `app/Controllers/AuthController.php`
 - `app/Controllers/HomeController.php`
@@ -301,6 +358,7 @@ Below is the full file list detected from the project folder.
 - `app/Controllers/UserController.php`
 
 ## Models
+
 - `app/Models/Admin.php`
 - `app/Models/Announcement.php`
 - `app/Models/ContactRequest.php`
@@ -310,19 +368,23 @@ Below is the full file list detected from the project folder.
 - `app/Models/User.php`
 
 ## Services
+
 - `app/Services/NotificationService.php`
 
 ## Public entry + server files
+
 - `public/.htaccess`
 - `public/index.php`
 - `public/debug_log.txt`
 
 ## Public JS
+
 - `public/assets/js/auth.js`
 - `public/assets/js/main.js`
 - `public/assets/js/map.js`
 
 ## Public CSS
+
 - `public/assets/css/style.css`
 - `public/assets/css/home.css`
 - `public/assets/css/search.css`
@@ -352,14 +414,17 @@ Below is the full file list detected from the project folder.
 - `public/assets/css/admin/users.css`
 
 ## Public uploads (sample files currently present)
+
 - `public/uploads/69abdc0f39334.png`
 - `public/uploads/img_69ed8da22698e1.24234088_0.jpeg`
 
 ## Views - layouts
+
 - `resources/views/layouts/header.php`
 - `resources/views/layouts/footer.php`
 
 ## Views - top level
+
 - `resources/views/home.php`
 - `resources/views/dashboard.php`
 - `resources/views/map.php`
@@ -367,29 +432,35 @@ Below is the full file list detected from the project folder.
 - `resources/views/success_stories.php`
 
 ## Views - auth
+
 - `resources/views/auth/login.php`
 - `resources/views/auth/register.php`
 - `resources/views/auth/forgot.php`
 - `resources/views/auth/reset.php`
 
 ## Views - pages
+
 - `resources/views/pages/about.php`
 - `resources/views/pages/contact.php`
 - `resources/views/pages/faq.php`
 
 ## Views - user
+
 - `resources/views/user/profile.php`
 
 ## Views - items
+
 - `resources/views/items/index.php`
 - `resources/views/items/create.php`
 - `resources/views/items/show.php`
 
 ## Views - messages
+
 - `resources/views/messages/index.php`
 - `resources/views/messages/chat.php`
 
 ## Views - admin
+
 - `resources/views/admin/dashboard.php`
 - `resources/views/admin/users.php`
 - `resources/views/admin/reports.php`
@@ -403,6 +474,7 @@ Below is the full file list detected from the project folder.
 - `resources/views/admin/login.php`
 
 ## Other placeholders
+
 - `security/New Text Document.txt`
 - `storage/New Text Document.txt`
 
@@ -441,4 +513,3 @@ These points are useful in viva when examiners ask:
 ## 10. One-Line Viva Summary
 
 This project is a **custom PHP MVC Lost & Found platform** where request routing starts at `.htaccess` and `index.php`, flows through Core Router -> Controllers -> Models -> MySQL, and renders modular Views with shared Header/Footer and page-level CSS/JS for user, item, chat, map, and admin workflows.
-

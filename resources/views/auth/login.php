@@ -175,6 +175,6 @@ document.getElementById('submitBtn').closest('form').addEventListener('submit', 
 </script>
 
 <?php
-clearOld();
+clearOld();// // Remove previous data before adding new
 require_once ROOT . '/resources/views/layouts/footer.php';
 ?>
