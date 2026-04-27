@@ -7,25 +7,49 @@ $stmt = $db->prepare("SELECT phone FROM users WHERE user_id = :uid");
 $stmt->execute(['uid' => $item['user_id']]);
 $posterPhone = $stmt->fetchColumn();
 
-
 /* ─────────────────────────────────────────────
    STEP 2 – Build the WhatsApp link
 ──────────────────────────────────────────────── */
-// Prefer report WhatsApp -> joined profile phone -> fallback profile phone query -> contact info
-$wpNumber = !empty($item['whatsapp_contact'])
-    ? $item['whatsapp_contact']
-    : (!empty($item['phone']) ? $item['phone'] : $posterPhone);
 
+// Check if 'whatsapp_contact' exists and is not empty in the item
+$wpNumber = !empty($item['whatsapp_contact'])
+
+    // If true → use the WhatsApp-specific contact number
+    ? $item['whatsapp_contact']
+
+    // If false → check if 'phone' exists in the item
+    : (!empty($item['phone'])
+
+        // If 'phone' exists → use it
+        ? $item['phone']
+
+        // If not → fallback to the poster's profile phone number
+        : $posterPhone
+    );
+
+
+// After the above logic, check if $wpNumber is still empty
 if (empty($wpNumber) && !empty($item['contact_info'])) {
+
+    // If a generic 'contact_info' field exists, use it as a last fallback
     $wpNumber = $item['contact_info'];
 }
 
+// Remove all non-digit characters from the phone number (e.g., +, spaces, dashes)
+// Also ensure $wpNumber is treated as a string and handle null safely
 $wpPhone = preg_replace('/\D+/', '', (string)($wpNumber ?? ''));
-$wpMessage = urlencode('Hello, I am inquiring about your item: ' . $item['title']);
-$whatsAppUrl = !empty($wpPhone)
-    ? ('https://wa.me/' . $wpPhone . '?text=' . $wpMessage)
-    : ('https://wa.me/?text=' . $wpMessage);
 
+// Create the message text and URL-encode it so it can be safely used in a URL
+$wpMessage = urlencode('Hello, I am inquiring about your item: ' . $item['title']);
+
+// Check if a cleaned phone number exists
+$whatsAppUrl = !empty($wpPhone)
+
+    // If phone number exists → create WhatsApp link with specific number
+    ? ('https://wa.me/' . $wpPhone . '?text=' . $wpMessage)
+
+    // If no phone number → create WhatsApp link without number (opens app with message only)
+    : ('https://wa.me/?text=' . $wpMessage);
 
 /* ─────────────────────────────────────────────
    STEP 3 – Build social share URLs
