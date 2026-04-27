@@ -49,6 +49,14 @@
 
 </details>
 
+<img width="1904" height="913" alt="Screenshot 2026-04-27 083449" src="https://github.com/user-attachments/assets/aa24be5e-9859-4713-8043-f6391070324e" />
+
+<img width="1919" height="919" alt="Screenshot 2026-04-27 083429" src="https://github.com/user-attachments/assets/6eb129ac-0dba-439d-adac-bec07ba224ab" />
+
+<img width="1905" height="917" alt="Screenshot 2026-04-27 083418" src="https://github.com/user-attachments/assets/597f9f28-d38a-4d75-9e52-a9d3959eaa24" />
+
+
+
 ---
 
 ## ✨ Overview
@@ -344,6 +352,4 @@ This project is for **educational and personal use**. See the [`legal/`](legal/)
 
 ---
 
-<p align="center">
-  Made with ❤️ for the community
-</p>
+This project is for educational and personal use. See the `legal/` directory for any additional licensing information.
