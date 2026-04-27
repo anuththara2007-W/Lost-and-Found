@@ -1,6 +1,8 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/item-form.css">
+
+<!-- Css for maps -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
@@ -19,7 +21,7 @@
 
     <form action="<?= BASE_URL ?>/item/create" method="POST" enctype="multipart/form-data">
 
-        <!-- Tells the server if this is a lost or found report -->
+        <!-- To find this is lost or found report -->
         <input type="hidden" name="type" value="<?= escape($type) ?>">
 
         <!-- Item Name -->
@@ -47,7 +49,7 @@
             </select>
         </div>
 
-        <!-- Custom Category — only shown when "Other" is selected -->
+        <!-- Custom Category (Other) -->
         <div class="input-group <?= old('category_id') === 'other' ? '' : 'item-form-hidden' ?>"
              id="custom_category_group">
             <label class="input-label" for="custom_category">Custom Category Name</label>
@@ -112,7 +114,7 @@
             </label>
         </div>
 
-        <!-- Reward Amount — lost items only -->
+        <!-- Reward Amount (lost items only) -->
         <?php if ($type === 'lost'): ?>
             <div class="input-group full-row">
                 <label class="input-label" for="reward_amount">Reward Amount (Optional)</label>
@@ -135,7 +137,7 @@
                    class="input-field item-form-file-input" accept="image/*">
         </div>
 
-        <!-- Submit — red for lost, green for found -->
+        <!-- Submit Report -->
         <button type="submit"
                 class="btn <?= $type === 'lost' ? 'btn-primary' : 'btn-found' ?> w-full item-form-submit-btn full-row">
             Submit Report
@@ -144,22 +146,24 @@
     </form>
 </div>
 
+
+<!--Loads leaflet Library to control map -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
 
-// 1. Show/hide the custom category input when "Other" is selected
+// Custom category when "OTHER" is selected
 function toggleCustomCategory() {
     const isOther = document.getElementById('category_id').value === 'other';
     const group   = document.getElementById('custom_category_group');
     const input   = document.getElementById('custom_category');
-    group.classList.toggle('item-form-hidden', !isOther);
+    group.classList.toggle('item-form-hidden', !isOther);  //if it Other - show it else hide it.
     input.required = isOther;
 }
 
 
-// 2. Fill the description textarea with a generated template
+// AI generated description area
 function generateDescription() {
     const title = document.getElementById('title').value;
     const type  = "<?= escape($type) ?>";
@@ -184,9 +188,11 @@ function generateDescription() {
 }
 
 
+
+// Leaflet map part
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 3. Leaflet map — click anywhere to place a pin and save the coordinates
+    // click anywhere to place a pin and save the coordinates
     const savedLat = document.getElementById('latitude').value;
     const savedLng = document.getElementById('longitude').value;
     const startLat = savedLat ? parseFloat(savedLat) : 7.8731; // Default: Sri Lanka
@@ -194,13 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const map = L.map('pickerMap').setView([startLat, startLng], savedLat ? 15 : 7);
 
+    //loads map designs (OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Place a pin if coordinates were already saved (e.g. after a failed submit)
+    // show a pin, if location already exist
     let marker = savedLat ? L.marker([startLat, startLng]).addTo(map) : null;
 
+    //Disply saved latitude & longitude 
     if (savedLat) {
         document.getElementById('latDisplay').textContent = parseFloat(savedLat).toFixed(5);
         document.getElementById('lngDisplay').textContent = parseFloat(savedLng).toFixed(5);
@@ -209,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     map.on('click', ({ latlng }) => {
         const { lat, lng } = latlng;
 
-        // Save to hidden inputs so they submit with the form
+        // Save to hidden inputs to submit with the form
         document.getElementById('latitude').value         = lat;
         document.getElementById('longitude').value        = lng;
         document.getElementById('latDisplay').textContent = lat.toFixed(5);
@@ -220,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    // 4. Auto-tagger — detect category from keywords in the title/description
+    // Auto-tagger — detect category from keywords in the title/description
     const keywords = {
         'electronics': ['phone', 'iphone', 'samsung', 'laptop', 'macbook', 'ipad', 'tablet',
                         'charger', 'headphones', 'airpods', 'earbuds', 'camera', 'watch', 'apple watch'],
@@ -233,6 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'bag'        : ['bag', 'backpack', 'tote', 'luggage', 'suitcase', 'briefcase']
     };
 
+
+    //Auto tag feature
     function autoTag() {
         const select = document.getElementById('category_id');
         if (select.value !== '') return; // Don't override a manual selection
@@ -251,10 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
         select.value = option.value;
         toggleCustomCategory();
 
-        // Flash an "Auto-tagged!" badge on the label for 3 seconds
+        // Flash an "Auto-tagged!" badge for 3 seconds
         const lbl      = document.querySelector('label[for="category_id"]');
         const original = lbl.innerHTML;
-        lbl.innerHTML  = 'Category <span class="item-form-autotag-badge"><i class="fas fa-magic"></i> Auto-tagged!</span>';
+        lbl.innerHTML  = 'Category <span class="item-form-autotag-badge"><i class="fas fa-magic"></i> Auto-tagged! </span>';
         setTimeout(() => lbl.innerHTML = original, 3000);
     }
 
