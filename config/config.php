@@ -13,10 +13,23 @@
 define('ROOT', dirname(__DIR__));
 
 // Web-accessible base URL — auto-detected from current request
+
+        //Detect protocol (secure or not) like if true HTTPS is on,otherwise http
 $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+        //$_SERVER['HTTP_HOST'] → current domain | ?? 'localhost' → fallback if not set
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+
+        //Get correct folder path for project
 $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
+
+// Remove trailing slash for clean URL path
 $basePath = rtrim($scriptDir, '/');
+
+/*$scheme → http/https
+'://' → standard URL separator
+$host → domain
+$basePath → project folder */
 define('BASE_URL', $scheme . '://' . $host . $basePath);
 
 // ── Database ───────────────────────────────────────────────────────
@@ -25,7 +38,7 @@ define('DB_PORT',    '3306');
 define('DB_NAME',    'lost_and_found');
 define('DB_USER',    'root');    // default XAMPP user
 define('DB_PASS',    '');        // default XAMPP password (blank)
-define('DB_CHARSET', 'utf8mb4');
+define('DB_CHARSET', 'utf8mb4'); // Full Unicode support including emojis and all languages
 
 // ── Debug ──────────────────────────────────────────────────────────
 define('DEBUG_MODE', true);

@@ -15,13 +15,13 @@ use PDO;
  */
 class Message
 {
-    private $db;
-    private $columnCache = []; // Cache for column existence
-    private $tableCache = [];  // Cache for table existence
+    private $db;//database connection
+    private $columnCache = []; // store checked column
+    private $tableCache = [];  //store checked tables 
 
     /**
      * Constructor
-     * Establish database connection using Singleton pattern
+     * Establish database connection 
      */
     public function __construct()
     {
@@ -90,7 +90,6 @@ class Message
 
     /**
      * Add comment with optional attachment
-     * Also supports older database versions dynamically
      */
     public function addCommentWithAttachment($report_id, $user_id, $comment_text, $attachment_path, $parent_id = 0)
     {
@@ -98,7 +97,7 @@ class Message
         $hasAttachment = $this->hasColumn('comments', 'attachment_path');
         $hasParent = $this->hasColumn('comments', 'parent_id');
 
-        // Base columns
+        // Base columns exists
         $columns = ['report_id', 'user_id', 'comment_text'];
         $placeholders = [':report_id', ':user_id', ':comment_text'];
 

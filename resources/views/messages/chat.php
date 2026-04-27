@@ -5,8 +5,8 @@
 
 <!-- Main Chat Container -->
 <div class="wa-chat-container">
-
-    <!-- ================= LEFT SIDEBAR (CHAT LIST) ================= -->
+    
+    //right sidebar with conversation list
     <div class="wa-sidebar">
 
         <!-- Sidebar Header -->
@@ -137,7 +137,7 @@
 
 <!-- ================= JAVASCRIPT (REAL-TIME CHAT LOGIC) ================= -->
 <script>
-
+//handles real time chat
 // Get basic data from PHP
 const reportId = document.getElementById('report_id').value;
 const currentUserId = <?= json_encode($_SESSION['user_id']) ?>;
@@ -145,7 +145,7 @@ const baseUrl = '<?= BASE_URL ?>';
 
 let lastMessageCount = 0;
 
-// Escape HTML for security (prevent XSS)
+// Escape HTML for security
 function escapeHtml(text) {
     return (text || '')
         .replace(/&/g, "&amp;")
