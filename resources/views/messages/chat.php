@@ -6,7 +6,6 @@
 <!-- Main Chat Container -->
 <div class="wa-chat-container">
     
-    //right sidebar with conversation list
     <div class="wa-sidebar">
 
         <!-- Sidebar Header -->
