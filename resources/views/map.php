@@ -1,7 +1,7 @@
 <?php require_once ROOT . '/resources/views/layouts/header.php'; ?>
 
 <?php
-// Get all items from data, default to empty array if not set
+// Get all items from backend
 $allItems = $data['items'] ?? [];
 $lostItems = [];
 
@@ -32,12 +32,12 @@ foreach ($allItems as $item) {
         </div>
     </div>
 
-    <!-- Map Element -->
+    <!-- Map Element (appear) -->
     <div class="map-wrapper">
         <div id="laf-map" class="laf-map-element"></div>
     </div>
 
-    <!-- Show message if no lost items exist -->
+    <!-- msg if no lost items -->
     <?php if (empty($lostItems)): ?>
         <div class="map-empty-note">No lost items available to show on the map.</div>
     <?php endif; ?>
@@ -50,7 +50,7 @@ foreach ($allItems as $item) {
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── 1. Safety Checks ─────────────────────────────────────────────────────
+    // Safety Checks (prevent errors if,)
     const mapElement = document.getElementById('laf-map');
 
     if (!mapElement) {
@@ -65,18 +65,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ── 2. Data from PHP ──────────────────────────────────────────────────────
     // Pass lost items and base URL from PHP into JS safely
-const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
-// Convert PHP data to safe JSON for JavaScript
-// Protects from HTML/JS injection attacks
-// Escapes < > characters
-// Escapes single quotes
-// Escapes double quotes
-// Escapes & symbol
+    const items   = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     const baseUrl = <?= json_encode(BASE_URL) ?>;
 
-    // ── 3. Helper Functions ───────────────────────────────────────────────────
 
-    // Escape special HTML characters to prevent XSS
+    // To prevent XSS attacks
     function escapeHtml(text) {
         return String(text || '')
             .replace(/&/g, '&amp;')
@@ -86,7 +79,7 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
             .replace(/'/g, '&#039;');
     }
 
-    // Check if lat/lng values are real and within valid range
+    // Check longitidinal & Laditudinal values are in correct range
     function validLatLng(lat, lng) {
         return Number.isFinite(lat) &&
                Number.isFinite(lng) &&
@@ -94,17 +87,16 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
                lng >= -180 && lng <= 180;
     }
 
-    // ── 4. Map Setup ──────────────────────────────────────────────────────────
-    // Initialize map centered on Sri Lanka
+    // map centered to SL 
     const map = L.map('laf-map').setView([7.8731, 80.7718], 7);
 
-    // Add OpenStreetMap tiles as the background layer
+    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19
     }).addTo(map);
 
-    // Custom red dot icon for lost items
+    // red dot icon for lost items
     const iconLost = L.divIcon({
         className: 'custom-div-icon',
         html: "<div class='custom-marker-lost'></div>",
@@ -112,10 +104,9 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
         iconAnchor: [9, 9]
     });
 
-    // Layer group to hold all markers (makes clearing/redrawing easy)
+    // to hold all markers
     const markerLayer = L.layerGroup().addTo(map);
 
-    // ── 5. Render Markers ─────────────────────────────────────────────────────
     // Place markers on the map for each lost item
     function renderMarkers(inputItems, fitView) {
         markerLayer.clearLayers(); // Remove old markers
@@ -124,7 +115,7 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
 
         inputItems.forEach(function (item, index) {
 
-            // Parse coordinates; use fallback grid near Colombo if invalid
+            // if given locations is invalid, the marker drop near colombo
             let lat = parseFloat(item.latitude);
             let lng = parseFloat(item.longitude);
             if (!validLatLng(lat, lng)) { //    // Set default Sri Lanka location (Colombo base)
@@ -133,12 +124,12 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
                 lng = 79.8612 + ((index % 10) * 0.02);
             }
 
-            // Sanitize text fields for popup display
+            // Sanitize data before display
             const safeTitle    = escapeHtml(item.title    || 'Lost Item');
             const safeLocation = escapeHtml(item.location || 'Unknown Location');
             const reportId     = encodeURIComponent(item.report_id || '');
 
-            // Build popup HTML content
+            // popup msg
             const popupContent = `
                 <div class="popup-container">
                     <div class="popup-badge-wrapper"><span class="popup-badge-lost">LOST</span></div>
@@ -148,7 +139,7 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
                 </div>
             `;
 
-            // Add marker with popup to the layer
+            // Add those popup contents
             L.marker([lat, lng], { icon: iconLost }).addTo(markerLayer).bindPopup(popupContent);
             bounds.push([lat, lng]);
             addedCount++;
@@ -164,17 +155,15 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
         }
     }
 
-    // Initial render with the PHP-provided data
+    // show markers when page load
     renderMarkers(items, true);
 
-    // ── 6. Live Refresh ───────────────────────────────────────────────────────
-    // Fetch fresh markers from the API every 10 seconds
+    // live update & refresh 
     async function refreshMarkers() {
         try {
             const res  = await fetch(`${baseUrl}/map/api_markers`, { credentials: 'same-origin' });
             const data = await res.json();
 
-            // Keep only lost items from the API response
             const liveLost = Array.isArray(data.items)
                 ? data.items.filter(x => String(x.type || '').toLowerCase() === 'lost')
                 : [];
@@ -187,8 +176,7 @@ const items = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HE
 
     setInterval(refreshMarkers, 10000); // Refresh every 10s
 
-    // ── 7. Map Resize Fixes ───────────────────────────────────────────────────
-    // Leaflet sometimes renders incorrectly if the container size changes
+    // Map Resize Fixes 
     setTimeout(() => map.invalidateSize(), 300);        // After initial load
     window.addEventListener('load',   () => map.invalidateSize()); // After all assets load
     window.addEventListener('resize', () => map.invalidateSize()); // On window resize

@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/home.css">
 
 <style>
-/* Small override for layout */
+/* homepage full wide */
 main {
     max-width: none;
     padding: 0;
@@ -179,7 +179,7 @@ main {
     </section>
 
 
-    <!-- ================= HOW IT WORKS ================= -->
+    <!-- ================= HOW Recovey Works ================= -->
     <section id="how" class="section">
         <div class="section-inner">
 
@@ -189,6 +189,7 @@ main {
 
             <div class="steps-grid">
 
+                 <!-- 3 Details -->
                 <div class="step-card" data-num="01">
                     <div class="step-icon"><i class="fa-solid fa-location-dot"></i></div>
                     <div class="step-title"><?= escape(t('home_step1_title')) ?></div>
@@ -221,7 +222,8 @@ main {
             <p class="sec-sub"><?= escape(t('home_category_sub')) ?></p>
 
             <div class="cats-grid">
-
+                
+                 <!-- Categary list -->
                 <a href="<?= BASE_URL ?>/item/search?category_id=1" class="cat-card">
                     <div class="cat-icon"><i class="fa-regular fa-id-card"></i></div>
                     <div class="cat-name"><?= escape(t('home_cat_identification')) ?></div>
@@ -263,7 +265,7 @@ main {
     </section>
 
 
-    <!-- ================= INFO SPLIT ================= -->
+    <!-- ================= INFO ================= -->
     <section class="section">
         <div class="section-inner">
             <div class="split">
@@ -324,7 +326,8 @@ main {
             <p class="sec-sub"><?= escape(t('home_safe_sub')) ?></p>
 
             <div class="safety-grid">
-
+                
+                <!-- card list -->
                 <div class="safety-card">
                     <h4><i class="fa-solid fa-city"></i> <?= escape(t('home_safe_public')) ?></h4>
                     <p><?= escape(t('home_safe_public_sub')) ?></p>
@@ -350,7 +353,7 @@ main {
     </section>
 
 
-    <!-- ================= CTA ================= -->
+    <!--  something is missing  -->
     <div class="cta">
 
         <h2><?= escape(t('home_cta_title')) ?></h2>
@@ -370,4 +373,5 @@ main {
 
 </div>
 
+<!-- Load footer section -->
 <?php require_once ROOT . '/resources/views/layouts/footer.php'; ?>
