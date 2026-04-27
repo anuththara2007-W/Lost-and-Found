@@ -97,27 +97,33 @@ function displayFlashMessages() {
     echo '</div>';
     echo "<script>setTimeout(function(){document.querySelectorAll('.global-toast').forEach(function(el){el.style.opacity='0';el.style.transform='translateY(-8px)';el.style.transition='all .25s ease';});setTimeout(function(){var s=document.getElementById('global-toast-stack');if(s){s.remove();}},300);},2200);</script>";
 }
-
+// Register action hook callback
 function add_action($hook, callable $callback) {
-    \App\Core\HookManager::addAction($hook, $callback);
+    \App\Core\HookManager::addAction($hook, $callback); // Store action
 }
 
+// Execute action hooks
 function do_action($hook, ...$args) {
-    \App\Core\HookManager::doAction($hook, ...$args);
+    \App\Core\HookManager::doAction($hook, ...$args); // Run all callbacks
 }
 
+// Register filter hook callback
 function add_filter($hook, callable $callback) {
-    \App\Core\HookManager::addFilter($hook, $callback);
+    \App\Core\HookManager::addFilter($hook, $callback); // Store filter
 }
 
+// Apply filters to a value
 function apply_filters($hook, $value, ...$args) {
-    return \App\Core\HookManager::applyFilters($hook, $value, ...$args);
+    return \App\Core\HookManager::applyFilters($hook, $value, ...$args); // Modify value
 }
 
+// Get current selected language
 function current_lang() {
-    $lang = $_SESSION['lang'] ?? 'en';
-    $allowed = ['en', 'si', 'ta'];
-    return in_array($lang, $allowed, true) ? $lang : 'en';
+    $lang = $_SESSION['lang'] ?? 'en'; // Get session language or default
+
+    $allowed = ['en', 'si', 'ta']; // Allowed languages list
+
+    return in_array($lang, $allowed, true) ? $lang : 'en'; // Validate language
 }
 
 function t($key) {
@@ -426,4 +432,5 @@ function t($key) {
 
     $lang = current_lang();
     return $dict[$lang][$key] ?? ($dict['en'][$key] ?? $key);
+    /// Return translated text if exists, else fallback to English, else key itself
 }

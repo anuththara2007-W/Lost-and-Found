@@ -1,8 +1,24 @@
+#.htaccess is used to route all requests to index.php so the application can use clean and readable URLs.
 <IfModule mod_rewrite.c>
+
+# Check if Apache rewrite module is enabled
+
     Options -Multiviews
+    # Disable automatic file matching behavior
+
     RewriteEngine On
+    # Enable URL rewriting engine
+
     RewriteBase /Lost-and-Found/public/
+    # Set base folder for rewrite rules
+
     RewriteCond %{REQUEST_FILENAME} !-d
+    # If request is NOT a directory
+
     RewriteCond %{REQUEST_FILENAME} !-f
+    # If request is NOT a file
+
     RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+    # Redirect all requests to index.php with URL parameter
+
 </IfModule>

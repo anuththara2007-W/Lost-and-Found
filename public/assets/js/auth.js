@@ -1,39 +1,47 @@
-"use strict";
+"use strict"; // makes JavaScript more strict and error-safe
 
 /* =========================================================
    Password Visibility Toggle
 ========================================================= */
-
-const passwordButtons = document.querySelectorAll(".toggle-password");
+const passwordButtons = document.querySelectorAll(".toggle-password"); // Get all toggle buttons
 
 passwordButtons.forEach(function (button) {
+  // Loop through each button
+
   button.addEventListener("click", function () {
-    const targetId = button.dataset.target;
-    const inputField = document.getElementById(targetId);
+    // On button click
+
+    const targetId = button.dataset.target; // Get target input id
+    const inputField = document.getElementById(targetId); // Find input field
 
     if (!inputField) {
-      return;
+      // If input not found
+      return; // Stop execution
     }
 
-    let currentType = inputField.type;
+    let currentType = inputField.type; // Get current input type
 
     if (currentType === "password") {
-      inputField.type = "text";
+      // If password hidden
+      inputField.type = "text"; // Show password
     } else {
-      inputField.type = "password";
+      // If password visible
+      inputField.type = "password"; // Hide password
     }
 
-    const hideIcon = button.querySelector(".icon-hide");
-    const showIcon = button.querySelector(".icon-show");
+    const hideIcon = button.querySelector(".icon-hide"); // Get hide icon
+    const showIcon = button.querySelector(".icon-show"); // Get show icon
 
     if (currentType === "password") {
-      if (hideIcon) hideIcon.style.display = "none";
-      if (showIcon) showIcon.style.display = "block";
-      button.setAttribute("aria-label", "Hide password");
+      // If was hidden
+      if (hideIcon) hideIcon.style.display = "none"; // Hide hide-icon
+      if (showIcon) showIcon.style.display = "block"; // Show show-icon
+      button.setAttribute("aria-label", "Hide password"); // Accessibility label
     } else {
-      if (hideIcon) hideIcon.style.display = "block";
-      if (showIcon) showIcon.style.display = "none";
-      button.setAttribute("aria-label", "Show password");
+      // If was visible
+      if (hideIcon) hideIcon.style.display = "block"; // Show hide-icon
+      if (showIcon) showIcon.style.display = "none"; // Hide show-icon
+      button.setAttribute("aria-label", "Show password"); // Accessibility label
     }
   });
 });
@@ -41,7 +49,7 @@ passwordButtons.forEach(function (button) {
 /* =========================================================
    Password Strength Checker
 ========================================================= */
-
+//not implimented yet, but will be in the future. This is just a placeholder for now.
 const passwordInput = document.getElementById("password");
 const strengthBar = document.querySelector(".strength-fill");
 const strengthText = document.querySelector(".strength-label");
@@ -105,143 +113,168 @@ function getPasswordScore(password) {
 /* =========================================================
    Confirm Password Match
 ========================================================= */
-
-const confirmPasswordInput = document.getElementById("confirm_password");
+const confirmPasswordInput = document.getElementById("confirm_password"); // Get confirm password field
 
 if (confirmPasswordInput !== null && passwordInput !== null) {
+  // Ensure both inputs exist
+
   function checkPasswordMatch() {
-    const messageBox = document.getElementById("confirm-msg");
+    // Function to validate passwords
+
+    const messageBox = document.getElementById("confirm-msg"); // Get message display
 
     if (!messageBox) {
-      return;
+      // If message box missing
+      return; // Stop execution
     }
 
-    let passwordValue = passwordInput.value;
-    let confirmValue = confirmPasswordInput.value;
+    let passwordValue = passwordInput.value; // Get password value
+    let confirmValue = confirmPasswordInput.value; // Get confirm value
 
     if (confirmValue.length === 0) {
-      messageBox.className = "field-msg";
-      return;
+      // If confirm empty
+      messageBox.className = "field-msg"; // Reset message style
+      return; // Stop further checks
     }
 
     if (passwordValue === confirmValue) {
-      messageBox.textContent = "Passwords match";
-      messageBox.className = "field-msg visible ok";
+      // If passwords match
+      messageBox.textContent = "Passwords match"; // Success message
+      messageBox.className = "field-msg visible ok"; // Success style
 
-      confirmPasswordInput.classList.remove("is-invalid");
-      confirmPasswordInput.classList.add("is-valid");
+      confirmPasswordInput.classList.remove("is-invalid"); // Remove error class
+      confirmPasswordInput.classList.add("is-valid"); // Add success class
     } else {
-      messageBox.textContent = "Passwords do not match";
-      messageBox.className = "field-msg visible error";
+      // If passwords do not match
+      messageBox.textContent = "Passwords do not match"; // Error message
+      messageBox.className = "field-msg visible error"; // Error style
 
-      confirmPasswordInput.classList.remove("is-valid");
-      confirmPasswordInput.classList.add("is-invalid");
+      confirmPasswordInput.classList.remove("is-valid"); // Remove success class
+      confirmPasswordInput.classList.add("is-invalid"); // Add error class
     }
   }
 
-  confirmPasswordInput.addEventListener("input", checkPasswordMatch);
-  passwordInput.addEventListener("input", checkPasswordMatch);
+  confirmPasswordInput.addEventListener("input", checkPasswordMatch); // Check on typing confirm
+  passwordInput.addEventListener("input", checkPasswordMatch); // Check on typing password
 }
-
 /* =========================================================
    Email Validation
 ========================================================= */
-
-const emailInput = document.getElementById("email");
+const emailInput = document.getElementById("email"); // Get email input field
 
 if (emailInput !== null) {
+  // Check input exists
+
   function validateEmailField() {
-    let emailValue = emailInput.value.trim();
-    let messageBox = document.getElementById("email-msg");
+    // Email validation function
+
+    let emailValue = emailInput.value.trim(); // Get trimmed value
+    let messageBox = document.getElementById("email-msg"); // Get message box
 
     if (!messageBox) {
-      return;
+      // If message box missing
+      return; // Stop execution
     }
 
-    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let isValid = pattern.test(emailValue);
+    let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email regex pattern
+    let isValid = pattern.test(emailValue); // Test email format
 
     if (emailValue.length === 0) {
-      return;
+      // If empty input
+      return; // Skip validation
     }
 
     if (isValid === true) {
-      emailInput.classList.add("is-valid");
-      emailInput.classList.remove("is-invalid");
+      // If valid email
+      emailInput.classList.add("is-valid"); // Add valid class
+      emailInput.classList.remove("is-invalid"); // Remove invalid class
 
-      messageBox.className = "field-msg";
+      messageBox.className = "field-msg"; // Reset message style
     } else {
-      emailInput.classList.add("is-invalid");
-      emailInput.classList.remove("is-valid");
+      // If invalid email
+      emailInput.classList.add("is-invalid"); // Add error class
+      emailInput.classList.remove("is-valid"); // Remove valid class
 
-      messageBox.textContent = "Invalid email format";
-      messageBox.className = "field-msg visible error";
+      messageBox.textContent = "Invalid email format"; // Show error text
+      messageBox.className = "field-msg visible error"; // Apply error style
     }
   }
 
-  let emailTimeout;
+  let emailTimeout; // Store debounce timer
 
   emailInput.addEventListener("input", function () {
-    clearTimeout(emailTimeout);
+    // On typing
+    clearTimeout(emailTimeout); // Clear previous timer
 
     emailTimeout = setTimeout(function () {
-      validateEmailField();
-    }, 500);
+      // Delay validation
+      validateEmailField(); // Run validation
+    }, 500); // 500ms delay
   });
 
-  emailInput.addEventListener("blur", validateEmailField);
+  emailInput.addEventListener("blur", validateEmailField); // Validate on focus out
 }
 
 /* =========================================================
    Username Check (API)
 ========================================================= */
-
-const usernameInput = document.getElementById("username");
+const usernameInput = document.getElementById("username"); // Get username input
 
 if (usernameInput !== null) {
-  let usernameTimer;
+  // Check input exists
+
+  let usernameTimer; // Store debounce timer
 
   usernameInput.addEventListener("input", function () {
-    clearTimeout(usernameTimer);
+    // On typing
+    clearTimeout(usernameTimer); // Clear previous timer
 
-    let value = usernameInput.value.trim();
-    let messageBox = document.getElementById("username-msg");
+    let value = usernameInput.value.trim(); // Get trimmed value
+    let messageBox = document.getElementById("username-msg"); // Get message box
 
     if (value.length < 3) {
-      return;
+      // If too short
+      return; // Skip check
     }
 
     usernameTimer = setTimeout(function () {
-      checkUsername(value);
-    }, 500);
+      // Delay request
+      checkUsername(value); // Call API check
+    }, 500); // 500ms delay
   });
 
   async function checkUsername(username) {
+    // Async API function
     try {
-      const response = await fetch("/api/check-username?username=" + username);
-      const data = await response.json();
+      const response = await fetch("/api/check-username?username=" + username); // Send request
+      const data = await response.json(); // Parse JSON response
 
-      const messageBox = document.getElementById("username-msg");
+      const messageBox = document.getElementById("username-msg"); // Get message box
 
       if (data.available === true) {
-        usernameInput.classList.add("is-valid");
-        usernameInput.classList.remove("is-invalid");
+        // If username free
+        usernameInput.classList.add("is-valid"); // Add valid class
+        usernameInput.classList.remove("is-invalid"); // Remove invalid class
 
         if (messageBox) {
-          messageBox.textContent = "Username available";
-          messageBox.className = "field-msg visible ok";
+          // If message box exists
+          messageBox.textContent = "Username available"; // Success text
+          messageBox.className = "field-msg visible ok"; // Success style
         }
       } else {
-        usernameInput.classList.add("is-invalid");
-        usernameInput.classList.remove("is-valid");
+        // If username taken
+        usernameInput.classList.add("is-invalid"); // Add error class
+        usernameInput.classList.remove("is-valid"); // Remove valid class
 
         if (messageBox) {
-          messageBox.textContent = "Username already taken";
-          messageBox.className = "field-msg visible error";
+          // If message box exists
+          messageBox.textContent = "Username already taken"; // Error text
+          messageBox.className = "field-msg visible error"; // Error style
         }
       }
     } catch (error) {
-      // ignore error
+      // Handle request error
+      // ignore error // Do nothing on error
     }
   }
 }
@@ -250,39 +283,47 @@ if (usernameInput !== null) {
    Profile Image Preview
 ========================================================= */
 
-const imageInput = document.getElementById("profile_image");
-const imagePreview = document.getElementById("avatar-preview-img");
+const imageInput = document.getElementById("profile_image"); // Get file input
+const imagePreview = document.getElementById("avatar-preview-img"); // Get preview image
 
 if (imageInput !== null && imagePreview !== null) {
+  // Check elements exist
+
   imageInput.addEventListener("change", function () {
-    let file = imageInput.files[0];
+    // On file change
+
+    let file = imageInput.files[0]; // Get selected file
 
     if (!file) {
-      return;
+      // If no file selected
+      return; // Stop execution
     }
 
-    let allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    let allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"]; // Allowed formats
 
     if (allowedTypes.indexOf(file.type) === -1) {
-      showToast("Invalid image type", "error");
-      imageInput.value = "";
-      return;
+      // Check file type
+      showToast("Invalid image type", "error"); // Show error
+      imageInput.value = ""; // Reset input
+      return; // Stop
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      showToast("Image too large (max 2MB)", "error");
-      imageInput.value = "";
-      return;
+      // Check size > 2MB
+      showToast("Image too large (max 2MB)", "error"); // Show error
+      imageInput.value = ""; // Reset input
+      return; // Stop
     }
 
-    let reader = new FileReader();
+    let reader = new FileReader(); // Create file reader
 
     reader.onload = function (e) {
-      imagePreview.src = e.target.result;
-      imagePreview.style.display = "block";
+      // When file loaded
+      imagePreview.src = e.target.result; // Set preview image
+      imagePreview.style.display = "block"; // Show preview
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(file); // Convert file to URL
   });
 }
 
@@ -291,34 +332,39 @@ if (imageInput !== null && imagePreview !== null) {
 ========================================================= */
 
 function showToast(message, type) {
+  // Toast function
+
   if (!type) {
-    type = "info";
+    // If no type given
+    type = "info"; // Default type
   }
 
-  let container = document.getElementById("toast-container");
+  let container = document.getElementById("toast-container"); // Get container
 
   if (!container) {
-    container = document.createElement("div");
-    container.id = "toast-container";
+    // If container not exists
+    container = document.createElement("div"); // Create container
+    container.id = "toast-container"; // Set id
 
-    container.style.position = "fixed";
-    container.style.bottom = "20px";
-    container.style.right = "20px";
+    container.style.position = "fixed"; // Fixed position
+    container.style.bottom = "20px"; // Bottom spacing
+    container.style.right = "20px"; // Right spacing
 
-    document.body.appendChild(container);
+    document.body.appendChild(container); // Add to page
   }
 
-  let toast = document.createElement("div");
-  toast.textContent = message;
+  let toast = document.createElement("div"); // Create toast
+  toast.textContent = message; // Set message
 
-  toast.style.padding = "12px";
-  toast.style.marginTop = "10px";
+  toast.style.padding = "12px"; // Inner spacing
+  toast.style.marginTop = "10px"; // Space between toasts
 
-  container.appendChild(toast);
+  container.appendChild(toast); // Add toast
 
   setTimeout(function () {
-    toast.remove();
-  }, 3000);
+    // Auto remove
+    toast.remove(); // Remove after time
+  }, 3000); // 3 seconds
 }
 
-window.showToast = showToast;
+window.showToast = showToast; // Make function global
