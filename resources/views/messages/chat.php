@@ -140,7 +140,7 @@
 // Get basic data from PHP
 //takes data from backend api
 //convert in to HTML
-////Display it in the ui
+//Display it in the ui
 const reportId = document.getElementById('report_id').value;
 const currentUserId = <?= json_encode($_SESSION['user_id']) ?>;
 const baseUrl = '<?= BASE_URL ?>';
