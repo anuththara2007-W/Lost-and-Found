@@ -1,6 +1,6 @@
 <?php
 namespace App\Core;
-
+ //abs -hide complex logic from controllers
 //runs actoion from user requests
 class Controller
 {
