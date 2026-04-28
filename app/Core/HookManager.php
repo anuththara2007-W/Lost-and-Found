@@ -1,7 +1,7 @@
 <?php
 namespace App\Core;
-/*HookManager is a mechanism to run extra functions at predefined points (before/after main flow), so we can extend features easily without modifying core
-routing code*/
+/*HookManager is a mechanism to run extra functions at predefined points (before/after main flow), 
+so we can extend features easily without modifying core routing code*/
 // Hook system manager class  is used for filters because it allows modifying data dynamically before it is used, 
 // making the system flexible and extendable without changing core code.
 class HookManager

@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS chat_status (
 -- =========================
 -- INDEXES
 -- =========================
+-- indexes  creates a search shortcut for the database.
 CREATE INDEX idx_reports_user_id ON reports(user_id);
 CREATE INDEX idx_reports_category_id ON reports(category_id);
 CREATE INDEX idx_reports_type_status ON reports(type, status);
@@ -136,6 +137,9 @@ CREATE INDEX idx_comments_report_id ON comments(report_id);
 -- =========================
 -- SAMPLE DATA
 -- =========================
+
+
+-- INSERT IGNORE is used to Insert data, but if it already exists, don’t crash — just skip it.
 INSERT IGNORE INTO categories (name, description) VALUES
 ('Electronics', 'Phones, laptops, headphones'),
 ('Wallets & Bags', 'Purses, backpacks'),

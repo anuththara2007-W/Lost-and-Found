@@ -14,6 +14,28 @@ class Item
         $this->db = Database::getInstance()->getConnection();
     }
 
+    private function normalizeCategoryId($categoryId)
+    {
+        if ($categoryId === null) {
+            return null;
+        }
+
+        $raw = trim((string)$categoryId);
+        if ($raw === '' || strtolower($raw) === 'other' || !ctype_digit($raw)) {
+            return null;
+        }
+
+        $normalized = (int)$raw;
+        if ($normalized <= 0) {
+            return null;
+        }
+
+        $stmt = $this->db->prepare("SELECT 1 FROM categories WHERE category_id = :category_id LIMIT 1");
+        $stmt->execute(['category_id' => $normalized]);
+
+        return $stmt->fetchColumn() ? $normalized : null;
+    }
+
     public function getRecentReports($limit = 6)
     {
         // Prepare SQL query to fetch reports with user and category info
@@ -117,6 +139,8 @@ class Item
 
     public function addReport($data)
     {
+        $categoryId = $this->normalizeCategoryId($data['category_id'] ?? null);
+
         // Prepare SQL query to insert report data
         $stmt = $this->db->prepare("
             INSERT INTO reports 
@@ -128,7 +152,7 @@ class Item
         // Execute query with data
         $success = $stmt->execute([
             'user_id' => $data['user_id'],
-            'category_id' => $data['category_id'] ?: null,
+            'category_id' => $categoryId,
             'type' => $data['type'],
             'title' => $data['title'],
             'description' => $data['description'],
@@ -281,6 +305,8 @@ class Item
 
     public function updateReportAdmin($reportId, array $data)
     {
+        $categoryId = $this->normalizeCategoryId($data['category_id'] ?? null);
+
         // Prepare SQL query to update a report
         $stmt = $this->db->prepare("
             UPDATE reports
@@ -300,7 +326,7 @@ class Item
             'location' => $data['location'],
             'status' => $data['status'],
             'type' => $data['type'],
-            'category_id' => $data['category_id'] ?: null,
+            'category_id' => $categoryId,
             'id' => (int)$reportId
         ]);
     }

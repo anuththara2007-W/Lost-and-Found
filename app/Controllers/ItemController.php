@@ -184,9 +184,13 @@ $potentialMatches = $stmt->fetchAll();
             }
 
             //prepare data
+            $selectedCategory = trim((string)($_POST['category_id'] ?? ''));
+            $isCustomCategory = strtolower($selectedCategory) === 'other';
+            $customCategory = trim($_POST['custom_category'] ?? '');
+
             $data = [
                 'user_id' => $_SESSION['user_id'],
-                'category_id' => !empty($_POST['category_id']) ? $_POST['category_id'] : null,
+                'category_id' => $isCustomCategory ? null : ($selectedCategory !== '' ? $selectedCategory : null),
                 'type' => $_POST['type'] ?? 'lost',
                 'title' => trim($_POST['title']),
                 'description' => trim($_POST['description']),
@@ -197,7 +201,7 @@ $potentialMatches = $stmt->fetchAll();
                 'longitude' => !empty($_POST['longitude']) ? trim($_POST['longitude']) : null,
                 'image_path' => $imagePath,
                 'images' => $uploadedImages,
-                'custom_category' => $_POST['custom_category'] ?? null,
+                'custom_category' => $customCategory !== '' ? $customCategory : null,
                 'whatsapp_contact' => $_POST['whatsapp_contact'] ?? null,
                 'allow_platform_message' => isset($_POST['allow_platform_message']) ? 1 : 0
             ];
@@ -205,6 +209,11 @@ $potentialMatches = $stmt->fetchAll();
             //validation
             if (empty($data['title']) || empty($data['description']) || empty($data['location'])) {
                 $_SESSION['flash_error'] = 'Please fill out all required fields.';
+                redirect('/item/create?type=' . $data['type']);
+            }
+
+            if ($isCustomCategory && empty($data['custom_category'])) {
+                $_SESSION['flash_error'] = 'Please specify a custom category when selecting Other.';
                 redirect('/item/create?type=' . $data['type']);
             }
 
