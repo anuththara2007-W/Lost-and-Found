@@ -1,80 +1,118 @@
 <?php
-/* ─────────────────────────────────────────────
-   STEP 1 – Get the poster's phone number
-──────────────────────────────────────────────── */
+  // STEP 1 – Get the poster's phone number
 $db   = \App\Core\Database::getInstance()->getConnection();
 $stmt = $db->prepare("SELECT phone FROM users WHERE user_id = :uid");
 $stmt->execute(['uid' => $item['user_id']]);
 $posterPhone = $stmt->fetchColumn();
 
+//STEP 2 – Build the WhatsApp link
+ 
 
-/* ─────────────────────────────────────────────
-   STEP 2 – Build the WhatsApp link
-──────────────────────────────────────────────── */
-// Prefer report WhatsApp -> joined profile phone -> fallback profile phone query -> contact info
+// Check if 'whatsapp_contact' exists and is not empty in the item
 $wpNumber = !empty($item['whatsapp_contact'])
-    ? $item['whatsapp_contact']
-    : (!empty($item['phone']) ? $item['phone'] : $posterPhone);
 
+    // If true → use the WhatsApp-specific contact number
+    ? $item['whatsapp_contact']
+
+    // If false → check if 'phone' exists in the item
+    : (!empty($item['phone'])
+
+        // If 'phone' exists → use it
+        ? $item['phone']
+
+        // If not → fallback to the poster's profile phone number
+        : $posterPhone
+    );
+
+
+// After the above logic, check if $wpNumber is still empty
 if (empty($wpNumber) && !empty($item['contact_info'])) {
+
+    // If a generic 'contact_info' field exists, use it as a last fallback
     $wpNumber = $item['contact_info'];
 }
 
+// Remove all non-digit characters from the phone number (e.g., +, spaces, dashes)
+// Also ensure $wpNumber is treated as a string and handle null safely
 $wpPhone = preg_replace('/\D+/', '', (string)($wpNumber ?? ''));
+
+// Create the message text and URL-encode it so it can be safely used in a URL
 $wpMessage = urlencode('Hello, I am inquiring about your item: ' . $item['title']);
+
+// Check if a cleaned phone number exists
 $whatsAppUrl = !empty($wpPhone)
+
+    // If phone number exists → create WhatsApp link with specific number
     ? ('https://wa.me/' . $wpPhone . '?text=' . $wpMessage)
+
+    // If no phone number → create WhatsApp link without number (opens app with message only)
     : ('https://wa.me/?text=' . $wpMessage);
 
 
-/* ─────────────────────────────────────────────
-   STEP 3 – Build social share URLs
-──────────────────────────────────────────────── */
+   //STEP 3 – Build social share URLs
+
 $shareUrl  = urlencode(BASE_URL . '/item/show/' . $item['report_id']);
 $shareText = urlencode('Check out this ' . $item['type'] . ' item on Lost & Found: ' . $item['title']);
 
 
-/* ─────────────────────────────────────────────
-   STEP 4 – Handy flags used in the HTML
-──────────────────────────────────────────────── */
+
+   //STEP 4 – Handy flags used in the HTML
+
 $hasActivity  = !empty($comments);
 $isResolved   = ($item['status'] === 'resolved');
 $isOwnReport  = isLoggedIn() && ($_SESSION['user_id'] == $item['user_id']);
 $messagingOn  = isset($item['allow_platform_message']) && $item['allow_platform_message'] != 0;
 
 
-/* ─────────────────────────────────────────────
-   STEP 5 – Category label to display
-──────────────────────────────────────────────── */
+
+  // STEP 5 – Category label to display
+
 // Custom category > database category > fallback
 $categoryLabel = !empty($item['custom_category'])
     ? $item['custom_category']
     : ($item['category_name'] ?? 'Uncategorized');
 
 
-/* ─────────────────────────────────────────────
-   STEP 6 – Split comments into parents & replies
-──────────────────────────────────────────────── */
+
+  //STEP 6 – Split comments into parents & replies
+
+// Initialize an array to store top-level (parent) comments
 $parentComments = [];
+
+// Initialize an array to store replies (child comments), grouped by parent ID
 $childComments  = [];
 
+// Loop through all comments (if $comments is null, use an empty array to avoid errors)
 foreach ($comments ?? [] as $c) {
+
+    // Extract a valid comment ID by checking multiple possible keys
+    // (comment_id → message_id → id → fallback to 0 if none exist)
     $cid = (int)($c['comment_id'] ?? $c['message_id'] ?? $c['id'] ?? 0);
+
+    // If no valid ID found (<= 0), skip this comment
     if ($cid <= 0) continue;
 
+    // Store the resolved ID inside the comment array for consistent access later
     $c['__id'] = $cid;
 
+    // Check if this comment is a reply (has a parent_id > 0)
     if (!empty($c['parent_id']) && $c['parent_id'] > 0) {
+
+        // Add this comment under its parent in the childComments array
+        // Grouped by parent_id
         $childComments[$c['parent_id']][] = $c;
+
     } else {
+
+        // If no parent_id → it's a top-level (parent) comment
         $parentComments[] = $c;
     }
 }
 
 
-/* ─────────────────────────────────────────────
-   STEP 7 – Build the flyer image tag
-──────────────────────────────────────────────── */
+
+   //STEP 7 – Build the flyer image tag
+
 $flyerImageTag = !empty($item['image_path'])
     ? '<img class="flyer-photo" src="' . BASE_URL . '/uploads/' . htmlspecialchars($item['image_path']) . '" alt="Item photo">'
     : '';
@@ -85,6 +123,7 @@ $flyerImageTag = !empty($item['image_path'])
 <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/item-detail.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<!-- The integrity hash ensures the file has not been modified or tampered with -->
 
 <div class="item-detail-container">
 
@@ -122,22 +161,30 @@ $flyerImageTag = !empty($item['image_path'])
             </div>
 
 
-            <!-- Main Gallery Photo -->
-            <div class="item-gallery-container" onclick="openLightbox(0)">
-                <?php if (empty($images)): ?>
-                    <div class="item-gallery-empty">[ NO PHOTO UPLOADED ]</div>
-                <?php else: ?>
-                    <img id="main-gallery-image"
-                         src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($images[0]) ?>"
-                         class="item-gallery-main-img" alt="Main Item Image">
-                    <?php if (count($images) > 1): ?>
-                        <div class="item-gallery-badge">
-                            <i class="fas fa-images"></i> +<?= count($images) - 1 ?>
-                        </div>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </div>
+        <!-- Main container for item image gallery -->
+<!-- When clicked, it opens the lightbox starting from image index 0 -->
+<div class="item-gallery-container" onclick="openLightbox(0)"> <!--openlightbox is the popup full image when a image is clicked-->
 
+    <?php if (empty($images)): ?>
+        <!-- If no images are available, show placeholder text -->
+        <div class="item-gallery-empty">[ NO PHOTO UPLOADED ]</div>
+
+    <?php else: ?>
+        <!-- Display the first image as the main gallery preview -->
+        <img id="main-gallery-image"
+             src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($images[0]) ?>"
+             class="item-gallery-main-img" 
+             alt="Main Item Image">
+
+        <?php if (count($images) > 1): ?>
+            <!-- If there are multiple images, show a badge indicating extra images -->
+            <div class="item-gallery-badge">
+                <i class="fas fa-images"></i> +<?= count($images) - 1 ?>
+            </div>
+        <?php endif; ?>
+
+    <?php endif; ?>
+</div>
 
             <!-- Thumbnail Strip (only when 2+ images) -->
             <?php if (!empty($images) && count($images) > 1): ?>
@@ -328,64 +375,109 @@ $flyerImageTag = !empty($item['image_path'])
                 </div>
             <?php endif; ?>
 
+<!-- Comments Section -->
+<?php if ($messagingOn): ?>
+    <!-- Main container for comments/messages -->
+    <div class="comments-section" id="comments-app">
 
-            <!-- Comments Section -->
-            <?php if ($messagingOn): ?>
-                <div class="comments-section" id="comments-app">
-                    <h3 class="comments-title">Messages &amp; Updates</h3>
+        <!-- Section title -->
+        <h3 class="comments-title">Messages &amp; Updates</h3>
 
-                    <?php if (empty($parentComments)): ?>
-                        <p class="comments-empty">No messages yet. Be the first to reach out.</p>
-                    <?php else: ?>
-                        <div class="comments-list">
-                            <?php foreach ($parentComments as $comment): ?>
-                                <?php $cId = (int)($comment['__id'] ?? 0); ?>
-                                <div class="comment-card" id="comment-<?= $cId ?>">
+        <?php if (empty($parentComments)): ?>
+            <!-- If no parent (top-level) comments exist -->
+            <p class="comments-empty">No messages yet. Be the first to reach out.</p>
 
-                                    <div class="comment-header">
-                                        <strong class="comment-author">
-                                            <?= escape($comment['username']) ?>
-                                            <?php if ($comment['user_id'] == $item['user_id']): ?>
-                                                <span class="badge-author">AUTHOR</span>
-                                            <?php endif; ?>
-                                        </strong>
-                                        <span class="comment-date"><?= formatDate($comment['created_at']) ?></span>
+        <?php else: ?>
+            <!-- Wrapper for all comments -->
+            <div class="comments-list">
+
+                <!-- Loop through each parent (top-level) comment -->
+                <?php foreach ($parentComments as $comment): ?>
+
+                    <!-- Extract comment ID safely -->
+                    <?php $cId = (int)($comment['__id'] ?? 0); ?>
+
+                    <!-- Individual comment card -->
+                    <div class="comment-card" id="comment-<?= $cId ?>">
+
+                        <!-- Comment header (author + date) -->
+                        <div class="comment-header">
+
+                            <!-- Display username -->
+                            <strong class="comment-author">
+                                <?= escape($comment['username']) ?>
+
+                                <!-- If this user is the item owner, show AUTHOR badge -->
+                                <?php if ($comment['user_id'] == $item['user_id']): ?>
+                                    <span class="badge-author">AUTHOR</span>
+                                <?php endif; ?>
+                            </strong>
+
+                            <!-- Display formatted date -->
+                            <span class="comment-date">
+                                <?= formatDate($comment['created_at']) ?>
+                            </span>
+                        </div>
+
+                        <!-- Comment message text (supports line breaks) -->
+                        <p class="comment-text">
+                            <?= nl2br(escape($comment['comment_text'] ?? $comment['message'])) ?>
+                        </p>
+
+                        <?php if (isLoggedIn() && $cId > 0): ?>
+                            <!-- Reply button (only for logged-in users) -->
+                            <!-- Calls JS function and passes parent comment ID -->
+                            <button class="reply-btn" onclick="setReply(<?= $cId ?>)">
+                                Reply
+                            </button>
+                        <?php endif; ?>
+
+                        <!-- Nested replies (child comments) -->
+                        <?php if (!empty($childComments[$cId])): ?>
+
+                            <!-- Container for replies under this comment -->
+                            <div class="child-comments">
+
+                                <!-- Loop through each reply -->
+                                <?php foreach ($childComments[$cId] as $child): ?>
+
+                                    <!-- Child comment card -->
+                                    <div class="comment-card comment-card--child">
+
+                                        <!-- Header for child comment -->
+                                        <div class="comment-header">
+                                            <strong class="comment-author">
+                                                <?= escape($child['username']) ?>
+
+                                                <!-- Show AUTHOR badge if reply is from item owner -->
+                                                <?php if ($child['user_id'] == $item['user_id']): ?>
+                                                    <span class="badge-author">AUTHOR</span>
+                                                <?php endif; ?>
+                                            </strong>
+
+                                            <!-- Reply date -->
+                                            <span class="comment-date">
+                                                <?= formatDate($child['created_at']) ?>
+                                            </span>
+                                        </div>
+
+                                        <!-- Reply text -->
+                                        <p class="comment-text">
+                                            <?= nl2br(escape($child['comment_text'] ?? $child['message'])) ?>
+                                        </p>
+
                                     </div>
 
-                                    <p class="comment-text">
-                                        <?= nl2br(escape($comment['comment_text'] ?? $comment['message'])) ?>
-                                    </p>
+                                <?php endforeach; ?>
+                            </div>
 
-                                    <?php if (isLoggedIn() && $cId > 0): ?>
-                                        <button class="reply-btn" onclick="setReply(<?= $cId ?>)">Reply</button>
-                                    <?php endif; ?>
+                        <?php endif; ?>
 
-                                    <!-- Nested replies -->
-                                    <?php if (!empty($childComments[$cId])): ?>
-                                        <div class="child-comments">
-                                            <?php foreach ($childComments[$cId] as $child): ?>
-                                                <div class="comment-card comment-card--child">
-                                                    <div class="comment-header">
-                                                        <strong class="comment-author">
-                                                            <?= escape($child['username']) ?>
-                                                            <?php if ($child['user_id'] == $item['user_id']): ?>
-                                                                <span class="badge-author">AUTHOR</span>
-                                                            <?php endif; ?>
-                                                        </strong>
-                                                        <span class="comment-date"><?= formatDate($child['created_at']) ?></span>
-                                                    </div>
-                                                    <p class="comment-text">
-                                                        <?= nl2br(escape($child['comment_text'] ?? $child['message'])) ?>
-                                                    </p>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    <?php endif; ?>
+                    </div>
 
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
                     <!-- Post-a-message form (logged-in users only) -->
                     <?php if (isLoggedIn()): ?>
@@ -445,57 +537,117 @@ $flyerImageTag = !empty($item['image_path'])
 /* ─────────────────────────────────────────────
    GALLERY & LIGHTBOX
 ──────────────────────────────────────────────── */
-<?php if (!empty($images)): ?>
-
-// Image URLs built by PHP so JS never needs to know about the uploads folder
+<?php if (!empty($images)): ?>// Image URLs are generated by PHP so JavaScript doesn't need to handle file paths
 const galleryImages = <?= json_encode(array_map(fn($img) => BASE_URL . '/uploads/' . $img, $images)) ?>;
+
+// Keeps track of which image is currently active
 let currentIndex = 0;
 
-// Swap the main preview photo and highlight the matching thumbnail
+
+// Change the main displayed image and highlight the selected thumbnail
 function changeMainImage(index) {
+
+    // Update current image index
     currentIndex = index;
+
+    // Set the main image source to the selected image
     document.getElementById('main-gallery-image').src = galleryImages[index];
+
+    // Loop through all thumbnails
     document.querySelectorAll('.gallery-thumb').forEach(t =>
-        t.classList.toggle('gallery-thumb--active', parseInt(t.dataset.index) === index)
+
+        // Add 'active' class only to the selected thumbnail
+        t.classList.toggle(
+            'gallery-thumb--active',
+            parseInt(t.dataset.index) === index
+        )
     );
 }
 
-// Open the full-screen lightbox at a given index
+
+// Open the full-screen lightbox (image viewer)
 function openLightbox(index) {
+
+    // If index is provided, use it; otherwise keep current index
     currentIndex = index ?? currentIndex;
+
+    // Update lightbox content
     refreshLightbox();
-    document.getElementById('image-lightbox').classList.add('image-lightbox--open');
+
+    // Show the lightbox by adding CSS class
+    document.getElementById('image-lightbox')
+        .classList.add('image-lightbox--open');
+
+    // Prevent background scrolling while lightbox is open
     document.body.classList.add('body-no-scroll');
 }
 
-// Close the lightbox and re-enable scrolling
+
+// Close the lightbox
 function closeLightbox(e) {
+
+    // Prevent click event from bubbling (optional safety)
     e?.stopPropagation();
-    document.getElementById('image-lightbox').classList.remove('image-lightbox--open');
+
+    // Hide the lightbox
+    document.getElementById('image-lightbox')
+        .classList.remove('image-lightbox--open');
+
+    // Re-enable page scrolling
     document.body.classList.remove('body-no-scroll');
 }
 
-// Navigate to the previous image (loops around)
+
+// Go to the previous image in the lightbox
 function prevLightboxImage(e) {
+
+    // Prevent click bubbling
     e?.stopPropagation();
+
+    // If only one image, do nothing
     if (galleryImages.length <= 1) return;
-    currentIndex = currentIndex === 0 ? galleryImages.length - 1 : currentIndex - 1;
+
+    // Move to previous image (loop to last if at start)
+    currentIndex = currentIndex === 0
+        ? galleryImages.length - 1
+        : currentIndex - 1;
+
+    // Refresh lightbox display
     refreshLightbox();
 }
 
-// Navigate to the next image (loops around)
+
+// Go to the next image in the lightbox
 function nextLightboxImage(e) {
+
+    // Prevent click bubbling
     e?.stopPropagation();
+
+    // If only one image, do nothing
     if (galleryImages.length <= 1) return;
-    currentIndex = currentIndex === galleryImages.length - 1 ? 0 : currentIndex + 1;
+
+    // Move to next image (loop to first if at end)
+    currentIndex = currentIndex === galleryImages.length - 1
+        ? 0
+        : currentIndex + 1;
+
+    // Refresh lightbox display
     refreshLightbox();
 }
 
-// Update the lightbox image, counter, and thumbnail highlight
+
+// Update lightbox image, counter, and sync with main gallery
 function refreshLightbox() {
-    document.getElementById('lightbox-main-img').src = galleryImages[currentIndex];
+
+    // Update the main image inside the lightbox
+    document.getElementById('lightbox-main-img').src =
+        galleryImages[currentIndex];
+
+    // Update image counter (e.g., "1", "2", "3"...)
     const counter = document.getElementById('lightbox-counter');
     if (counter) counter.textContent = currentIndex + 1;
+
+    // Also update the main gallery preview and active thumbnail
     changeMainImage(currentIndex);
 }
 
@@ -504,77 +656,141 @@ function refreshLightbox() {
 
 /* ─────────────────────────────────────────────
    LEAFLET MAP
-──────────────────────────────────────────────── */
+──────────────────────────────────────────────── */// Run this code only after the HTML document is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    const mapEl = document.getElementById('detailMap');
-    if (!mapEl) return; // No coordinates saved — skip
 
+    // Get the map container element by ID
+    const mapEl = document.getElementById('detailMap');
+
+    // If the map element does not exist, stop execution
+    // (means no location/coordinates were provided)
+    if (!mapEl) return;
+
+    // Read latitude from data attribute and convert to float
     const lat  = parseFloat(mapEl.dataset.lat);
+
+    // Read longitude from data attribute and convert to float
     const lng  = parseFloat(mapEl.dataset.lng);
+
+    // Get item type (e.g., "lost" or "found") for styling marker
     const type = mapEl.dataset.type;
 
+    // Initialize Leaflet map and center it at given coordinates with zoom level 15
     const map = L.map('detailMap').setView([lat, lng], 15);
+
+    // Load map tiles from OpenStreetMap and add attribution
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Coloured dot marker — CSS classes handle the lost/found colours
+    // Add a custom marker at the given coordinates
     L.marker([lat, lng], {
+
+        // Use a custom HTML-based icon instead of default pin
         icon: L.divIcon({
+
+            // Wrapper class for styling
             className : 'map-marker-wrapper',
+
+            // Custom HTML for the marker (a colored dot)
+            // data-type is used in CSS to style "lost" vs "found"
             html      : `<div class="map-marker-dot" data-type="${type}"></div>`,
+
+            // Size of the marker
             iconSize  : [20, 20],
+
+            // Anchor point (center of the marker)
             iconAnchor: [10, 10]
         })
-    }).addTo(map);
+
+    }).addTo(map); // Add marker to the map
 });
-
-
-/* ─────────────────────────────────────────────
-   REPLY FORM
+/*───────────────────────────
+REPLY FORM
 ──────────────────────────────────────────────── */
 
-// Switch the form into reply mode for a specific comment
+// Switch the form into reply mode for a specific comment// Set the form into "reply mode" for a specific parent comment
 function setReply(parentId) {
-    document.getElementById('parent_id').value        = parentId;
+
+    // Store the parent comment ID in a hidden input field
+    document.getElementById('parent_id').value = parentId;
+
+    // Change the form label to indicate reply mode
     document.getElementById('reply-label').textContent = 'Replying to message...';
+
+    // Show the "Cancel Reply" button
     document.getElementById('cancel-reply').classList.remove('reply-btn--hidden');
+
+    // Focus the textarea so user can start typing immediately
     document.getElementById('comment_text').focus();
-    document.getElementById('comment-form-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Scroll smoothly to the comment form so it's visible in viewport
+    document.getElementById('comment-form-container')
+        .scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// Reset the form back to normal post mode
+
+// Reset the form back to normal "new comment" mode
 function cancelReply() {
-    document.getElementById('parent_id').value         = '0';
+
+    // Reset parent ID to 0 (meaning: not a reply, it's a new comment)
+    document.getElementById('parent_id').value = '0';
+
+    // Reset label back to default state
     document.getElementById('reply-label').textContent = 'Post a message';
-    document.getElementById('comment_text').value      = '';
+
+    // Clear the textarea content
+    document.getElementById('comment_text').value = '';
+
+    // Hide the "Cancel Reply" button again
     document.getElementById('cancel-reply').classList.add('reply-btn--hidden');
 }
 
 
 /* ─────────────────────────────────────────────
    PRINT FLYER
-──────────────────────────────────────────────── */
+──────────────────────────────────────────────── */// Function to generate and print a dynamic Lost & Found flyer
 function printFlyer() {
-    const title   = <?= json_encode(escape($item['title'])) ?>;
-    const desc    = <?= json_encode(escape($item['description'])) ?>;
-    const type    = <?= json_encode(escape($item['type'])) ?>;
+
+    // Get item title from PHP and safely encode it for JavaScript
+    const title = <?= json_encode(escape($item['title'])) ?>;
+
+    // Get item description
+    const desc  = <?= json_encode(escape($item['description'])) ?>;
+
+    // Get item type (lost or found)
+    const type  = <?= json_encode(escape($item['type'])) ?>;
+
+    // Get contact info (fallback to empty string if not set)
     const contact = <?= json_encode(escape($item['contact_info'] ?? '')) ?>;
+
+    // Pre-generated HTML image tag for flyer preview image
     const flyerImg = <?= json_encode($flyerImageTag) ?>;
 
-    // Step 1: Build dynamic parts
-    const heading      = type === 'lost' ? 'MISSING' : 'FOUND';
-    const accentColor  = type === 'lost' ? '#C0392B' : '#1A6E3C';
+
+    // STEP 1: Build dynamic UI values based on item type
+
+    // Set heading text based on type
+    const heading = type === 'lost' ? 'MISSING' : 'FOUND';
+
+    // Choose theme color based on type
+    const accentColor = type === 'lost' ? '#C0392B' : '#1A6E3C';
+
+    // Create contact block only if contact exists
     const contactBlock = contact
         ? `<div class="contact-box">&#128222; ${contact}</div>`
         : '';
 
+
+    // Generate QR code pointing to current page URL
     const qrUrl = `https://quickchart.io/qr?size=160&text=${encodeURIComponent(window.location.href)}`;
 
-    // Step 2: Write all CSS inline so it works in the popup window
+
+    // STEP 2: Define full CSS for the flyer (embedded in popup window)
     const css = `
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Source+Sans+3:wght@400;600&display=swap');
 
+        /* Reset default spacing */
         * { box-sizing: border-box; margin-top: 30px; padding: 0; }
 
         body {
@@ -584,6 +800,7 @@ function printFlyer() {
             padding: 40px;
         }
 
+        /* Main flyer container */
         .flyer {
             max-width: 600px;
             margin: 0 auto;
@@ -592,6 +809,7 @@ function printFlyer() {
             min-height:65vh;
         }
 
+        /* Big heading (MISSING / FOUND) */
         .flyer-heading {
             font-family: 'Oswald', sans-serif;
             font-size: 72px;
@@ -604,6 +822,7 @@ function printFlyer() {
             margin-bottom: 20px;
         }
 
+        /* Image styling */
         .flyer-img {
             display: block;
             max-width: 100%;
@@ -613,6 +832,7 @@ function printFlyer() {
             object-fit: cover;
         }
 
+        /* Item title */
         .flyer-title {
             font-family: 'Oswald', sans-serif;
             font-size: 32px;
@@ -620,6 +840,7 @@ function printFlyer() {
             margin-bottom: 14px;
         }
 
+        /* Description text */
         .flyer-desc {
             font-size: 16px;
             line-height: 1.7;
@@ -628,6 +849,7 @@ function printFlyer() {
             margin-bottom: 20px;
         }
 
+        /* Contact box styling */
         .contact-box {
             font-size: 18px;
             font-weight: 600;
@@ -639,6 +861,7 @@ function printFlyer() {
             margin-bottom: 20px;
         }
 
+        /* QR section container */
         .flyer-qr-box {
             display: flex;
             flex-direction: column;
@@ -649,6 +872,7 @@ function printFlyer() {
             border-top: 2px dashed #ccc;
         }
 
+        /* QR label text */
         .flyer-qr-label {
             font-size: 13px;
             color: #777;
@@ -656,38 +880,66 @@ function printFlyer() {
             letter-spacing: 1px;
         }
 
+        /* Print-specific styles */
         @media print {
             body { padding: 0; }
             .flyer { border-color: ${accentColor}; }
         }
     `;
 
-    // Step 3: Open a new blank window and write the full HTML into it
+
+    // STEP 3: Open a new browser tab/window for printing
     const win = window.open('', '_blank');
+
+    // Write full HTML content into the new window
     win.document.write(`
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
             <title>Lost &amp; Found Flyer</title>
+
+            <!-- Inject flyer CSS -->
             <style>${css}</style>
         </head>
         <body>
+
+            <!-- Flyer container -->
             <div class="flyer">
+
+                <!-- Main heading (MISSING / FOUND) -->
                 <h1 class="flyer-heading">${heading}</h1>
+
+                <!-- Item image -->
                 ${flyerImg}
+
+                <!-- Item title -->
                 <h2 class="flyer-title">${title}</h2>
+
+                <!-- Item description -->
                 <p class="flyer-desc">${desc}</p>
+
+                <!-- Contact info (if available) -->
                 ${contactBlock}
+
+                <!-- QR code section -->
                 <div class="flyer-qr-box">
                     <p class="flyer-qr-label">Scan to view live details online</p>
+
+                    <!-- QR code image -->
                     <img src="${qrUrl}" alt="QR Code" width="160" height="160">
                 </div>
+
             </div>
+
+            <!-- Auto-trigger print dialog when page loads -->
             <script>window.onload = () => window.print()<\/script>
+
         </body>
         </html>
     `);
+
+    // Finalize document writing
     win.document.close();
 }
 </script>

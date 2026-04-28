@@ -63,8 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // ── 2. Data from PHP ──────────────────────────────────────────────────────
-    // Pass lost items and base URL from PHP into JS safely
+    // Pass lost items PHP to JS
     const items   = <?= json_encode($lostItems, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>;
     const baseUrl = <?= json_encode(BASE_URL) ?>;
 

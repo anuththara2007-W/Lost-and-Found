@@ -10,11 +10,35 @@ class Item
 
     public function __construct()
     {
+        // Get database connection using Singleton pattern
         $this->db = Database::getInstance()->getConnection();
+    }
+
+    private function normalizeCategoryId($categoryId)
+    {
+        if ($categoryId === null) {
+            return null;
+        }
+
+        $raw = trim((string)$categoryId);
+        if ($raw === '' || strtolower($raw) === 'other' || !ctype_digit($raw)) {
+            return null;
+        }
+
+        $normalized = (int)$raw;
+        if ($normalized <= 0) {
+            return null;
+        }
+
+        $stmt = $this->db->prepare("SELECT 1 FROM categories WHERE category_id = :category_id LIMIT 1");
+        $stmt->execute(['category_id' => $normalized]);
+
+        return $stmt->fetchColumn() ? $normalized : null;
     }
 
     public function getRecentReports($limit = 6)
     {
+        // Prepare SQL query to fetch reports with user and category info
         $stmt = $this->db->prepare("
             SELECT r.*, u.username, c.name as category_name
             FROM reports r
@@ -24,13 +48,18 @@ class Item
             ORDER BY r.date_posted DESC
             LIMIT :limit
         ");
+
+         // Bind limit parameter safely as integer
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
+
+        // Return all results as an array
         return $stmt->fetchAll();
     }
 
     public function getResolvedReports($limit = 20)
     {
+        // Prepare SQL query to fetch resolved reports with user and category details
         $stmt = $this->db->prepare("
             SELECT r.*, u.username, c.name as category_name
             FROM reports r
@@ -40,13 +69,17 @@ class Item
             ORDER BY r.date_posted DESC
             LIMIT :limit
         ");
+        // Bind limit value securely as integer
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
+
+        // Return all fetched results
         return $stmt->fetchAll();
     }
 
     public function searchItems($keyword, $type, $category_id = null, $location = null, $date = null)
     {
+        // Base query: get open reports with user and category details
         $query = "
             SELECT r.*, u.username, c.name as category_name
             FROM reports r
@@ -54,8 +87,9 @@ class Item
             LEFT JOIN categories c ON r.category_id = c.category_id
             WHERE r.status = 'open'
         ";
-        $params = [];
+        $params = [];   // Store values for prepared statement
         
+        // Filter by keyword
         if (!empty($keyword)) {
             $query .= " AND (r.title LIKE :keyword_title OR r.description LIKE :keyword_desc OR r.custom_category LIKE :keyword_cat)";
             $params[':keyword_title'] = '%' . $keyword . '%';
@@ -63,21 +97,25 @@ class Item
             $params[':keyword_cat'] = '%' . $keyword . '%';
         }
         
+        // Filter by type 
         if (!empty($type) && in_array($type, ['lost', 'found'])) {
             $query .= " AND r.type = :type";
             $params[':type'] = $type;
         }
 
+        // Filter by category
         if (!empty($category_id)) {
             $query .= " AND r.category_id = :category_id";
             $params[':category_id'] = $category_id;
         }
 
+         // Filter by location
         if (!empty($location)) {
             $query .= " AND r.location LIKE :location";
             $params[':location'] = '%' . $location . '%';
         }
 
+        // Filter by date 
         if (!empty($date)) {
             if ($date === 'today') {
                 $query .= " AND DATE(r.date_posted) = CURDATE()";
@@ -88,15 +126,22 @@ class Item
             }
         }
         
+         // Sort results by newest first
         $query .= " ORDER BY r.date_posted DESC";
         
+        // Prepare and execute query with parameters
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
+
+        // Return results
         return $stmt->fetchAll();
     }
 
     public function addReport($data)
     {
+        $categoryId = $this->normalizeCategoryId($data['category_id'] ?? null);
+
+        // Prepare SQL query to insert report data
         $stmt = $this->db->prepare("
             INSERT INTO reports 
             (user_id, category_id, type, title, description, location, reward_amount, contact_info, image_path, latitude, longitude, custom_category, whatsapp_contact, allow_platform_message)
@@ -104,9 +149,10 @@ class Item
             (:user_id, :category_id, :type, :title, :description, :location, :reward_amount, :contact_info, :image_path, :latitude, :longitude, :custom_category, :whatsapp_contact, :allow_platform_message)
         ");
 
+        // Execute query with data
         $success = $stmt->execute([
             'user_id' => $data['user_id'],
-            'category_id' => $data['category_id'] ?: null,
+            'category_id' => $categoryId,
             'type' => $data['type'],
             'title' => $data['title'],
             'description' => $data['description'],
@@ -121,6 +167,7 @@ class Item
             'allow_platform_message' => isset($data['allow_platform_message']) ? (int)$data['allow_platform_message'] : 1
         ]);
 
+        // If insert is successful
         if ($success) {
             $report_id = $this->db->lastInsertId();
             
@@ -131,20 +178,22 @@ class Item
                     $imgStmt->execute([$report_id, $img]);
                 }
             }
-            return true;
+            return true; //success
         }
-        return false;
+        return false;  //failed    
     }
 
     public function getCategories()
     {
+        // Prepare query to fetch all categories sorted by name
         $stmt = $this->db->prepare("SELECT * FROM categories ORDER BY name ASC");
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll();    // Return all categories as an array
     }
 
     public function getReportsByUser($user_id)
     {
+         // Prepare query to fetch user's reports with category name
         $stmt = $this->db->prepare("
             SELECT r.*, c.name as category_name
             FROM reports r
@@ -153,11 +202,12 @@ class Item
             ORDER BY r.date_posted DESC
         ");
         $stmt->execute(['user_id' => $user_id]);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll();    // Return all reports of that user
     }
 
      public function getReportById($id)
     {
+        // Prepare query to fetch report with user and category details
         $stmt = $this->db->prepare("
             SELECT r.*, u.username, u.email, u.phone, c.name as category_name
             FROM reports r
@@ -166,12 +216,15 @@ class Item
             WHERE r.report_id = :id
         ");
         $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
+        return $stmt->fetch();    // Return single report
     }
 
      public function markResolved($id, $user_id)
     {
+        // Prepare query to update report status to 'resolved'
         $stmt = $this->db->prepare("UPDATE reports SET status = 'resolved' WHERE report_id = :id AND user_id = :user_id");
+        
+        // Execute query with report ID and user ID
         return $stmt->execute([
             'id' => $id,
             'user_id' => $user_id
@@ -180,7 +233,10 @@ class Item
 
     public function delete($id, $user_id)
     {
+        // Prepare query to delete report
         $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id AND user_id = :user_id");
+        
+        // Execute query with report ID and user ID
         return $stmt->execute([
             'id' => $id,
             'user_id' => $user_id
@@ -190,6 +246,7 @@ class Item
      // --- Admin Methods ---
     public function getAllReports()
     {
+        // Prepare query to fetch all reports with user and category details
         $stmt = $this->db->prepare("
             SELECT r.*, u.username, u.email, c.name as category_name
             FROM reports r
@@ -198,11 +255,14 @@ class Item
             ORDER BY r.date_posted DESC
         ");
         $stmt->execute();
+
+        // Fetch all results and return as an array
         return $stmt->fetchAll();
     }
 
     public function getAdminReports(array $filters = [])
     {
+         // Base query to get reports with user and category details
         $query = "
             SELECT r.*, u.username, u.email, c.name as category_name
             FROM reports r
@@ -210,33 +270,44 @@ class Item
             LEFT JOIN categories c ON r.category_id = c.category_id
             WHERE 1=1
         ";
-        $params = [];
+        $params = [];    // Array to store query parameters
 
+        // If search keyword is given
         if (!empty($filters['q'])) {
             $query .= " AND (r.title LIKE :q OR r.description LIKE :q OR r.location LIKE :q OR u.username LIKE :q)";
             $params['q'] = '%' . $filters['q'] . '%';
         }
+
+        // Filter by type
         if (!empty($filters['type']) && in_array($filters['type'], ['lost', 'found'], true)) {
             $query .= " AND r.type = :type";
             $params['type'] = $filters['type'];
         }
+
+        // Filter by status
         if (!empty($filters['status'])) {
             $query .= " AND r.status = :status";
             $params['status'] = $filters['status'];
         }
+
+        //Filter by specific user
         if (!empty($filters['user_id'])) {
             $query .= " AND r.user_id = :user_id";
             $params['user_id'] = (int)$filters['user_id'];
         }
 
+        // Order results by latest reports
         $query .= " ORDER BY r.date_posted DESC";
         $stmt = $this->db->prepare($query);
         $stmt->execute($params);
-        return $stmt->fetchAll();
+        return $stmt->fetchAll();   // Return all matching results
     }
 
     public function updateReportAdmin($reportId, array $data)
     {
+        $categoryId = $this->normalizeCategoryId($data['category_id'] ?? null);
+
+        // Prepare SQL query to update a report
         $stmt = $this->db->prepare("
             UPDATE reports
             SET title = :title,
@@ -248,13 +319,14 @@ class Item
             WHERE report_id = :id
         ");
 
+        // Execute query with actual values
         return $stmt->execute([
             'title' => $data['title'],
             'description' => $data['description'],
             'location' => $data['location'],
             'status' => $data['status'],
             'type' => $data['type'],
-            'category_id' => $data['category_id'] ?: null,
+            'category_id' => $categoryId,
             'id' => (int)$reportId
         ]);
     }
@@ -262,19 +334,22 @@ class Item
     public function deleteReport($id)
     {
         try {
+            // Start a transaction
             $this->db->beginTransaction();
 
-            // Delete child records that reference this report (foreign key constraints)
+            // Delete related comments % images of the report
             $this->db->prepare("DELETE FROM comments WHERE report_id = :id")->execute(['id' => $id]);
             $this->db->prepare("DELETE FROM report_images WHERE report_id = :id")->execute(['id' => $id]);
 
-            // Now delete the report itself
+            // Now delete the main report
             $stmt = $this->db->prepare("DELETE FROM reports WHERE report_id = :id");
             $stmt->execute(['id' => $id]);
 
             $this->db->commit();
             return true;
         } catch (\Throwable $e) {
+
+            // If any error occurs, undo all changes
             if ($this->db->inTransaction()) {
                 $this->db->rollBack();
             }
