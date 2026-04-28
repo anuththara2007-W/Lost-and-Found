@@ -5,7 +5,7 @@ use App\Core\Database;
 use PDO;
 
 class Item
-{
+{ //encap
     private $db;
 
     public function __construct()

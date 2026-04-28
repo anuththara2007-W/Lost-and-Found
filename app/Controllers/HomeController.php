@@ -15,7 +15,7 @@ class HomeController extends Controller
         }
     }
 
-    public function index()
+    public function index() //pol
     {
         // store recent items
         $recentItems = [];
