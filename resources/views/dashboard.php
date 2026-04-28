@@ -10,7 +10,7 @@
                 <div class="dashboard-avatar" style="background: url('<?= BASE_URL ?>/uploads/avatars/<?= escape($user['profile_image']) ?>') center/cover; color: transparent;"></div>
             <?php else: ?>
                 <div class="dashboard-avatar">
-                    <?= strtoupper(substr($user['username'], 0, 1)) ?>//get first letter of username from index 0 and make it uppercase
+                    <?= strtoupper(substr($user['username'], 0, 1)) ?>
                 </div>
             <?php endif; ?>
             
