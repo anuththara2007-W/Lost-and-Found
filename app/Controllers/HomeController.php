@@ -9,7 +9,7 @@ class HomeController extends Controller
 
     public function __construct()
     {
-        // Try not to fail if the Item model isn't built yet
+        // Load Item model if file exists (skip if not)
         if(file_exists(ROOT . '/app/Models/Item.php')) {
             $this->itemModel = $this->model('Item');
         }
@@ -17,18 +17,21 @@ class HomeController extends Controller
 
     public function index()
     {
-        // Get recent items
+        // store recent items
         $recentItems = [];
+
+        //if item model is loaded get 6 recent reports from DB
         if($this->itemModel) {
             $recentItems = $this->itemModel->getRecentReports(6);
         }
 
+        // Data is send to the home
         $data = [
-            'title' => 'Lost & Found - Home',
-            'recentItems' => $recentItems
+            'title' => 'Lost & Found - Home',   //page title
+            'recentItems' => $recentItems   
         ];
 
-        $this->view('home', $data);
+        $this->view('home', $data);     //load home view with data
     }
 
     public function success_stories()
