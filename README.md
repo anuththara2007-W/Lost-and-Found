@@ -1,355 +1,557 @@
-<p align="center">
-  <img src="https://img.shields.io/badge/PHP-8%2B-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8+"/>
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
-  <img src="https://img.shields.io/badge/Apache-D22128?style=for-the-badge&logo=apache&logoColor=white" alt="Apache"/>
-  <img src="https://img.shields.io/badge/XAMPP-FB7A24?style=for-the-badge&logo=xampp&logoColor=white" alt="XAMPP"/>
-  <img src="https://img.shields.io/badge/License-Educational-blue?style=for-the-badge" alt="License"/>
-</p>
+# Lost and Found - Community Recovery Platform
 
-<h1 align="center">🔍 Lost & Found</h1>
-
-<p align="center">
-  <strong>A community-driven web platform for reporting and recovering lost and found items.</strong><br/>
-  Built with a custom PHP MVC framework · Served via XAMPP / Apache
-</p>
+A full-stack PHP web application designed to connect community members who have lost or found items. Built on a custom MVC framework with secure database operations and responsive design.
 
 ---
 
-## 📑 Table of Contents
+## Overview
 
-- [✨ Overview](#-overview)
-- [🚀 Features](#-features)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📂 Project Structure](#-project-structure)
-- [⚡ Getting Started](#-getting-started)
-- [📖 Usage](#-usage)
-- [🔐 Admin Panel](#-admin-panel)
-- [💬 Messaging System](#-messaging-system)
-- [🛡️ Security](#️-security)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+Lost and Found is a comprehensive platform where users can report, search, and communicate about lost or found items. The system features location-based discovery, real-time messaging, and admin management capabilities all built with security-first practices.
 
----
+### Core Capabilities
 
-## 📸 Screenshots
-
-<details>
-<summary>Click to expand screenshots</summary>
-<br/>
-
-<img width="100%" alt="Home Page" src="https://github.com/user-attachments/assets/aa24be5e-9859-4713-8043-f6391070324e" />
-
-<br/><br/>
-
-<img width="100%" alt="Browse Reports" src="https://github.com/user-attachments/assets/6eb129ac-0dba-439d-adac-bec07ba224ab" />
-
-<br/><br/>
-
-<img width="100%" alt="Item Detail View" src="https://github.com/user-attachments/assets/597f9f28-d38a-4d75-9e52-a9d3959eaa24" />
-
-</details>
-
-<img width="1904" height="913" alt="Screenshot 2026-04-27 083449" src="https://github.com/user-attachments/assets/aa24be5e-9859-4713-8043-f6391070324e" />
-
-<img width="1919" height="919" alt="Screenshot 2026-04-27 083429" src="https://github.com/user-attachments/assets/6eb129ac-0dba-439d-adac-bec07ba224ab" />
-
-<img width="1905" height="917" alt="Screenshot 2026-04-27 083418" src="https://github.com/user-attachments/assets/597f9f28-d38a-4d75-9e52-a9d3959eaa24" />
-
-
+- Report lost or found items with detailed information and photos
+- Advanced search and filtering by category, location, and date range
+- Real-time messaging system between users
+- Location tracking with interactive maps
+- User authentication and profile management
+- Admin dashboard for system oversight and moderation
 
 ---
 
-## ✨ Overview
+## Core Features
 
-**Lost & Found** is a full-stack PHP web application that connects people who have lost items with those who have found them. Users can:
-
-- 📝 Post reports for lost or found items
-- 🔎 Search by category and browse listings
-- 🗺️ Explore an interactive map
-- 💬 Communicate directly via a real-time chat interface
-
-All within a clean, modern UI built with **Cormorant Garamond** and **DM Sans** typography.
-
----
-
-## 🚀 Features
-
-### 👤 User Features
+### User Capabilities
 
 | Feature | Description |
-|---------|-------------|
-| **Account Management** | Register, log in, update profile (name, phone, avatar), and manage sessions |
-| **Lost & Found Reports** | Post, browse, and search lost or found item listings with image uploads |
-| **Item Detail View** | View full report details with an integrated comment/chat section |
-| **Real-time Chat** | Per-report threaded messaging with image attachments, typing indicators, and online presence |
-| **Inbox** | View all conversations linked to reports you've participated in |
-| **Dashboard** | Personal dashboard displaying all your submitted reports |
-| **Success Stories** | Gallery of resolved/reunited items with reward information |
-| **Password Recovery** | Self-service forgot / reset password flow |
-| **Interactive Map** | Browse reports by geographic location |
-| **Contact & FAQ** | Static informational pages |
+|---------|-----------|
+| Account Management | Register, login, profile editing, and secure session management |
+| Item Reporting | Create lost/found reports with photos and detailed descriptions |
+| Search and Filtering | Advanced search by category, location, date range, and keywords |
+| Real-time Messaging | Direct user-to-user communication linked to specific reports |
+| Inbox System | View all active conversations and message threads in one place |
+| Personal Dashboard | Manage your submitted reports and track responses |
+| Interactive Maps | Browse and discover items by geographic location |
+| Success Tracking | View resolved cases and reward information |
+| Password Recovery | Self-service password reset with email verification |
 
-### 🛠️ Admin Features
+### Admin Capabilities
 
 | Feature | Description |
-|---------|-------------|
-| **Admin Dashboard** | Overview metrics (total users, active reports, resolved items) and recent activity table |
-| **User Management** | View all users, assign trust badges, and ban/unban accounts |
-| **Report Management** | Review, moderate, and manage all submitted reports |
-| **Announcements** | Broadcast global messages (Info / Warning / Success / Danger) with publish/hide toggles |
-| **System Settings** | Platform configuration panel |
-| **Export CSV** | Download report data |
+|---------|-----------|
+| Dashboard Analytics | System metrics, user statistics, and activity overview |
+| User Management | Manage accounts, assign trust badges, and moderate bans |
+| Report Moderation | Review, approve, or remove item reports |
+| Announcements | Create and publish system-wide notifications |
+| System Settings | Configure platform-level parameters and policies |
+| Data Export | Export reports and user data to CSV format |
 
 ---
 
-## 🛠️ Tech Stack
+## Technology Stack
 
 | Layer | Technology |
-|:------|:-----------|
-| **Language** | PHP 8+ (custom MVC, no external framework) |
-| **Database** | MySQL (via PDO with `utf8mb4`) |
-| **Server** | Apache (XAMPP) with `.htaccess` URL rewriting |
-| **Frontend** | Vanilla HTML / CSS / JavaScript |
-| **Fonts** | Google Fonts — Cormorant Garamond, DM Sans |
-| **Icons** | Font Awesome |
-| **Session** | PHP native sessions (`laf_session`, 2 h TTL) |
-| **Mail** | SMTP (Mailtrap-compatible configuration) |
-| **File Uploads** | Server-side PHP, max 2 MB |
+|-------|-----------|
+| Backend | PHP 8+ with custom MVC architecture |
+| Database | MySQL 5.7+ (UTF-8 multibyte character support) |
+| Server | Apache with XAMPP stack |
+| Frontend | HTML5, CSS3, and vanilla JavaScript |
+| Maps | Leaflet.js for interactive geographic mapping |
+| Typography | Google Fonts (Cormorant Garamond, DM Sans) |
+| Icons | Font Awesome library |
+| Security | PDO prepared statements, bcrypt password hashing |
+| Sessions | PHP native sessions with custom configuration |
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Lost-and-Found/
-│
-├── 📁 app/
-│   ├── 📁 Controllers/
-│   │   ├── AuthController.php          # Login, register, logout, password reset
-│   │   ├── UserController.php          # Dashboard, profile, avatar upload
-│   │   ├── MessageController.php       # Inbox, chat, AJAX API endpoints
-│   │   ├── HomeController.php          # Landing, search, success stories
-│   │   ├── ItemController.php          # CRUD for lost/found reports
-│   │   ├── AdminController.php         # Admin panel actions
-│   │   └── MapController.php           # Map data endpoint
+├── app/
+│   ├── Core/                    Application framework foundation
+│   │   ├── App.php              Router and request dispatcher
+│   │   ├── Controller.php       Base controller for all routes
+│   │   └── Database.php         PDO database connection manager
 │   │
-│   ├── 📁 Models/
-│   │   ├── User.php                    # User CRUD, auth, badge & ban management
-│   │   ├── Item.php                    # Report CRUD and queries
-│   │   ├── Message.php                 # Comments, conversations, typing, presence
-│   │   └── Announcement.php            # Admin announcement model
+│   ├── Controllers/             Request handlers for business logic
+│   │   ├── AuthController.php   User authentication and registration
+│   │   ├── ItemController.php   Item CRUD and search operations
+│   │   ├── UserController.php   User profile and dashboard
+│   │   ├── MessageController.php Messaging and chat system
+│   │   ├── AdminController.php  Admin panel operations
+│   │   ├── HomeController.php   Public pages and navigation
+│   │   ├── MapController.php    Geographic mapping features
+│   │   └── PageController.php   Static content pages
 │   │
-│   ├── 📁 Core/
-│   │   ├── App.php                     # Router / front controller
-│   │   ├── Controller.php              # Base controller (view/model helpers)
-│   │   └── Database.php                # PDO singleton
+│   ├── Models/                  Data entities and queries
+│   │   ├── User.php             User accounts and authentication
+│   │   ├── Item.php             Item reports and listings
+│   │   ├── Message.php          Chat and messaging data
+│   │   ├── Announcement.php     System announcements
+│   │   ├── ContactRequest.php   Contact form submissions
+│   │   └── SystemConfig.php     Platform configuration
 │   │
-│   └── 📁 Services/
+│   └── Services/                Specialized business services
+│       └── NotificationService.php  Email and alert handling
 │
-├── 📁 config/
-│   ├── config.php                      # App constants, DB credentials, autoloader
-│   └── sql.db                          # (legacy / dev SQLite snapshot)
+├── config/
+│   ├── config.php               Central environment configuration
+│   ├── setup.sql                Database schema setup script
+│   └── lost&found.sql           Sample data and migrations
 │
-├── 📁 includes/
-│   └── helpers.php                     # Global helper functions (redirect, escape, …)
+├── includes/
+│   └── helpers.php              Global utility and helper functions
 │
-├── 📁 public/                           # Apache document root
-│   ├── index.php                       # Application entry point
-│   ├── .htaccess                       # URL rewriting rules
-│   └── 📁 assets/
-│       ├── 📁 css/                     # Global + per-page stylesheets
-│       └── 📁 js/                      # Client-side scripts
+├── public/                       Web-accessible directory
+│   ├── index.php                Application entry point
+│   ├── .htaccess                Apache URL rewriting rules
+│   │
+│   └── assets/
+│       ├── css/                 Stylesheets (global and page-specific)
+│       │   ├── style.css        Main stylesheet
+│       │   ├── dashboard.css    Dashboard styling
+│       │   ├── admin-main.css   Admin interface styles
+│       │   └── auth/            Authentication page styles
+│       │
+│       ├── js/                  Client-side JavaScript
+│       │   ├── auth.js          Authentication form handling
+│       │   └── chat.js          Real-time messaging scripts
+│       │
+│       └── uploads/             User-uploaded files
+│           └── chat/            Chat attachment storage
 │
-├── 📁 resources/views/
-│   ├── 📁 layouts/                     # header.php, footer.php
-│   ├── 📁 auth/                        # login, register, forgot, reset
-│   ├── 📁 items/                       # index (browse), show, create
-│   ├── 📁 messages/                    # inbox index, per-report chat
-│   ├── 📁 admin/                       # dashboard, users, reports, announcements, settings
-│   ├── 📁 pages/                       # about, contact, faq
-│   ├── dashboard.php                   # User personal dashboard
-│   ├── map.php
-│   ├── search.php
-│   └── success_stories.php
+├── resources/
+│   └── views/                   View templates (MVC presentation layer)
+│       ├── layouts/
+│       │   └── main.php         Master page layout
+│       │
+│       ├── auth/                Authentication templates
+│       │   ├── login.php
+│       │   ├── register.php
+│       │   ├── forgot.php
+│       │   └── reset.php
+│       │
+│       ├── items/               Item listing and detail templates
+│       │   ├── list.php
+│       │   ├── detail.php
+│       │   └── form.php
+│       │
+│       ├── messages/            Messaging interface templates
+│       │   ├── index.php
+│       │   └── chat.php
+│       │
+│       ├── admin/               Admin panel templates
+│       │   ├── dashboard.php
+│       │   ├── users.php
+│       │   ├── reports.php
+│       │   ├── announcements.php
+│       │   └── settings.php
+│       │
+│       └── pages/               Static content pages
+│           ├── home.php
+│           ├── about.php
+│           ├── faq.php
+│           └── contact.php
 │
-├── 📁 security/
-├── 📁 storage/
-├── 📁 Theme/
-└── 📁 legal/
+├── storage/                     File storage directory
+├── security/                    Security documentation
+├── SETUP_REPORT.md              Architecture and file interconnections
+├── ARCHITECTURE_REFERENCE.md    Detailed system design
+└── README.md                    This file
 ```
 
 ---
 
-## ⚡ Getting Started
+## Getting Started
 
-### Prerequisites
+### Requirements
 
-- **XAMPP** (or any Apache + MySQL + PHP 8+ stack)
+- XAMPP (Apache, MySQL, PHP 8+) or equivalent stack
 - PHP `pdo_mysql` extension enabled
-- Apache `mod_rewrite` enabled
+- Apache `mod_rewrite` enabled for URL routing
+- MySQL 5.7+ database server
+- Modern web browser for frontend
 
-### 1️⃣ Installation
+### Installation
 
-Clone the repository into your XAMPP `htdocs` directory:
+**Step 1: Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/Lost-and-Found.git "C:/xampp/htdocs/Lost & Found/Lost-and-Found"
+git clone https://github.com/anuththara2007-W/Lost-and-Found.git
+cd Lost-and-Found
 ```
 
-Start **Apache** and **MySQL** via the XAMPP Control Panel.
+**Step 2: Start Services**
 
-Enable `mod_rewrite` in `httpd.conf` (if not already):
+1. Open XAMPP Control Panel
+2. Start Apache and MySQL services
+3. Verify both services show green indicators
+
+**Step 3: Enable Apache Rewriting**
+
+Edit `httpd.conf` and ensure this module is loaded:
 
 ```apache
 LoadModule rewrite_module modules/mod_rewrite.so
 ```
 
-Ensure your VirtualHost / Directory block contains:
+For your project directory or VirtualHost, ensure:
 
 ```apache
 AllowOverride All
 ```
 
-### 2️⃣ Database Setup
+**Step 4: Configure the Database**
 
-1. Open **phpMyAdmin** at [`http://localhost/phpmyadmin`](http://localhost/phpmyadmin).
-2. Create a new database named **`lost_and_found`** with collation `utf8mb4_unicode_ci`.
-3. Import the SQL schema (if provided) or run the CREATE TABLE statements for:
+1. Visit `http://localhost/phpmyadmin`
+2. Create a new database named `lost_and_found`
+3. Set collation to `utf8mb4_unicode_ci`
+4. Import schema from `config/setup.sql`
 
-| Table | Key Columns |
-|:------|:------------|
-| `users` | `user_id`, `username`, `full_name`, `email`, `phone`, `password_hash`, `profile_image`, `badge_status`, `is_banned`, `last_activity`, `date_joined` |
-| `reports` | `report_id`, `user_id`, `category_id`, `title`, `description`, `type` (`lost`/`found`), `image_path`, `reward_amount`, `status`, `date_posted` |
-| `categories` | `category_id`, `name` |
-| `comments` | `comment_id`, `report_id`, `user_id`, `comment_text`, `attachment_path`, `parent_id`, `created_at` |
-| `chat_status` | `report_id`, `user_id`, `is_typing`, `last_typed` |
-| `announcements` | `announcement_id`, `title`, `content`, `type`, `is_active`, `date_posted` |
+**Step 5: Update Environment Configuration**
 
-### 3️⃣ Configuration
-
-Open `config/config.php` and update the following constants:
+Edit `config/config.php` and verify:
 
 ```php
-// Base paths
-define('ROOT',     'C:/xampp/htdocs/Lost & Found/Lost-and-Found');
-define('BASE_URL', 'http://localhost/Lost%20%26%20Found/Lost-and-Found');
-
-// Database
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'lost_and_found');
 define('DB_USER', 'root');
-define('DB_PASS', '');          // Set your MySQL password here
-
-// Mail (optional — uses Mailtrap by default)
-define('MAIL_HOST', 'smtp.mailtrap.io');
-define('MAIL_PORT', 2525);
-define('MAIL_USER', '');        // Your Mailtrap username
-define('MAIL_PASS', '');        // Your Mailtrap password
+define('DB_PASS', '');              // Your MySQL password
+define('APP_ENV', 'development');   // Use 'production' for live servers
+define('APP_DEBUG', true);          // Set to false in production
 ```
 
-> [!NOTE]
-> Set `APP_ENV` to `'production'` and `APP_DEBUG` to `false` before deploying to a live server.
+**Step 6: Set File Permissions**
+
+Ensure these directories are writable:
+
+```bash
+chmod -R 755 public/uploads/
+chmod -R 755 storage/
+chmod -R 755 resources/views/
+```
+
+**Step 7: Access the Application**
+
+Open your browser and navigate to:
+
+```
+http://localhost/Lost%20%26%20Found/Lost-and-Found/
+```
 
 ---
 
-## 📖 Usage
+## Authentication Credentials
 
-### User Roles
+### Test Accounts
 
-| Role | Access | Credentials |
-|:-----|:-------|:------------|
-| **Admin** | Full admin panel | `admin@gmail.com` / `1234567890` *(change before production)* |
-| **User** | Public + dashboard | Self-registered via `/auth/register` |
+| Role | Email | Password | Purpose |
+|------|-------|----------|---------|
+| Admin | admin@gmail.com | 1234567890 | Administrative access |
+| Demo User | demo@example.com | demo123456 | Regular user testing |
 
-### Route Map
-
-<details>
-<summary>📍 View all routes</summary>
-
-| URL | Description |
-|:----|:------------|
-| `/` | Home — browse all reports |
-| `/items/lost` | Filter: lost items only |
-| `/items/found` | Filter: found items only |
-| `/items/create` | Post a new report *(login required)* |
-| `/item/show/{id}` | View a specific report + chat |
-| `/map` | Interactive map view |
-| `/message/index` | Message inbox *(login required)* |
-| `/message/chat/{report_id}` | Chat for a specific report |
-| `/user/dashboard` | Personal dashboard |
-| `/user/profile` | Edit profile & avatar |
-| `/auth/login` | Login page |
-| `/auth/register` | Registration page |
-| `/auth/forgot` | Forgot password |
-| `/contact` | Contact page |
-| `/pages/faq` | FAQ |
-| `/pages/about` | About page |
-
-</details>
+> Important: Change admin credentials before deploying to production. See Security section below.
 
 ---
 
-## 🔐 Admin Panel
+## Application Routes
 
-Access the admin panel at **`/admin/dashboard`** after logging in with admin credentials.
+### Public Routes
 
-| Section | Route | Description |
-|:--------|:------|:------------|
-| **Dashboard** | `/admin/dashboard` | Key metrics, recent reports table, CSV export |
-| **Manage Users** | `/admin/users` | View all users, set trust badge, ban / unban accounts |
-| **Manage Reports** | `/admin/reports` | Browse and moderate all submitted reports |
-| **Announcements** | `/admin/announcements` | Create / publish / hide / delete global announcements |
-| **System Settings** | `/admin/settings` | Platform-level configuration |
+| URL | Method | Description |
+|-----|--------|-----------|
+| `/` | GET | Home page with item feed |
+| `/items/lost` | GET | Filter for lost items |
+| `/items/found` | GET | Filter for found items |
+| `/item/show/{id}` | GET | View item details with comments |
+| `/map` | GET | Interactive geographic map |
+| `/pages/about` | GET | About page |
+| `/pages/faq` | GET | Frequently asked questions |
+| `/contact` | GET/POST | Contact form |
 
-**Announcement types:** `info` · `warning` · `success` · `danger`
+### Authentication Routes (No Login Required)
 
----
+| URL | Method | Description |
+|-----|--------|-----------|
+| `/auth/login` | GET/POST | User login page |
+| `/auth/register` | GET/POST | Create new account |
+| `/auth/forgot` | GET/POST | Password recovery request |
+| `/auth/reset/{token}` | GET/POST | Password reset form |
 
-## 💬 Messaging System
+### User Routes (Login Required)
 
-The chat system is built on top of the existing reports table — every report acts as a conversation thread.
+| URL | Method | Description |
+|-----|--------|-----------|
+| `/items/create` | GET/POST | Create new item report |
+| `/item/edit/{id}` | GET/POST | Edit your report |
+| `/item/delete/{id}` | POST | Delete your report |
+| `/user/dashboard` | GET | Personal dashboard |
+| `/user/profile` | GET/POST | Edit profile information |
+| `/user/avatar` | POST | Upload profile photo |
+| `/message/index` | GET | Message inbox |
+| `/message/chat/{report_id}` | GET | Open chat for report |
+| `/message/send` | POST | Send chat message |
 
-| Feature | How it works |
-|:--------|:-------------|
-| **Real-time polling** | Client fetches new messages via `GET /message/apiGetMessages/{report_id}` every few seconds |
-| **Typing indicators** | Sent via `POST /message/apiSetTyping` and cleared after 5 s of inactivity |
-| **Online status** | A user is considered online if `last_activity` is within the last 15 seconds |
-| **File attachments** | Images (JPG, JPEG, PNG, GIF) uploaded to `public/uploads/chat/` with unique filenames |
-| **Threaded replies** | Comments support a `parent_id` for reply-to functionality |
+### Admin Routes (Admin Login Required)
 
----
-
-## 🛡️ Security
-
-| Measure | Details |
-|:--------|:--------|
-| **Password hashing** | `password_hash()` / `password_verify()` (bcrypt) |
-| **Input sanitization** | `htmlspecialchars()`, `filter_input()`, prepared PDO statements — no raw SQL concatenation |
-| **Sessions** | Custom name (`laf_session`), 2-hour lifetime |
-| **Account banning** | Checked on login before session creation |
-| **Debug mode** | `APP_DEBUG` should be `false` in production |
-
-> [!WARNING]
-> **Before going live:** Change the hardcoded admin credentials in `AuthController.php`, set a strong DB password, and configure HTTPS.
-
----
-
-## 🤝 Contributing
-
-1. **Fork** this repository
-2. **Create** a feature branch: `git checkout -b feature/your-feature-name`
-3. **Commit** your changes: `git commit -m 'feat: add your feature'`
-4. **Push** to the branch: `git push origin feature/your-feature-name`
-5. **Open** a Pull Request
-
-> Please follow the existing code style and namespace convention (`App\Controllers`, `App\Models`, `App\Core`).
+| URL | Method | Description |
+|-----|--------|-----------|
+| `/admin/dashboard` | GET | Admin overview and metrics |
+| `/admin/users` | GET/POST | Manage user accounts |
+| `/admin/users/{id}/ban` | POST | Ban a user account |
+| `/admin/users/{id}/trust` | POST | Award trust badge |
+| `/admin/reports` | GET | View all item reports |
+| `/admin/reports/{id}/delete` | POST | Remove inappropriate report |
+| `/admin/announcements` | GET/POST | Create system announcements |
+| `/admin/announcements/{id}/toggle` | POST | Activate/deactivate announcement |
+| `/admin/settings` | GET/POST | System configuration |
+| `/admin/export` | POST | Export data to CSV |
 
 ---
 
-## 📄 License
+## Security Implementation
 
-This project is for **educational and personal use**. See the [`legal/`](legal/) directory for any additional licensing information.
+### Password Security
+
+All user passwords are hashed using PHP's built-in `password_hash()` function with bcrypt algorithm:
+
+```php
+// Registration
+$password_hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+
+// Login verification
+if (password_verify($login_password, $stored_hash)) {
+    // Create session
+}
+```
+
+### Database Security
+
+All database queries use PDO prepared statements to prevent SQL injection:
+
+```php
+// Secure query example
+$stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND is_banned = 0");
+$stmt->execute([$email]);
+$user = $stmt->fetch();
+```
+
+### Input Validation
+
+User inputs are validated and sanitized before processing:
+
+```php
+// Email validation
+$email = filter_var($input, FILTER_VALIDATE_EMAIL);
+
+// HTML encoding for output
+echo htmlspecialchars($user_input, ENT_QUOTES, 'UTF-8');
+```
+
+### Session Management
+
+Sessions use secure configurations:
+
+```php
+// Custom session name
+define('SESSION_NAME', 'laf_session');
+
+// Session timeout (2 hours)
+define('SESSION_TIMEOUT', 7200);
+
+// Session cookie security flags
+ini_set('session.cookie_httponly', 1);  // JavaScript cannot access
+ini_set('session.cookie_secure', 1);    // HTTPS only (production)
+```
+
+### Account Protection
+
+- Admin accounts are verified before granting access
+- Failed login attempts can be rate-limited
+- Users can be banned to prevent abuse
+- All actions log user activity for audit trail
 
 ---
 
-This project is for educational and personal use. See the `legal/` directory for any additional licensing information.
+## Database Schema
+
+### Users Table
+
+```sql
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(100),
+    phone VARCHAR(20),
+    profile_image VARCHAR(255),
+    badge_status VARCHAR(20),        -- 'verified', 'trusted', 'standard'
+    is_banned BOOLEAN DEFAULT FALSE,
+    last_activity TIMESTAMP,
+    date_joined TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_email (email),
+    KEY idx_banned (is_banned)
+);
+```
+
+### Reports Table
+
+```sql
+CREATE TABLE reports (
+    report_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    category_id INT,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    type ENUM('lost', 'found') NOT NULL,
+    image_path VARCHAR(255),
+    location VARCHAR(255),
+    reward_amount DECIMAL(10, 2),
+    status ENUM('open', 'resolved', 'closed') DEFAULT 'open',
+    date_posted TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    KEY idx_type (type),
+    KEY idx_status (status),
+    KEY idx_date (date_posted)
+);
+```
+
+### Messages/Comments Table
+
+```sql
+CREATE TABLE comments (
+    comment_id INT PRIMARY KEY AUTO_INCREMENT,
+    report_id INT NOT NULL,
+    user_id INT NOT NULL,
+    comment_text TEXT,
+    attachment_path VARCHAR(255),
+    parent_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (report_id) REFERENCES reports(report_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    KEY idx_report (report_id),
+    KEY idx_user (user_id)
+);
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue: "Class not found" error**
+- Ensure autoload is correctly configured in public/index.php
+- Check that namespace matches file path structure
+- Verify PSR-4 compliance in class definitions
+
+**Issue: Database connection failed**
+- Verify MySQL is running in XAMPP
+- Check database credentials in config.php
+- Ensure database user has permissions for the database
+- Test connection with phpMyAdmin
+
+**Issue: Uploads not working**
+- Verify public/uploads/ directory exists
+- Check directory permissions (755 or 777)
+- Ensure file size limits in php.ini are sufficient
+- Verify file type restrictions in ItemController
+
+**Issue: Sessions not persisting**
+- Check session save path permissions
+- Verify SESSION_NAME constant is valid
+- Ensure cookies are enabled in browser
+- Check for session_start() calls in config.php
+
+**Issue: 404 errors on all routes**
+- Verify mod_rewrite is enabled in Apache
+- Check .htaccess file in public/ directory
+- Ensure AllowOverride All in Apache configuration
+- Test that rewrite rules are being applied
+
+---
+
+## Code Organization Principles
+
+### Namespace Convention
+
+All application code follows PSR-4 autoloading under the `App` namespace:
+
+```
+App\Core\        - Framework foundation classes
+App\Controllers\ - Request handlers
+App\Models\      - Data entities and queries
+App\Services\    - Business logic services
+```
+
+### Naming Conventions
+
+- **Classes**: PascalCase (UserController, ItemModel)
+- **Methods**: camelCase (getUserById, createNewItem)
+- **Constants**: UPPER_CASE (DB_HOST, SESSION_TIMEOUT)
+- **Properties**: camelCase ($userId, $itemTitle)
+- **Files**: Match class names exactly (UserController.php)
+
+### File Organization
+
+- One class per file
+- Logical grouping in directories
+- Related tests in parallel structure
+- Asset organization mirrors functionality
+
+---
+
+## Contributing Guidelines
+
+We welcome contributions to the Lost and Found platform. To contribute:
+
+1. Fork the repository
+2. Create a feature branch from main
+3. Make your changes with clear commit messages
+4. Add tests for new functionality
+5. Ensure all existing tests pass
+6. Submit a pull request with a clear description
+
+### Code Standards
+
+- Follow PSR-12 PHP coding standards
+- Use meaningful variable and function names
+- Add inline comments for complex logic
+- Test edge cases and error conditions
+- Maintain existing code style
+
+---
+
+## Support and Documentation
+
+For detailed information about the application architecture and file interconnections, see:
+
+- **SETUP_REPORT.md** - Critical files per layer and their connections
+- **ARCHITECTURE_REFERENCE.md** - Comprehensive system design guide
+- **security/** directory - Security policies and best practices
+
+---
+
+## License
+
+This project is for educational and personal use. See the `legal/` directory for additional licensing information.
+
+---
+
+## Contact and Support
+
+For questions, issues, or suggestions:
+
+1. Check the FAQ at `/pages/faq`
+2. Use the contact form at `/contact`
+3. Review security documentation in `security/` directory
+4. Open an issue on GitHub repository
+
+---
+
+**Last Updated**: May 2026  
+**Version**: 1.0  
+**Maintained by**: Lost and Found Development Team
